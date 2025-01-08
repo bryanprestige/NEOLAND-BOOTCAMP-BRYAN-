@@ -1,3 +1,3 @@
 # NEOLAND-BOOTCAMP-BRYAN-
 
-Mensaje para Juan Ramon, Juan ramon, estas ahi?
+Mensaje para Costantina, estas ahi?
