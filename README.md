@@ -1,4 +1,3 @@
 # NEOLAND-BOOTCAMP-BRYAN-
 
-asfasfasfasfasfasfasfdqsfasfasfasfasfasfassd
-fcg
+Mensaje para Juan Ramon, Juan ramon, estas ahi?
