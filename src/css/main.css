@@ -1,0 +1,70 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: beige;
+    display: block;
+    align-content: center;
+    height: max-content;
+    max-width: 1280px;
+}
+
+#navegador {
+    border: 3px solid rgb(0, 0, 0);
+    color: black;
+    font-size: 25px;
+    background-color: beige;
+}
+
+#lista-navegador, #credenciales-formulario {
+    display: flex;
+    padding: 10px;
+}
+
+.item-navegador{
+    margin:auto;
+}
+
+.titulo {
+    display: block;
+    padding: 10px;
+    margin: auto;
+    border: 3px solid rgb(0, 0, 0); ;
+}
+
+.texto {
+    text-align: center;
+}
+
+#formulario {
+    width: 100% ;
+    margin: 0 auto;
+    display: grid;
+    background-color: rgb(255, 255, 255);
+    grid-template-columns: repeat(3,1fr);
+}
+
+#formulario-2 {
+    width: 100% ;
+    margin: 0 auto;
+    display: grid;
+    background-color: rgb(255, 255, 255);
+    grid-template-rows: repeat(3,1fr);
+}
+
+#pokemons {
+    width: 550px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+img {
+    width: 100px;
+}
+
+#pikachu {
+    width: 100px;
+}
