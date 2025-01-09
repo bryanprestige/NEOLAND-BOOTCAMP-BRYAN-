@@ -12,18 +12,18 @@
 
      <nav id="navegador">
             <ul id="lista-navegador">
-                <li class="item-navegador">
-                    <a href="./julen.html"> Pagina de Julen</a>
+                <li class="item-navegador" id="pagina-de-julen">
+                    <a href="./julen.html"> <img src="./imagenes/pagina-de-julen.webp" id="imagen-julen"></a>
                 </li>
-                <li class="item-navegador">
-                    <a href="./datos.html">Pagina de datos</a>
+                <li class="item-navegador" id="pagina-de-datos">
+                    <a href="./datos.html"><img src="./imagenes/pagina de datos.webp" id="imagen-datos"></a>
                 </li>
                 <form action="./form-data.html" id="credenciales-formulario">
-                        <label class="item-navegador">Usuario:</label>
+                        <label class="item-navegador"><img id="usuario" src="./imagenes/usuario.webp"></label>
                             <input type="text" name="usuario" class="item-navegador"><br>
-                        <label class="item-navegador">Contraseña:</label>
+                        <label class="item-navegador"><img src="./imagenes/password.png"></label>
                             <input type="password" name="pwd" class="item-navegador"><br>
-                        <button type="submit" class="item-navegador">Log in</button>    
+                        <button type="submit" class="item-navegador" id="login-button">Log in</button>    
                 </form>
             </ul>
     </nav>
@@ -41,29 +41,35 @@
                         <p class="texto">Para ganar la liga Pokémon, un entrenador debe vencer a los cuatro miembros del Alto Mando y al campeón de la liga. Los entrenadores que logran esto se convierten en campeones de la liga Pokémon.</p>
                 </ul>
     </section>
-    
+
     <section class="titulo">
-        <article class="titulo">
-            <p class="texto"><strong> Medallas requeridas</strong> </p>
+        <article class="titulo" id="medallas">
+            <p class="texto"><strong> Medallas requeridas y como conseguirlas</strong></p>
+            <img src="./imagenes/medallas de gimnasio.png" alt="medallas pokemon">
         </article>
-                <ol class="texto">    
-                    <li>Medalla Roca</li>
-                    <li>Medalla Cascada</li>
-                    <li>Medalla Trueno</li>
-                    <li>Medalla Arcoiris</li>
-                    <li>Medalla Alma</li>
-                    <li>Medalla Pantano</li>
-                    <li>Medalla Volcan</li>
-                    <li>Medalla Tierra</li>
-                </ol>   
+        <article id="container-medallas">
+                <div class="texto">    
+                   <a href="https://www.wikidex.net/wiki/Medalla_Roca_(Kanto)" id="roca"><h2>Medalla Roca</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Cascada" id="cascada"><h2>Medalla Cascada</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Trueno" id="trueno"><h2>Medalla Trueno</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Arcoíris" id="arcoiris"><h2>Medalla Arcoiris</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Alma" id="alma"><h2>Medalla Alma</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Pantano" id="pantano"><h2>Medalla Pantano</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Volcán" id="volcan"><h2>Medalla Volcan</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Tierra" id="tierra"><h2>Medalla Tierra</h2></a>
+                  
+                </div>   
+        </article>
     </section>
     <article class="titulo"> 
         <h2 class="texto">¿Qué es el Alto Mando?</h2>
         <p class="texto">El Alto Mando es un grupo de cuatro entrenadores Pokémon que son los más fuertes de la región. Cada miembro del Alto Mando se especializa en un tipo de Pokémon diferente.</p>
     </article>
     </section>
-    <article class="titulo">
-       <h1 class="texto">ADVERTISING</h1>
+    <article class="titulo" id="ads">
+       <img id="ad" src="./imagenes/mcdonals.jpg">
+       <img id="ad" src="./imagenes/mcdonals.jpg">
+       <img id="ad" src="./imagenes/mcdonals.jpg">
     </article> 
     <section class="titulo">
      <article>       
@@ -77,7 +83,7 @@
     </article>
 
     <article class="titulo">
-        <p class="texto">Las palabras de ash tras lograr la victoria fueron:
+        <p class="texto" id="quote">Las palabras de ash tras lograr la victoria fueron: <br>
         <q>¡Lo logramos Pikachu!</q><br> ¡Somos los campeones de la liga Pokémon!</q></p>
    </article>
     <article class="titulo">
@@ -85,8 +91,13 @@
     </article>
     </section>
 
-    <article class="titulo">
-        <h1 class="texto">ADVERTISING</h1>
+    <article class="titulo" id="ads-2">
+        <img src="./imagenes/pokemon-logo.png">
+        <img src="./imagenes/pokemon-logo.png">
+        <img src="./imagenes/pokemon-logo.png">
+        <img src="./imagenes/pokemon-logo.png">
+        <img src="./imagenes/pokemon-logo.png">
+        <img src="./imagenes/pokemon-logo.png">
      </article>
 
     <article class="titulo">
@@ -94,9 +105,9 @@
     </article>
 
     <section class="titulo">
-            <form action="julen.html" method="post" class="texto">
+            <form action="datos.html" method="post" class="texto">
                 <fieldset class="titulo" id="formulario">
-                    <legend>Formulario</legend>
+                    <legend id="leyenda">Formulario</legend>
                         <label for="nombre" class="nombre"> Nombre:</label>
                             <input type="text" name="nombre" id="nombre"> <br>
                         <label for="email" class="email"> Email:</label>
@@ -119,31 +130,33 @@
             </form>
     </section>
     <section class="titulo">
-                    <h1 class="texto"> Elige a tu pokemon inicial</h1>
+                    <h1 class="texto" id="elige-pokemon"> Elige a tu pokemon inicial</h1>
                         <select name="pokemon" class="titulo">
                             <fieldset id="formulario-3">
                                 <option value="bulbasaur">Bulbasaur</option>
                                 <option value="charmander">Charmander</option>
                                 <option value="squirtle">Squirtle</option>
-                                <option value="pikachu">Pikachu</option>  
-                        </select> <br>
+                                <option value="pikachu">Pikachu</option>                          </select> <br>
                         <div id="pokemons">
                             <img src="imagenes/bulbasaur.png">
                             <img src="imagenes/charmander.png">
                             <img src="imagenes/squirtle.png" id="squirtle">
                             <img src="imagenes/pikachu.png" id="pikachu">
                         </div>
-                                <h1 class="texto"> Porque quieres participar?</h1>
-                                <label for="mensaje"> Mensaje:</label>
+                            <h1 class="texto"> Porque quieres participar?</h1>
+                        <div class="mensaje-container">    
+                                <label for="mensaje" id="mensaje"> Mensaje:</label>
                                 <textarea class="titulo" name="mensaje" id="mensaje" cols="30" rows="10"></textarea>
-                            </fieldset>
-                    <input class="titulo" type="submit" value="Enviar">
-    </section>
+                        </div>
+                        <form action="enhorabuena.html" method="post" class="texto">
+                    <input class="titulo" id="enviar" type="submit" value="Enviar">
+                        </form>
+                </section>
  
      <footer class="titulo">
         <p class="texto"><a href="#navegador"> Volver arriba</a></p>
         <p class="texto">¡Gracias por visitar la web oficial de la Liga Pokémon!</p>
-        <p class="texto"> &copy; 2025 Liga Pokémon. Todos los derechos reservados.</p>
+        <p class="texto" id="copy"> &copy; 2025 Liga Pokémon. Todos los derechos reservados.</p>
     </footer>
 
 </body>

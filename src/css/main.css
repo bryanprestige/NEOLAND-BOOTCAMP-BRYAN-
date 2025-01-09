@@ -9,12 +9,99 @@ body {
     align-content: center;
     height: max-content;
     max-width: 1280px;
+    font-family:Arial, Helvetica, sans-serif ;
 }
 
+/*NAVEGACION */
 #navegador {
     border: 3px solid rgb(0, 0, 0);
     color: black;
     font-size: 25px;
+}
+
+#pagina-de-julen {
+    filter: grayscale(100%);
+}
+
+#pagina-de-julen:hover{
+    filter: grayscale(0%);
+}
+
+#pagina-de-datos {
+    filter: grayscale(100%);
+}
+
+#pagina-de-datos:hover{
+    filter: grayscale(0%);
+}
+
+#imagen-julen, #imagen-datos, #usuario {
+    border-radius: 100px;
+}
+
+#login-button {
+    background-color: rgb(168, 174, 235);
+    border: 3px solid black;
+    border-radius: 5px;
+    width: 60px;
+}
+
+/*MEDALLAS*/
+
+#medallas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+#container-medallas {
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    grid-template-rows: repeat(4,auto);
+    gap: 10px;
+    padding: 20px;
+}
+
+#container-medallas .texto h2 {
+    margin: 0; 
+    text-align: center; 
+    border: 1px solid black;
+    padding: 10px; 
+    box-sizing: border-box;
+}
+
+#roca:hover {
+    color:grey;
+}
+
+#cascada:hover {
+    color: lightseagreen
+}
+#trueno:hover {
+    color: yellow;
+}
+
+#arcoiris:hover {
+    color: green;
+}
+#alma:hover {
+    color: violet;
+}
+#pantano:hover {
+    color: purple;
+}
+#volcan:hover {
+    color: red;
+}
+#tierra:hover {
+    color: rgb(146, 57, 57);
+}
+
+/*LINKS*/
+
+:link{
+    color: maroon;
 }
 
 .item-navegador a:hover {
@@ -25,6 +112,7 @@ body {
     color: yellow;
 }
 
+/*FORMULARIOS*/
 
 #lista-navegador, #credenciales-formulario {
     display: flex;
@@ -47,6 +135,22 @@ body {
     text-align: center;
 }
 
+
+#quote {
+    font-size:20px ;
+}
+
+#leyenda {
+    border: 3px solid black;
+    background-color: black;
+    color: rgb(22, 196, 60);
+}
+
+.nombre, .email, .telefono  {
+    text-shadow: 2px 2px #c3d7f5;
+    text-emphasis-style: "#";
+}
+
 #formulario {
     width: 100% ;
     margin: 0 auto;
@@ -61,6 +165,10 @@ body {
     display: grid;
     background-color: rgb(255, 255, 255);
     grid-template-rows: repeat(3,1fr);
+}
+
+#elige-pokemon {
+    margin: 10px;
 }
 
 #pokemons {
@@ -94,10 +202,132 @@ img {
     width: 100px;
 }
 
-#pikachu {
-    width: 100px;
+.mensaje-container {
+    display: flex;
+    flex-direction: column; /* Asegura que el label esté encima del textarea */
+    align-items:center; /* Alinea el texto del label al inicio */
+    margin-bottom: 20px; /* Espacio debajo del contenedor */
 }
 
-#squirtle {
-    background-color: transparent;
+#mensaje {
+    border: 2px solid white;
+    padding: 5px;
+    background-color: rgb(214, 236, 117);
+    margin: 5px;
 }
+
+#enviar {
+    background-color:rgb(153, 184, 15);
+} 
+
+#copy {
+    font-style: italic;
+}
+
+/*ADS*/
+
+#ads, #ads-2 {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+#ad {
+    width: 180px;
+}
+
+
+
+/*RESPONSIVE 768*/
+
+@media (max-width: 762px) {
+    body {
+        font-size: 14px;
+    }
+
+    #navegador {
+        flex-direction: column;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    img {
+        width: 50px;
+    }
+
+    #ads, #ads-2 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #container-medallas {
+        grid-template-columns: 1fr;
+    }
+
+    #mensaje {
+        width: 90%;
+    }
+
+    #formulario, #formulario-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/*RESPONSIVE 992*/
+@media (max-width: 992px) {
+    #navegador {
+        display: flex;
+        flex-direction: column;
+        font-size: 18px;
+    }
+
+    img {
+        width: 60px;
+    }
+
+    #container-medallas {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .titulo {
+        padding: 5px;
+    }
+
+    #pokemons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #ads img {
+        width: 150px;
+    }
+}
+/*RESPONSIVE 1200*/
+@media (max-width: 1200px) {
+    body {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+
+    #navegador {
+        font-size: 20px;
+    }
+
+    img {
+        width: 80px;
+    }
+
+    #medallas {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    #container-medallas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+
+
+
