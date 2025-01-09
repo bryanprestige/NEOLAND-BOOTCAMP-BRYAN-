@@ -4,7 +4,7 @@
 }
 
 body {
-    background-color: beige;
+    background: linear-gradient(rgb(42, 122, 243),rgb(207, 204, 6));
     display: block;
     align-content: center;
     height: max-content;
@@ -15,8 +15,16 @@ body {
     border: 3px solid rgb(0, 0, 0);
     color: black;
     font-size: 25px;
-    background-color: beige;
 }
+
+.item-navegador a:hover {
+    color: yellow;
+}
+
+#youtube-link:hover {
+    color: yellow;
+}
+
 
 #lista-navegador, #credenciales-formulario {
     display: flex;
@@ -25,6 +33,7 @@ body {
 
 .item-navegador{
     margin:auto;
+    list-style: none;
 }
 
 .titulo {
@@ -59,7 +68,27 @@ body {
     display: flex;
     justify-content: center;
     margin: auto;
+    animation-duration: 3s;
+    animation-name: slides;
+    animation-iteration-count: infinite;
 }
+
+@keyframes slides {
+    0% {
+        transform: translate(0px,0px);
+     }
+ 
+     25%{
+         transform: translate(500px,0px);
+     }
+ 
+     100%{
+         transform: translate(0px,0px);
+     }
+     
+     
+}
+
 
 img {
     width: 100px;
@@ -67,4 +96,8 @@ img {
 
 #pikachu {
     width: 100px;
+}
+
+#squirtle {
+    background-color: transparent;
 }
