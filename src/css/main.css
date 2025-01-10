@@ -356,6 +356,14 @@ img {
         border: 2px solid black; /* Asegura que la caja sea visible */
         padding: 10px; /* Agrega espacio interno */
     }
+
+    #credenciales-formulario,#credenciales-404,#credenciales-sorpresa {
+        flex-direction: row; /* Alinea elementos en columna */
+        justify-content: center; /* Centra los elementos */
+        width: 100%; /* Ocupa todo el ancho del navegador */
+        max-width: 768px;
+    }
+
     #grid-texto {
         display: block;
         width: 98%;
