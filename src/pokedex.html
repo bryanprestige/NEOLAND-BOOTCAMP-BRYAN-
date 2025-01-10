@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos</title>
+    <link rel="stylesheet" href="./css/main.css">
+    
+</head>
+<body>
+    <main>
+        <nav id="navegador">
+            <ul id="lista-navegador">
+                <li class="item-navegador" id="pagina-inicio">
+                    <a href="./index.html"> <img src="./imagenes/inicio.png" id="imagen-inicio"></a>
+                </li>
+                <li class="item-navegador" id="pagina-pokedex">
+                    <a href="./pokedex.html"><img src="./imagenes/pokedex.png" id="imagen-pokedex"></a>
+                </li>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img id="card-back" src="./imagenes/card-back.png" alt="Reverso carta pokemon">
+                      </div>
+                      <div class="flip-card-back">
+                       <a href="sorpresa.html"> <img id="card-front" src="./imagenes/card-front.png" alt="Reverso carta pokemon"></a>
+                      </div>
+                    </div>
+                </div>
+            </ul>
+        <form action="./notfound.html" id="credenciales-formulario">
+                <label class="item-navegador"><img id="usuario" src="./imagenes/usuario.png"></label>
+                <input type="text" name="usuario" class="item-navegador"><br>
+                <label class="item-navegador"><img id="password" src="./imagenes/password.png"></label>
+                <input type="password" name="pwd" class="item-navegador"><br>
+                <input class="titulo" id="log-in" type="submit" value="Log In"> 
+        </form>
+    </nav>
+    <section id="pokedex-tabla">
+        <h1>Información de Pokémon</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pokemon</th>
+                    <th>Localización</th>
+                    <th>Generación</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <tr>
+                        <td>Pikachu</td>
+                        <td>Bosque Verde</td>
+                        <td>Primera</td>
+                    </tr>
+                    <tr>
+                        <td>Charmander</td>
+                        <td>Laboratorio del Profesor Oak</td>
+                        <td>Primera</td>
+                    </tr>
+                    <tr>
+                        <td>Totodile</td>
+                        <td>Laboratorio del Profesor Elm</td>
+                        <td>Segunda</td>
+                    </tr>
+                    <tr>
+                        <td>Gardevoir</td>
+                        <td>Ruta 102</td>
+                        <td>Tercera</td>
+                    </tr>
+                    <tr>
+                        <td>Lucario</td>
+                        <td>Cueva Desafío</td>
+                        <td>Cuarta</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <footer class="titulo" id="footer-pokedex">
+            <p class="texto"><a href="#navegador" id="arriba"> Volver arriba</a></p>
+            <p class="texto">¡Gracias por visitar la web oficial de la Liga Pokémon!</p>
+            <p class="texto" id="copy"> &copy; 2025 Liga Pokémon. Todos los derechos reservados.</p>
+        </footer>
+        </main>
+    </body>
+</html>

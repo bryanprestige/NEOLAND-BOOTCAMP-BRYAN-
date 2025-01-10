@@ -2,16 +2,58 @@
     margin: 0;
     padding: 0;
 }
-
 body {
-    background: linear-gradient(rgb(42, 122, 243),rgb(207, 204, 6));
+    background: linear-gradient(#243D4B,#F7BC47);
     display: block;
     align-content: center;
     height: max-content;
     max-width: 1280px;
     font-family:Arial, Helvetica, sans-serif ;
+    color:white;
+    text-shadow: 1px 1px #243D4B;
 }
-
+/*COMUNES*/
+.titulo {
+    display: block;
+    padding: 10px;
+    margin: auto;
+    border: 3px solid rgb(0, 0, 0);
+}
+.texto {
+    text-align: center;
+}
+#quote {
+    font-size:20px ;
+}
+#logro {
+    font-size: 50px;
+}
+/*TABLA*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #F7BC47;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #243D4B;
+}
+tr:hover {
+    background-color: #f1f1f1;
+}
+#pokedex-tabla {
+    display: block;
+    justify-content: center;
+}
 /*NAVEGACION */
 #navegador {
     border: 3px solid rgb(0, 0, 0);
@@ -22,76 +64,146 @@ body {
     margin: auto;
 
 }
-
-#pagina-de-julen {
+#lista-navegador {
+    background-color: #F7BC47;
+    width: 1200px;
+    display: flex;
+    align-items: center;
+}
+#pagina-inicio {
+    filter:contrast(50%);
+    transition: transform .2s; /* Animation */
+}
+#pagina-inicio:hover{
+    filter: contrast(100%);
+    transform: scale(1.2);
+}
+#pagina-pokedex {
     filter: grayscale(100%);
+    transition: transform .2s; /* Animation */
 }
-
-#pagina-de-julen:hover{
+#pagina-pokedex:hover{
     filter: grayscale(0%);
+    transform: scale(1.2);
 }
-
-#pagina-de-datos {
-    filter: grayscale(100%);
+#imagen-inicio {
+    width: 50px;
 }
-
-#pagina-de-datos:hover{
-    filter: grayscale(0%);
-}
-
-#imagen-julen, #imagen-datos, #usuario {
-    border-radius: 100px;
-}
-
-#login-button {
-    background-color: rgb(168, 174, 235);
-    border: 3px solid black;
-    border-radius: 5px;
+#imagen-pokedex {
     width: 60px;
 }
-
+#imagen-inicio, #imagen-pokedex {
+    border-radius: 10px;
+}
+#usuario {
+    width: 30px;
+}
+#password {
+    width: 50px;
+}
+#log-in {
+    border-radius: 5px;
+    background-color: #243D4B;
+    color: #F7BC47;
+}
+/*FLIP CARD*/
+#card-back{
+    width: 45px;
+    filter: grayscale(100%);
+    transition: transform .2s;
+}
+#card-front {
+    width: 45px;
+}
+#card-back:hover, c{
+    filter: grayscale(0%);
+    transform: scale(1.5);
+}
+#card-front:hover {
+    transform: scale(1.5);
+}
+.flip-card {
+    background-color: transparent;
+    width: 45px;
+    height: 62px;
+    perspective: 1000px;
+  }
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .flip-card-front {
+    background-color: #bbb;
+    color: black;
+  }
+  .flip-card-back {
+    background-color:#243D4B;
+    color: white;
+    transform: rotateY(180deg);
+  }
+/*GRID TEXTO*/
+#grid-texto {
+    width: 85%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+#container-alto-mando {
+    width: 94%;
+}
 /*MEDALLAS*/
-
 #section-medallas {
     display: block;
     width: 98%;
     align-items: center;
 }
-
 #medallas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 97%;
-    justify-content: center;
+    justify-content:center;   
 }
-
 #container-medallas .texto h2 {
+    margin: 0; 
+    text-align: center; 
+    border: 3px solid black;
+    padding: 10px; 
+    box-sizing: border-box;
+}
+#grid-medallas {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+    padding: 20px;
     margin: 0; 
     text-align: center; 
     border: 1px solid black;
     padding: 10px; 
     box-sizing: border-box;
 }
-
-#grid-medallas {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 10px;
-    padding: 20px;
-}
-
 #roca:hover {
     color:grey;
 }
-
 #cascada:hover {
     color: lightseagreen
 }
 #trueno:hover {
     color: yellow;
 }
-
 #arcoiris:hover {
     color: green;
 }
@@ -107,56 +219,36 @@ body {
 #tierra:hover {
     color: rgb(146, 57, 57);
 }
-
 /*LINKS*/
-
 :link{
-    color: maroon;
+    color: #F7BC47;
 }
-
 .item-navegador a:hover {
     color: yellow;
 }
-
 #youtube-link:hover {
     color: yellow;
 }
-
 /*FORMULARIOS*/
-
 #lista-navegador, #credenciales-formulario {
     display: flex;
     padding: 10px;
 }
-
+#credenciales-sorpresa, #credenciales-404{
+    display: flex;
+    padding: 10px;
+    background-color: #243D4B;
+}
 .item-navegador{
     margin:auto;
     list-style: none;
 }
-
-.titulo {
-    display: block;
-    padding: 10px;
-    margin: auto;
-    border: 3px solid rgb(0, 0, 0); ;
-}
-
-.texto {
-    text-align: center;
-}
-
-
-#quote {
-    font-size:20px ;
-}
-
 #leyenda {
     border: 3px solid black;
-    background-color: black;
-    color: rgb(22, 196, 60);
+    background-color: #243D4B;
+    color: #F7BC47;
+    text-shadow: 1px 1px #243D4B;
 }
-
-
 #formulario {
     width: 90% ;
     margin: 0 auto;
@@ -164,7 +256,6 @@ body {
     background-color: rgb(255, 255, 255);
     grid-template-columns: repeat(3,1fr);
 }
-
 #formulario-2 {
     width: 100% ;
     margin: 0 auto;
@@ -172,17 +263,15 @@ body {
     background-color: rgb(255, 255, 255);
     grid-template-rows: repeat(3,1fr);
 }
-
 .nombre, .email, .telefono  {
-    text-shadow: 2px 2px #c3d7f5;
-    text-emphasis-style: "#";
+    color: #F7BC47;
+    text-shadow: 1px 1px #243D4B;
 }
-
+/*POKEMON*/
 
 #elige-pokemon {
     margin: 10px;
 }
-
 #pokemons {
     width: 550px;
     display: flex;
@@ -192,77 +281,71 @@ body {
     animation-name: slides;
     animation-iteration-count: infinite;
 }
-
+#pikachu {
+    width:200px;
+}
 @keyframes slides {
     0% {
         transform: translate(0px,0px);
      }
- 
      25%{
          transform: translate(500px,0px);
      }
- 
      100%{
          transform: translate(0px,0px);
-     }
-     
-     
+     }    
 }
-
-
 img {
     width: 100px;
 }
-
 .mensaje-container {
     display: flex;
-    flex-direction: column; /* Asegura que el label esté encima del textarea */
-    align-items:center; /* Alinea el texto del label al inicio */
-    margin-bottom: 20px; /* Espacio debajo del contenedor */
+    flex-direction: column; 
+    align-items:center; 
+    margin-bottom: 20px;
 }
-
 #mensaje {
+    text-align: center;
     border: 2px solid white;
     padding: 5px;
-    background-color: rgb(214, 236, 117);
+    background-color: #243D4B;
     margin: 5px;
+    color: #F7BC47;
 }
-
 #enviar {
-    background-color:rgb(153, 184, 15);
+    color:#F7BC47 ;
+    background-color:#243D4B;
 } 
-
+/*FOOTER*/
 #copy {
     font-style: italic;
 }
-
+#arriba {
+    color: #243D4B;
+    text-shadow: none;
+}
+#footer-sorpresa,#footer-pokedex,#footer-404 {
+    border:5px solid #243D4B ;
+    background-color: #F7BC47;
+}
 /*ADS*/
-
 #ads, #ads-2 {
     display: flex;
     justify-content: center;
     margin: auto;
 }
-
 #ad-1,#ad-2, #ad-3, #ad-4, #ad-5 {
     width: 180px;
 }
-
 #poke-1,#poke-2 ,#poke-3 ,#poke-4 ,#poke-5 ,#poke-6  {
     width: 80px;
 }
-
-
-
 /*RESPONSIVE 768*/
-
 @media (max-width: 768px) {
     body {
         font-size: 14px;
-        background: linear-gradient(grey,lightblue);
         max-width: 768px;
     }
-
     #navegador {
         flex-direction: column;
         align-items: center;
@@ -273,43 +356,38 @@ img {
         border: 2px solid black; /* Asegura que la caja sea visible */
         padding: 10px; /* Agrega espacio interno */
     }
-
+    #grid-texto {
+        display: block;
+        width: 98%;
+    }
     #lista-navegador {
         flex-direction: row; /* Alinea elementos en columna */
         justify-content: center; /* Centra los elementos */
         width: 100%; /* Ocupa todo el ancho del navegador */
     }
-
     img {
         width: 50px;
     }
-
     #ads, #ads-2 {
         flex-direction:row;
         align-items: center;
     }
-
     #ad-3, #ad-4,#ad-5 {
         display: none;
     }
-
     #poke-1, #poke-2 {
         display: none;
     }
-
     #grid-medallas {
         grid-template-columns: repeat(2, 1fr);
     }
-
     #mensaje {
         width: 90%;
     }
-
     #formulario, #formulario-2 {
         grid-template-columns: 1fr;
     }
 }
-
 /*RESPONSIVE 992*/
 @media (max-width: 992px) {
     #navegador {
@@ -318,34 +396,27 @@ img {
         font-size: 18px;
         max-width: 992px;
     }
-
     img {
         width: 60px;
     }
-
     #container-medallas {
         grid-template-columns: repeat(1, 1fr);
     }
-
     .titulo {
         padding: 5px;
     }
-
     #pokemons {
         flex-direction:row;
         align-items: center;
     }
-
     #ads img {
         width: 150px;
     }
-
     #ad-3, #ad-4 {
         display: none;
     }
 
 }
-
 /*RESPONSIVE 1200*/
 @media (max-width: 1200px) {
     body {
