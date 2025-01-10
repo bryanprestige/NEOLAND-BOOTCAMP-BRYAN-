@@ -18,6 +18,7 @@
                 <li class="item-navegador" id="pagina-de-datos">
                     <a href="./datos.html"><img src="./imagenes/pagina de datos.webp" id="imagen-datos"></a>
                 </li>
+            </ul>
                 <form action="./form-data.html" id="credenciales-formulario">
                         <label class="item-navegador"><img id="usuario" src="./imagenes/usuario.webp"></label>
                             <input type="text" name="usuario" class="item-navegador"><br>
@@ -25,7 +26,7 @@
                             <input type="password" name="pwd" class="item-navegador"><br>
                         <button type="submit" class="item-navegador" id="login-button">Log in</button>    
                 </form>
-            </ul>
+            
     </nav>
 
     <header class="titulo">
@@ -42,22 +43,21 @@
                 </ul>
     </section>
 
-    <section class="titulo">
-        <article class="titulo" id="medallas">
+    <section class="titulo" id="section-medallas">
+        <article id="medallas" class="titulo">
             <p class="texto"><strong> Medallas requeridas y como conseguirlas</strong></p>
             <img src="./imagenes/medallas de gimnasio.png" alt="medallas pokemon">
         </article>
         <article id="container-medallas">
-                <div class="texto">    
-                   <a href="https://www.wikidex.net/wiki/Medalla_Roca_(Kanto)" id="roca"><h2>Medalla Roca</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Cascada" id="cascada"><h2>Medalla Cascada</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Trueno" id="trueno"><h2>Medalla Trueno</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Arcoíris" id="arcoiris"><h2>Medalla Arcoiris</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Alma" id="alma"><h2>Medalla Alma</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Pantano" id="pantano"><h2>Medalla Pantano</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Volcán" id="volcan"><h2>Medalla Volcan</h2></a>
-                   <a href="https://www.wikidex.net/wiki/Medalla_Tierra" id="tierra"><h2>Medalla Tierra</h2></a>
-                  
+                <div class="texto" id="grid-medallas">    
+                   <a href="https://www.wikidex.net/wiki/Medalla_Roca_(Kanto)" target="_blank" id="roca"><h2>Medalla Roca</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Cascada" target="_blank" id="cascada"><h2>Medalla Cascada</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Trueno" target="_blank" id="trueno"><h2>Medalla Trueno</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Arcoíris" target="_blank" id="arcoiris"><h2>Medalla Arcoiris</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Alma" target="_blank" id="alma"><h2>Medalla Alma</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Pantano" target="_blank" id="pantano"><h2>Medalla Pantano</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Volcán" target="_blank" id="volcan"><h2>Medalla Volcan</h2></a>
+                   <a href="https://www.wikidex.net/wiki/Medalla_Tierra" target="_blank" id="tierra"><h2>Medalla Tierra</h2></a>
                 </div>   
         </article>
     </section>
@@ -67,9 +67,11 @@
     </article>
     </section>
     <article class="titulo" id="ads">
-       <img id="ad" src="./imagenes/mcdonals.jpg">
-       <img id="ad" src="./imagenes/mcdonals.jpg">
-       <img id="ad" src="./imagenes/mcdonals.jpg">
+       <img id="ad-1" src="./imagenes/mcdonals.jpg">
+       <img id="ad-2" src="./imagenes/mcdonals.jpg">
+       <img id="ad-3" src="./imagenes/mcdonals.jpg">
+       <img id="ad-4" src="./imagenes/mcdonals.jpg">
+       <img id="ad-5" src="./imagenes/mcdonals.jpg">
     </article> 
     <section class="titulo">
      <article>       
@@ -92,12 +94,12 @@
     </section>
 
     <article class="titulo" id="ads-2">
-        <img src="./imagenes/pokemon-logo.png">
-        <img src="./imagenes/pokemon-logo.png">
-        <img src="./imagenes/pokemon-logo.png">
-        <img src="./imagenes/pokemon-logo.png">
-        <img src="./imagenes/pokemon-logo.png">
-        <img src="./imagenes/pokemon-logo.png">
+        <img src="./imagenes/pokemon-logo.png" id="poke-1">
+        <img src="./imagenes/pokemon-logo.png" id="poke-2">
+        <img src="./imagenes/pokemon-logo.png" id="poke-3">
+        <img src="./imagenes/pokemon-logo.png" id="poke-4">
+        <img src="./imagenes/pokemon-logo.png" id="poke-5">
+        <img src="./imagenes/pokemon-logo.png" id="poke-6">
      </article>
 
     <article class="titulo">
@@ -123,11 +125,13 @@
         <article class="titulo">
             <h1 class="texto">  Cuando te gustaria empezar?</h1>
         </article> 
+        <article class="titulo">
             <form action="julen.html" method="post" class="texto">
                 <fieldset id="formulario-2">
                         <input class="texto" type="date" name="fecha" id="fecha">
                 </fieldset>
             </form>
+        </article>
     </section>
     <section class="titulo">
                     <h1 class="texto" id="elige-pokemon"> Elige a tu pokemon inicial</h1>
@@ -140,8 +144,8 @@
                         <div id="pokemons">
                             <img src="imagenes/bulbasaur.png">
                             <img src="imagenes/charmander.png">
-                            <img src="imagenes/squirtle.png" id="squirtle">
-                            <img src="imagenes/pikachu.png" id="pikachu">
+                            <img src="imagenes/squirtle.png">
+                            <img src="imagenes/pikachu.png">
                         </div>
                             <h1 class="texto"> Porque quieres participar?</h1>
                         <div class="mensaje-container">    

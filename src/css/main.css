@@ -17,6 +17,10 @@ body {
     border: 3px solid rgb(0, 0, 0);
     color: black;
     font-size: 25px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+
 }
 
 #pagina-de-julen {
@@ -48,19 +52,18 @@ body {
 
 /*MEDALLAS*/
 
+#section-medallas {
+    display: block;
+    width: 98%;
+    align-items: center;
+}
+
 #medallas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 97%;
     justify-content: center;
-}
-#container-medallas {
-    display: grid;
-    grid-template-columns: repeat(1,1fr);
-    grid-template-rows: repeat(4,auto);
-    gap: 10px;
-    padding: 20px;
 }
 
 #container-medallas .texto h2 {
@@ -69,6 +72,13 @@ body {
     border: 1px solid black;
     padding: 10px; 
     box-sizing: border-box;
+}
+
+#grid-medallas {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+    padding: 20px;
 }
 
 #roca:hover {
@@ -146,13 +156,9 @@ body {
     color: rgb(22, 196, 60);
 }
 
-.nombre, .email, .telefono  {
-    text-shadow: 2px 2px #c3d7f5;
-    text-emphasis-style: "#";
-}
 
 #formulario {
-    width: 100% ;
+    width: 90% ;
     margin: 0 auto;
     display: grid;
     background-color: rgb(255, 255, 255);
@@ -166,6 +172,12 @@ body {
     background-color: rgb(255, 255, 255);
     grid-template-rows: repeat(3,1fr);
 }
+
+.nombre, .email, .telefono  {
+    text-shadow: 2px 2px #c3d7f5;
+    text-emphasis-style: "#";
+}
+
 
 #elige-pokemon {
     margin: 10px;
@@ -232,23 +244,40 @@ img {
     margin: auto;
 }
 
-#ad {
+#ad-1,#ad-2, #ad-3, #ad-4, #ad-5 {
     width: 180px;
+}
+
+#poke-1,#poke-2 ,#poke-3 ,#poke-4 ,#poke-5 ,#poke-6  {
+    width: 80px;
 }
 
 
 
 /*RESPONSIVE 768*/
 
-@media (max-width: 762px) {
+@media (max-width: 768px) {
     body {
         font-size: 14px;
+        background: linear-gradient(grey,lightblue);
+        max-width: 768px;
     }
 
     #navegador {
         flex-direction: column;
         align-items: center;
         font-size: 14px;
+        width: 100%; /* Se adapta al ancho del dispositivo */
+        max-width: 768px; /* Limita su tamaño máximo */
+        box-sizing: border-box; /* Considera padding y borde en el ancho total */
+        border: 2px solid black; /* Asegura que la caja sea visible */
+        padding: 10px; /* Agrega espacio interno */
+    }
+
+    #lista-navegador {
+        flex-direction: row; /* Alinea elementos en columna */
+        justify-content: center; /* Centra los elementos */
+        width: 100%; /* Ocupa todo el ancho del navegador */
     }
 
     img {
@@ -256,12 +285,20 @@ img {
     }
 
     #ads, #ads-2 {
-        flex-direction: column;
+        flex-direction:row;
         align-items: center;
     }
 
-    #container-medallas {
-        grid-template-columns: 1fr;
+    #ad-3, #ad-4,#ad-5 {
+        display: none;
+    }
+
+    #poke-1, #poke-2 {
+        display: none;
+    }
+
+    #grid-medallas {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     #mensaje {
@@ -277,8 +314,9 @@ img {
 @media (max-width: 992px) {
     #navegador {
         display: flex;
-        flex-direction: column;
+        flex-direction: columnr;
         font-size: 18px;
+        max-width: 992px;
     }
 
     img {
@@ -294,14 +332,20 @@ img {
     }
 
     #pokemons {
-        flex-direction: column;
+        flex-direction:row;
         align-items: center;
     }
 
     #ads img {
         width: 150px;
     }
+
+    #ad-3, #ad-4 {
+        display: none;
+    }
+
 }
+
 /*RESPONSIVE 1200*/
 @media (max-width: 1200px) {
     body {
