@@ -1,70 +1,148 @@
+
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace;
+    
+    
 }
-
 body {
-    background-color: beige;
-    display: block;
-    align-content: center;
-    height: max-content;
-    max-width: 1280px;
+    background-image: url(https://media.istockphoto.com/id/1283615709/es/foto/dise%C3%B1o-de-fondo-de-pergamino-de-papel-marr%C3%B3n-antiguo-con-manchas-vintage-angustiadas-y.jpg?s=612x612&w=0&k=20&c=-CZlOsfnyTms69sR1DLprXIYPJVybp_XHE9AawfSnvQ=);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #4B3621;
+    padding: 20px;
+    border:  20px;
+    
+  
+ 
 }
-
-#navegador {
-    border: 3px solid rgb(0, 0, 0);
-    color: black;
-    font-size: 25px;
-    background-color: beige;
-}
-
-#lista-navegador, #credenciales-formulario {
-    display: flex;
-    padding: 10px;
-}
-
-.item-navegador{
-    margin:auto;
-}
-
-.titulo {
-    display: block;
-    padding: 10px;
-    margin: auto;
-    border: 3px solid rgb(0, 0, 0); ;
-}
-
-.texto {
+header.titulo,section.titulo,article.titulo{
+    background-color: #f5f5dc;
+    border: 3px solid #8b4513;
+    box-shadow: 5px 5px 1px rgba(0,0,0,0.2);
     text-align: center;
-}
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 900px;
+    font-family: serif;
 
-#formulario {
-    width: 100% ;
-    margin: 0 auto;
-    display: grid;
-    background-color: rgb(255, 255, 255);
-    grid-template-columns: repeat(3,1fr);
 }
-
-#formulario-2 {
-    width: 100% ;
-    margin: 0 auto;
-    display: grid;
-    background-color: rgb(255, 255, 255);
-    grid-template-rows: repeat(3,1fr);
+h1,h2{
+    color: #8b4513;
 }
+p,li{
+    font-size: 18px;
+    line-height: 1.6;
+}
+.item-navegador{
+    filter: grayscale(100%);
+}
+.item-navegador:hover{
+    filter: grayscale(0%);
+}
+#navegador {
+    background-color: #D2B48C;
+    color: black;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 3px solid #4B3621;
+    font-weight: bold;
+    border-radius: 5px;
 
+}
+ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    
+    font-family: serif;
+}
+ol.texto{
+    list-style-position: inside;
+    padding-left: 20px;
+    margin-left: 0;
+    line-height: 1.8;
+    font-size: 18px;
+    color: #4B3621;
+    
+}
+.item-navegador{
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    
+}
+li{
+    color: #4B3621;
+    
+}
+a{
+    color: #4B3621;
+    text-decoration: none;
+    transition: all 200ms ease-in-out;
+    cursor: pointer;
+}
+a:hover{
+    color: #a52a2a;
+}
+/*Formulario*/
+form{
+    background-color: #f5f5dc;
+    padding: 20px;
+    border:10px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    transition: all 300ms ease;
+    scale: 0.8;
+}
+form:hover{
+    color: #D2B48C;
+    scale: 1;
+}
+input, textarea, select, button{
+    margin: 10px 0;
+    padding: 10px ;
+    border:2px solid #8b4513;
+    border-radius: 5px;
+    width: 100%;
+    font-family: sans-serif;
+    transition: all 300ms ease-in-out;
+    cursor: pointer;
+}
+button:hover {
+    background: #ca6f13;
+    scale: 1.1;
+    color: wheat;
+}
+/*Footer*/
+footer{
+    background-color:#D2B48C;
+    text-align: center; 
+    padding: 15px;
+    border-top: 3px solid #8b4513;
+}
 #pokemons {
     width: 550px;
     display: flex;
     justify-content: center;
     margin: auto;
 }
-
 img {
     width: 100px;
 }
-
 #pikachu {
     width: 100px;
+}
+.titulosubmit{
+    scale: 0.9;
+}
+.titulosubmit:hover{
+    background: linear-gradient(90deg, #fcff9e 0%, #c67700 100%);;
+    scale: 1;
+    font-size: 1.1;
+    
+
 }
