@@ -1,0 +1,183 @@
+.header {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.header:hover {
+    transform: scale(1.05);
+}
+
+.header__nav-list {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+}
+
+.header__nav-item {
+    margin: 0 15px;
+}
+
+.header__nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilo para los enlaces generales */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* Estilo para el cuerpo y artículos */
+.main {
+    padding: 20px;
+}
+
+.recent-articles__grid {
+    display: flex;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.article {
+    flex: 1;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border: 1px solid #ddd;
+    transition: flex 0.3s ease, opacity 0.3s ease;
+    transform-origin: center center;
+}
+
+.article:hover {
+    flex: 3;
+    transform: scale(1.1);
+}
+
+.article:hover ~ .article {
+    flex: 0.5;
+    opacity: 0.3;
+}
+
+.article__image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.article__title {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.article__summary {
+    font-size: 1em;
+    color: #555;
+}
+
+/* Estilo para la sección destacada */
+.featured-article {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 80%;
+}
+
+.featured-article__content {
+    text-align: center;
+}
+
+.featured-article__image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.featured-article__title {
+    font-size: 2em;
+    margin: 10px 0;
+    color: #333;
+}
+
+.featured-article__summary {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.featured-article__link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.7s ease-in-out;
+    
+}
+
+.featured-article__link:hover {
+    scale: 1.1;
+    background-color: #0056b3;
+    color: aliceblue;
+}
+
+/* Estilo para las opiniones */
+.opinion__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.opinion-article {
+    background-color: #e9ecef;
+    padding: 15px;
+    border: 1px solid #ccc;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center center;
+}
+
+.opinion-article:hover {
+    transform: scale(1.1);
+    z-index: 1;
+}
+
+.opinion-article:hover ~ .opinion-article {
+    transform: scale(0.9);
+    opacity: 0.5;
+}
+
+/* Pie de página */
+.footer {
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.footer__link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer__link:hover {
+    color: #0056b3;
+}
