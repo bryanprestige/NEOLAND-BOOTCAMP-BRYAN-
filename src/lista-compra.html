@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de la Compra</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./Java/index.js"></script>
+</head>
+<body>
+    <header>
+        <h1>LISTA DE LA COMPRA</h1>
+    </header>
+    <main>
+        <form action="#" id="formulario">
+            <fieldset>
+                <legend>Anadir a la lista</legend>
+                <input type="text" placeholder="nuevo articulo">
+                <button class="buttons" onclick="addToShoppingList()" id="new-article">Anadir</button>
+                <button class="buttons" onclick="resetShoppingList()">Nueva lista de la compra</button>
+                <button id="surprise-button" class="buttons" type="button" onclick="changeHeaderAndFooterColor()">Sorpresa</button>
+            </fieldset>
+        </form>
+        <table>
+            <tr>
+                <th>Cantidad</th>
+                <th>Objeto</th>
+                <th>Precio</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Clase de Bachata</td>
+                <td>2$</td>
+                <td>2$</td>
+                <td><button class="buttons">Reset</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Clase de Salsa</td>
+                <td>3$</td>
+                <td>6$</td>
+                <td><button class="buttons">Reset</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Clase de Zouk</td>
+                <td>4$</td>
+                <td>12$</td>
+                <td><button class="buttons">Reset</button></td>
+            </tr>
+        </table>
+    </main>
+    <aside>
+        <nav>
+            <ul>
+                <li><a href="https://wetaca.com/carta-suscripcion/3PLATOSGRATIS?gad_source=1&gclid=Cj0KCQiAkJO8BhCGARIsAMkswyixxmvyoBrpt7pKJ9-JMZDHeuRPglKoYUJdleVV1xK0jcLqGAZi0rAaArUDEALw_wcB" target="_blank"> Wetaca</a></li>
+                <li><a href="https://knoweats.com/?srsltid=AfmBOorKsVY1LiHG-GHccv7H3OQwWxtgffXrH7LJ2PnYKtFV4vmjW1Cf" target="_blank"> Knoweats</a></li>
+                <li><a href="https://www.just-eat.es/a-domicilio/madrid?adj_tracker=84l7irb_rx4f7ic&adj_campaign=11430075535&campaignname=CM_S_G_ESP_ES_%5BBRAND%5D_%5BENGM%5D_Just%20Eat_Root_Madrid_1005493&utm_source=google&utm_medium=cpc&utm_campaign=CM_S_G_ESP_ES_%5BBRAND%5D_%5BENGM%5D_Just%20Eat_Root_Madrid_1005493&gad_source=1&gclid=Cj0KCQiAkJO8BhCGARIsAMkswygFJ6txGs5X-yw3DsIovzetqKoVjOtZCvq75RKgOJ34v-uMIpaN7_0aAun7EALw_wcB&gclsrc=aw.ds" target="_blank"> JustEats</a></li>
+                <li><a href="https://glovoapp.com/es/es/" target="_blank"> Glovo</a></li>
+                <li><a href="www.ubereats.com/es" target="_blank"> Uber Eats</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <footer>
+        &copy;Bryanprestige 2025
+        <p class="texto"><a href="./index.html" id="arriba"> Volver atras</a></p>
+    </footer>
+    <div id="output"></div>
+</body>
+</html>
