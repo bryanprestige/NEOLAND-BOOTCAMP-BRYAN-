@@ -196,29 +196,58 @@ tr:hover {
     padding: 10px; 
     box-sizing: border-box;
 }
+
+#roca,
+#cascada,
+#trueno,
+#arcoiris,
+#alma,
+#pantano,
+#volcan,
+#tierra {
+    opacity: 0.6;
+}
+
+
 #roca:hover {
     color:grey;
+    opacity: 1;
+    scale: 1.1;
 }
 #cascada:hover {
-    color: lightseagreen
+    color: lightseagreen;
+    opacity: 1;
+    scale: 1.1;
 }
 #trueno:hover {
     color: yellow;
+    opacity: 1;
+    scale: 1.1;
 }
 #arcoiris:hover {
     color: green;
+    opacity: 1;
+    scale: 1.1;
 }
 #alma:hover {
     color: violet;
+    opacity: 1;
+    scale: 1.1;
 }
 #pantano:hover {
     color: purple;
+    opacity: 1;
+    scale: 1.1;
 }
 #volcan:hover {
     color: red;
+    scale: 1.1;
+    opacity: 1;
 }
 #tierra:hover {
     color: rgb(146, 57, 57);
+    scale: 1.1;
+    opacity: 1;
 }
 /*LINKS*/
 :link{
