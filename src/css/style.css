@@ -43,11 +43,21 @@ main {
     border: 1px solid rgb(207, 236, 234);
 }
 
-.buttons {
+#button-container {
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.buttons,#reset-button {
     padding: 3px;
     text-align: center;
     background-color: antiquewhite;
     opacity: 0.5;
+}
+
+#reset-button:hover {
+    opacity: 1;
+    scale: 1.1;
 }
 
 .buttons:hover {
@@ -60,6 +70,10 @@ table, th, td {
 }
 
 table { margin-top: 5px;
+}
+
+#reset-button {
+    display: none;
 }
 
 aside{

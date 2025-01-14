@@ -3,42 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datos</title>
-    <link rel="stylesheet" href="./css/main.css">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/pokedex.css">
     
 </head>
 <body>
+    <!--Header of the page-->
+    <header class="debug">
+        <nav>
+            <ol>
+                <li><a href="./index.html" id="home">&#8962; Inicio</a></li>
+                <li><a href="./pokedex.html" id="pokedex">&#9745; Pokedex</a></li>
+                <li><a href="./sorpresa.html" id="games">&#127918; Games & Apps</a></li>
+                <li><a href="./lista-compra.html" id="tgc">&#127183;TGC</a></li>
+                <li><a href="./notfound.html" id="anime">&#128250;Animation</a></li>
+                <li><a href="./notfound.html" id="play">&#128400;Events</a></li>
+                <li><a href="./notfound.html" id="news">&#128240;News</a></li>
+            </ol>
+        </nav>
+    </header>
+     <!--Component:pokemon finder-->
     <main>
-        <nav id="navegador">
-            <ul id="lista-navegador">
-                <li class="item-navegador" id="pagina-inicio">
-                    <a href="./index.html"> <img src="./imagenes/inicio.png" id="imagen-inicio"></a>
-                </li>
-                <li class="item-navegador" id="pagina-tienda">
-                    <a href="./lista-compra.html"><img src="./imagenes/tienda-pokemon.png" id="imagen-tienda"></a>
-                </li>
-                <li class="item-navegador" id="pagina-pokedex">
-                    <a href="./pokedex.html"><img src="./imagenes/pokedex.png" id="imagen-pokedex"></a>
-                </li>
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                        <img id="card-back" src="./imagenes/card-back.png" alt="Reverso carta pokemon">
-                      </div>
-                      <div class="flip-card-back">
-                       <a href="sorpresa.html"> <img id="card-front" src="./imagenes/card-front.png" alt="Reverso carta pokemon"></a>
-                      </div>
-                    </div>
-                </div>
-            </ul>
-        <form action="./notfound.html" id="credenciales-formulario">
-                <label class="item-navegador"><img id="usuario" src="./imagenes/usuario.png"></label>
-                <input type="text" name="usuario" class="item-navegador"><br>
-                <label class="item-navegador"><img id="password" src="./imagenes/password.png"></label>
-                <input type="password" name="pwd" class="item-navegador"><br>
-                <input class="titulo" id="log-in" type="submit" value="Log In"> 
-        </form>
-    </nav>
+        <div id="searcher">
+            <form>
+                <fieldset>
+                <label for="search">Name or number</label>
+                
+                <input type="text" id="search"/>
+                </fieldset>
+                    <button>&#x1F50D;&#xfe0e;</button>
+                    <p>Search a pokemon by its name or national dex number</p>
+            </form>
+            <p2>Use the advanced search to find the pokemon by its tipe,weakness and more data!</p2>
+        </div>
+        <table class="debug">
+            <caption>Lista de Pokemon</caption>
+            <thead class="debug"></thead>
+            <tbody class="debug">
+                <tr>
+                    <td>Bulbasaur</td>
+                    <td>Ivysaur</td>
+                    <td>Venusaur</td>
+                    <td>Charmander</td>
+                </tr>
+                <tr>
+                    <td>Charmeleon</td>
+                    <td>Charizard</td>
+                    <td>Squirtle</td>
+                    <td>Wartortle</td>
+                </tr>
+                <tr>
+                    <td>Blastoise</td>
+                    <td>Caterpie</td>
+                    <td>Metapod</td>
+                    <td>Butterfly</td>
+                </tr>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </main>
+
+    <!--
     <section id="pokedex-tabla">
         <h1>Información de Pokémon</h1>
         <table>
@@ -77,12 +103,15 @@
                     </tr>
                 </tbody>
             </table>
-        </section>
+        </section> 
+
+        
         <footer class="titulo" id="footer-pokedex">
             <p class="texto"><a href="#navegador" id="arriba"> Volver arriba</a></p>
             <p class="texto">¡Gracias por visitar la web oficial de la Liga Pokémon!</p>
             <p class="texto" id="copy"> &copy; 2025 Liga Pokémon. Todos los derechos reservados.</p>
         </footer>
         </main>
+        -->
     </body>
 </html>
