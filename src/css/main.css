@@ -60,7 +60,7 @@ tr:hover {
     color: black;
     font-size: 25px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     margin: auto;
     top: 0;
     position: sticky;
@@ -142,6 +142,7 @@ tr:hover {
     width: 45px;
     height: 62px;
     perspective: 1000px;
+    display: flex;
   }
   .flip-card-inner {
     position: relative;
@@ -386,6 +387,7 @@ img {
 #poke-1,#poke-2 ,#poke-3 ,#poke-4 ,#poke-5 ,#poke-6  {
     width: 80px;
 }
+
 /*RESPONSIVE 768*/
 @media (max-width: 768px) {
     body {
