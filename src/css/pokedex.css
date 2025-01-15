@@ -12,7 +12,6 @@ body {
         grid-column-start: span 12;
         display: flex;
         flex-direction: column-reverse;
-        h1 {}
         nav{
             ol{
                 display: flex;
@@ -31,69 +30,70 @@ body {
                         background-color: white;
                         color: grey;
                     }
+                    #home {
+                        border-bottom: 5px;
+                        border-color: #919191;
+                        border-style:solid ;
+                    }
+                    #pokedex {
+                        background-color: #D14526;
+                        color: white;
+                        border-bottom: 5px ;
+                        border-color: #D14526;
+                        border-style: solid;
+                    }
+                    #games {
+                        border-bottom: 5px;
+                        border-color: #DE7340;
+                        border-style:solid ;
+                    }
+                    #tgc {
+                        border-bottom: 5px;
+                        border-color: #DFBE4E;
+                        border-style:solid ;
+                    }
+                    #anime {
+                        border-bottom: 5px;
+                        border-color: #67AB64;
+                        border-style:solid ;   
+                    }
+                    #play {
+                        border-bottom: 5px;
+                        border-color: #56A5D2;
+                        border-style:solid ;
+                    }
+                    #news {
+                        border-bottom: 5px;
+                        border-color: #2B52B3;
+                        border-style:solid ;
+                    }
+                    
+                    #home:hover{
+                        background-color: #919191;
+                        color: white;
+                    }
+                    #games:hover{
+                        background-color: #DE7340;
+                        color: white;
+                    }#tgc:hover{
+                        background-color: #DFBE4E;
+                        color: white;
+                    }#anime:hover{
+                        background-color: #67AB64;
+                        color: white;
+                    }#play:hover{
+                        background-color: #56A5D2;
+                        color: white;
+                    }#news:hover{
+                        background-color: #2B52B3;
+                        color: white;
+                    }
+
                 }
             }
+       
         }
-    }     
-
-#home {
-    border-bottom: 5px;
-    border-color: #919191;
-    border-style:solid ;
-}
-#pokedex {
-    background-color: #D14526;
-    color: white;
-    border-bottom: 5px ;
-    border-color: #D14526;
-    border-style: solid;
-}
-#games {
-    border-bottom: 5px;
-    border-color: #DE7340;
-    border-style:solid ;
-}
-#tgc {
-    border-bottom: 5px;
-    border-color: #DFBE4E;
-    border-style:solid ;
-}
-#anime {
-    border-bottom: 5px;
-    border-color: #67AB64;
-    border-style:solid ;   
-}
-#play {
-    border-bottom: 5px;
-    border-color: #56A5D2;
-    border-style:solid ;
-}
-#news {
-    border-bottom: 5px;
-    border-color: #2B52B3;
-    border-style:solid ;
-}
-
-#home:hover{
-    background-color: #919191;
-    color: white;
-}
-#games:hover{
-    background-color: #DE7340;
-    color: white;
-}#tgc:hover{
-    background-color: #DFBE4E;
-    color: white;
-}#anime:hover{
-    background-color: #67AB64;
-    color: white;
-}#play:hover{
-    background-color: #56A5D2;
-    color: white;
-}#news:hover{
-    background-color: #2B52B3;
-    color: white;
-}
+    }   
 
 main{
     color: white;
@@ -102,10 +102,64 @@ main{
     flex-direction: column;
     row-gap: 1em;
     padding: 2em;
-    background-color: #313131;
+    background-image: url(../imagenes/background-poke.png);
+    
+    .taglist{
+        display: flex;
+        column-gap: 10px;
+        .tag{
+        flex-grow: 1;
+        border-radius: 5px;
+        line-height: 2em;
+        text-align: center;
+
+        &.planta{
+            background-color: #A6CB63;
+        }
+        &.veneno {
+            background-color: #B182C5;
+        }
+    }
+}
+
+.pokemon-card {
+    padding: 10px 10px 20px;    
+    a{
+        text-decoration: none;
+        figure{
+            img{
+                display: block;
+                width: 100%;
+                border-radius: 5px;
+                transition: margin-top .3   s;
+                &:hover{
+                    margin-top: -10px;
+                }
+            }
+            figcaption{
+                margin-top: .3em;
+                font-size: .8em;
+                color: #919191;
+            }
+        }
+        }
+        h{
+            margin-top: .5em;
+            font-weight: bold;
+            color: #313131;
+        }
+        p{
+            margin-top:0.5em ;
+        }
+
+}
     form {
         display: flex;
         justify-content: space-evenly;
+        flex-direction: row;
+        column-gap: 1em;
+        align-items: flex-end;
+        padding: 1em;
         fieldset{
             display: flex;
             flex-direction: column;
@@ -122,13 +176,14 @@ main{
         }
     }
         button{
-            color: white;
-            background-color: #DE7340;
-            border-radius: 8px;
+            height: 45px;
             width: 80px;
+            border-radius: 8px;
             font-size: 24px;
             border-width: 0;
             cursor: pointer;
+            color: white;
+            background-color: #DE7340;
         }
         p{
             background-color: #67AB64;
@@ -136,12 +191,48 @@ main{
             border-radius: 10px;
             color: white;
             font-weight:600 ;
+            height: 45px;
+            flex-grow: 1;
         }
         }
-    }table{
-        border: 1px solid black;
-        caption{}
     }
+
+}
+#searcher, #footer-form{   
+    background-color: #313131; ;
+} 
+
+
+/*CLASSES*/
+
+.pokemon-gallery{
+    --gallery-columns:3;
+    --gallery-column-width:276px;
+    display: grid;
+    grid-template-columns: repeat( var(--gallery-columns),1fr);
+    background-color: white;
+    justify-items: center;
+    width:calc(var(--gallery-column-wisth)*var(--gallery-column));
+    margin:0 auto;
+    .pokemon-card {
+        width: calc(var(--gallery-column-width)-20px);
+    }
+}
+
+
+.checkbox {
+    display: flex;
+    align-items: flex-start;
+width: 100%;
+}
+
+/*IDS*/
+#use{
+    font-size: large;
+    display: block;
+    width: 46%;
+    padding: .4em;
+    margin-left: 15px;
 }
 
 #search {
@@ -151,4 +242,24 @@ main{
 
 body {
     background-image: url("../imagenes/background-poke.png");
+}
+
+#footer-form {
+    display: flex;
+    flex-direction: row;
+}
+
+#footer-pokedex {
+    width: 100%;
+}
+
+
+#pokedex-email {
+    display: flex;
+    flex-direction: column;
+}
+
+#pokedex-country {
+    display: flex;
+    flex-direction: row;
 }

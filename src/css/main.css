@@ -324,22 +324,36 @@ tr:hover {
     display: flex;
     justify-content: center;
     margin: auto;
-    animation-duration: 3s;
+    animation-duration: 6s;
     animation-name: slides;
     animation-iteration-count: infinite;
 }
 #pikachu {
     width:200px;
 }
+
+#pikachu, #squirtle, #charmander, #bulbasaur {
+    opacity: 0;
+    animation-name: appear;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes appear {
+    25%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 0%;
+    }
+}
+
 @keyframes slides {
     0% {
         transform: translate(0px,0px);
      }
-     25%{
+    100%{
          transform: translate(500px,0px);
-     }
-     100%{
-         transform: translate(0px,0px);
      }    
 }
 img {
