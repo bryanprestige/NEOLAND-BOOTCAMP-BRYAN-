@@ -4,3 +4,6 @@
 [submodule "JRamon"]
 	path = JRamon
 	url = https://github.com/JRamonCarralero/JRC-repositorio
+[submodule "pokemon"]
+	path = src/pokemon
+	url = https://github.com/fanzeyi/pokemon.json.git
