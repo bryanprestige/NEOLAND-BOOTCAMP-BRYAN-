@@ -1,286 +1,96 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
-    <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/pokedex.css">
-    <link rel="stylesheet" href="./css/pokedexmobile.css" media="screen and (max-width:768px)">
-    <link rel="stylesheet" href="./css/pokedexdesktop.css" media="screen and (min-width:769px)">    
-
-</head>
-<body>
-    <!--Header of the page-->
-    <header class="debug">
-        <nav>
-            <ol>
-                <li><a href="./index.html" id="home">&#8962; Inicio</a></li>
-                <li><a href="./pokedex.html" id="pokedex">&#9745; Pokedex</a></li>
-                <li><a href="./sorpresa.html" id="games">&#127918; Games & Apps</a></li>
-                <li><a href="./lista-compra.html" id="tgc">&#127183;TGC</a></li>
-                <li><a href="./notfound.html" id="anime">&#128250;Animation</a></li>
-                <li><a href="./notfound.html" id="play">&#128400;Events</a></li>
-                <li><a href="./notfound.html" id="news">&#128240;News</a></li>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pokedex</title>
+        <link rel="stylesheet" href="./css/reset.css">
+        <link rel="stylesheet" href="./css/pokedex.css">
+        <link rel="stylesheet" href="./css/pokedexmobile.css" media="screen and (max-width:768px)">
+        <link rel="stylesheet" href="./css/pokedexdesktop.css" media="screen and (min-width:769px)">    
+        <script type="module" src="./Java/pokemon.js"></script>
+    </head>
+    <body>
+        <!--Header of the page-->
+        <header class="debug">
+            <nav>
+                <ol>
+                    <li><a href="./index.html" id="home">&#8962; Inicio</a></li>
+                    <li><a href="./pokedex.html" id="pokedex">&#9745; Pokedex</a></li>
+                    <li><a href="./sorpresa.html" id="games">&#127918; Games & Apps</a></li>
+                    <li><a href="./lista-compra.html" id="tgc">&#127183;TGC</a></li>
+                    <li><a href="./notfound.html" id="anime">&#128250;Animation</a></li>
+                    <li><a href="./notfound.html" id="play">&#128400;Events</a></li>
+                    <li><a href="./notfound.html" id="news">&#128240;News</a></li>
+                </ol>
+            </nav>
+        </header>
+        <!--Component:pokemon finder-->
+        <main>
+            <div id="searcher">
+                <form>
+                    <fieldset>
+                    <label for="search">Name or number</label>
+                    <input type="text" id="search"/>
+                    </fieldset>
+                        <button id="search-button">&#x1F50D;&#xfe0e;</button>
+                        <p>Search a pokemon by its name or national dex number</p>
+                </form>
+                <p2 id="use">Use the advanced search to find the pokemon by its tipe,weakness and more data!</p2>
+            </div>
+            <!--Component:pokemon gallery-->
+            <ol class="pokemon-gallery">
+                <li class="pokemon-card">
+                    <!--Component:Pokemon File-->
+                    <a href="./ficha.html">
+                                <figure>
+                                    <img src="./pokemon/images/001.png"  alt="NOMBRE POKEMON">
+                                    <figcaption>N.0001</figcaption>
+                                </figure>
+                            </a>
+                            <h1>NOMBRE POKEMON</h1>
+                            <p class="taglist">
+                                <em class="tag grass">Planta</em>
+                                <em class="tag poison">Veneno</em>
+                            </p>
+                </li>
             </ol>
-        </nav>
-    </header>
-     <!--Component:pokemon finder-->
-    <main>
-        <div id="searcher">
-            <form>
-                <fieldset>
-                <label for="search">Name or number</label>
-                
-                <input type="text" id="search"/>
-                </fieldset>
-                    <button>&#x1F50D;&#xfe0e;</button>
-                    <p>Search a pokemon by its name or national dex number</p>
-            </form>
-            <p2 id="use">Use the advanced search to find the pokemon by its tipe,weakness and more data!</p2>
-        </div>
-        <ol class="pokemon-gallery">
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                        </a>
-                        <h>NOMBRE POKEMON</h>
-                        <p class="taglist">
-                            <em class="tag planta">Planta</em>
-                            <em class="tag veneno">Veneno</em>
-                        </p>
-            </li>
-            <li class="pokemon-card">
-                <a href="ficha.html">
-                            <figure>
-                                <img src="./imagenes/placehold.png"  alt="NOMBRE POKEMON">
-                                <figcaption>N.0001</figcaption>
-                            </figure>
-                </a>
-                <h>NOMBRE POKEMON</h>
-                <p class="taglist">
-                    <em class="tag planta">Planta</em>
-                    <em class="tag veneno">Veneno</em>
-                </p>
-            </li>
-        </ol>
-        <footer class="titulo" id="footer-pokedex">
+            <footer id="footer-pokedex">
                 <form id="footer-form">
+                    <div id="form-left">
                     <fieldset id="pokedex-email">
-                        <label for="email">Registrate para recibir correos electronicos </label>
-                            <input type="email" id="email" placeholder="Email"/>
+                        <label for="email">Regístrate para recibir correos electrónicos</label>
+                        <input type="email" id="email" placeholder="Email" />
                     </fieldset>
                     <fieldset id="pokedex-country">
-                    <select name="country">
-                                <form>
-                                    <fieldset>
-                                        <option value="Spain">Spain</option>
-                                        <option value="United Kingdom">United Kingdomk</option>
-                                        <option value="United States">United States</option>
-                                        <option value="Ecuador">Ecuador</option>
-                                    </fieldset>
-                                </form>
-                            </select>
-                            <input type="datetime-local" id="birthdaytime" name="birthdaytime"> 
-                    </fieldset>   
-                    <fieldset id="pokedex-checkbox"> 
-                        <label for="email">Me gustaria recibir correos electronicos acerca de:</label>
+                        <label for="country">País</label>
+                        <select name="country" id="country">
+                            <option value="Spain">España</option>
+                            <option value="United Kingdom">Reino Unido</option>
+                            <option value="United States">Estados Unidos</option>
+                            <option value="Ecuador">Ecuador</option>
+                        </select>
+                        <label for="birthdaytime">Fecha de nacimiento</label>
+                        <input type="datetime-local" id="birthdaytime" name="birthdaytime" />
+                        <button id="pokemon-button">Register</button>
+                    </fieldset>
+                    </div>
+                    <div id="form-right">
+                    <fieldset id="pokedex-checkbox">
+                        <label>Me gustaría recibir correos sobre:</label>
                         <div class="checkbox">
-                            <input type="checkbox" name="marketing" id="marketing">
-                            <h3>Videojuegos,Aplicaciones y muchas mas cosas de Pokemon</h3>
+                            <input type="checkbox" name="marketing" id="marketing" />
+                            <label for="marketing">Videojuegos, aplicaciones y más cosas de Pokémon</label>
                         </div>
                         <div class="checkbox">
-                            <input type="checkbox" name="conditions" id="conditions">
-                            <h3>Acepto las <a href="">condiciones de uso</a>y el<a href="">Aviso de privacidad</a>de pokemon.es</h3>
+                            <input type="checkbox" name="conditions" id="conditions" />
+                            <label for="conditions">Acepto las <a href="#">condiciones de uso</a> y el <a href="#">aviso de privacidad</a>.</label>
                         </div>
                     </fieldset>
+                    </div>
                 </form>
-        </footer>
-        </main>        
-    </body>
-</html>
+            </footer>
+            
+            </main>        
+        </body>
+    </html>
