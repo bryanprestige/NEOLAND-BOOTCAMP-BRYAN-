@@ -135,6 +135,50 @@ main{
             background-color: #ADB3B6;
             color: #313131;
         }
+        &.ground {
+            background: linear-gradient(180deg, #f7de3f 50%, #ab9842 50%);;
+            color: #313131;
+        }
+        &.steel {
+            background-color: #9eb7b8;;
+            color: #313131;
+        }
+        &.dragon {
+            background: linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+            color: #313131;
+        }
+        &.dark {
+            background-color: #707070;
+            color: #313131;
+        }
+        &.psychic {
+            background-color: #f366b9;;
+            color: #313131;
+        }
+        &.ghost {
+            background-color: #7b62a3;
+            color: #313131;
+        }
+        &.fairy {
+            background-color: #fdb9e9;
+            color: #313131;
+        }
+        &.electric {
+            background-color: #eed535;
+            color: #313131;
+        }
+        &.rock {
+            background-color: #a38c21;
+            color: #313131;
+        }
+        &.fight {
+            background-color: #d56723;
+            color: #313131;
+        }
+        &.ice {
+            background-color: #51c4e7;;
+            color: #313131;
+        }
     }
 }
 
@@ -191,7 +235,7 @@ main{
             font-size: 36px;
         }
     }
-        #search-button{
+        #searchButton{
             padding: .3em;
             height: 45px;
             width: 80px;
@@ -217,7 +261,7 @@ main{
     }
 
 }
-#searcher, #footer-form{   
+#searchForm, #footer-form{   
     background-color: #313131; ;
 } 
 
