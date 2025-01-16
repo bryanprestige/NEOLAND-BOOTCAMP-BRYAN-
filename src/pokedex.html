@@ -27,11 +27,11 @@
         </header>
         <!--Component:pokemon finder-->
         <main>
-            <div id="searcher">
+            <div id="searchForm">
                 <form>
                     <fieldset>
                     <label for="search">Name or number</label>
-                    <input type="text" id="search"/>
+                    <input type="text" id="search" autocomplete="off"/>
                     </fieldset>
                         <button id="search-button">&#x1F50D;&#xfe0e;</button>
                         <p>Search a pokemon by its name or national dex number</p>
@@ -40,20 +40,7 @@
             </div>
             <!--Component:pokemon gallery-->
             <ol class="pokemon-gallery">
-                <li class="pokemon-card">
-                    <!--Component:Pokemon File-->
-                    <a href="./ficha.html">
-                                <figure>
-                                    <img src="./pokemon/images/001.png"  alt="NOMBRE POKEMON">
-                                    <figcaption>N.0001</figcaption>
-                                </figure>
-                            </a>
-                            <h1>NOMBRE POKEMON</h1>
-                            <p class="taglist">
-                                <em class="tag grass">Planta</em>
-                                <em class="tag poison">Veneno</em>
-                            </p>
-                </li>
+                
             </ol>
             <footer id="footer-pokedex">
                 <form id="footer-form">

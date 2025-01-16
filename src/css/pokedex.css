@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: rgb(255, 245, 245);
+    background-color: rgb(255, 255, 255);
     display: grid;
     grid-template-columns: repeat(12,1fr);
     header {
@@ -135,9 +135,47 @@ main{
             background-color: #ADB3B6;
             color: #313131;
         }
-    }
-}
+        &.electric{
+            background-color: #EAD657;
+            color: #313131;
+        }
+        &.ground {
+            background:linear-gradient(#F3DF5F,#A89950);
+            color: #313131;
+        }
+        &.fairy {
+            background-color: #F3BCE6;
+            color:#313131;
+        }
+        &.fight {
+            background-color: #C76D36;
+        }
+        &.psychic {
+            background-color: #E26FB6;
+        }
+        &.steel {
+            background-color: #A3B7B8;
+            color:#313131;
+        }
+        &.ice {
+            background-color: #71C1E3;
+            color: #313131;
+        }
+        &.ghost {
+            background-color: #77639F;
+        }
+        &.rock {
+            background-color: #A08D38;
 
+        }
+        &.dragon {
+            background:linear-gradient(#67A2CB,#E1755E)  ;
+        }
+        &.dark {
+            background-color: #707070;
+        }
+}
+    }
 .pokemon-card {
     padding: 10px 10px 20px;    
     a{
@@ -167,7 +205,6 @@ main{
         p{
             margin-top:0.5em ;
         }
-
 }
     form {
         display: flex;
@@ -217,7 +254,7 @@ main{
     }
 
 }
-#searcher, #footer-form{   
+#searchForm, #footer-form{   
     background-color: #313131; ;
 } 
 
@@ -272,7 +309,15 @@ body {
     background-color: #919191 ;
 }
 
+
+.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
 #footer-form {
+    align-items: flex-start;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -313,13 +358,7 @@ body {
 }
 
 #footer-form input[type="checkbox"] {
-    width: auto;
-}
-
-#footer-form .checkbox {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    width: 100%;
 }
 
 /* Estilo para el contenedor principal */
@@ -335,10 +374,3 @@ body {
     gap: 20px;
 }
 
-#footer-form #form-left,
-#footer-form #form-right {
-    flex: 1 1 45%; /* Dos columnas que ocupan un 45% del ancho cada una */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
