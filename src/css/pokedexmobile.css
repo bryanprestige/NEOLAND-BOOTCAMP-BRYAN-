@@ -6,3 +6,26 @@ body{
         }
     } 
 }
+
+#footer-form{  
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox {
+    width: 490px;
+    margin-left: 0px;
+}
+#email {
+    width: 570px
+}
+
+#birthdaytime, #country{
+width: 280px;
+}
+
+#button-register {
+    width: 280px;
+}
+
+ 

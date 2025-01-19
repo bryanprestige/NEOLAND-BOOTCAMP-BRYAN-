@@ -7,20 +7,27 @@ body {
     display: block;
     align-content: center;
     height: max-content;
-    max-width: 1280px;
+    width: 100%;
     font-family:Arial, Helvetica, sans-serif ;
     color:white;
     text-shadow: 1px 1px #243D4B;
 }
-/*COMUNES*/
+/*COMUNES y TEXTOS*/
 .titulo {
     display: block;
     padding: 10px;
     margin: auto;
     border: 3px solid black;
+    text-shadow: 1px 1px #243D4B;
 }
 .texto {
     text-align: center;
+    font-size: 2em;
+    text-shadow: 1px 1px #243D4B;
+}
+p{
+    font-size: 20px;
+    text-shadow: 1px 1px #243D4B;
 }
 #quote {
     font-size:20px ;
@@ -28,66 +35,49 @@ body {
 #logro {
     font-size: 50px;
 }
-/*TABLA*/
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 20px 0;
-    font-size: 18px;
-    text-align: left;
-}
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-th {
-    background-color: #F7BC47;
-    color: white;
-}
-tr:nth-child(even) {
-    background-color: #243D4B;
-}
-tr:hover {
-    background-color: #f1f1f1;
-}
-#pokedex-tabla {
-    display: block;
-    justify-content: center;
-}
 /*NAVEGACION */
 #navegador {
-    border: 3px solid black;
     color: black;
     font-size: 25px;
     display: flex;
-    justify-content: space-evenly;
     margin: auto;
     top: 0;
     position: sticky;
     z-index: 1;
 }
 #lista-navegador {
+    border-radius: 10px;
     background-color: #F7BC47;
-    width: 1200px;
+    width: 50%;
     display: flex;
-    align-items: center;
+    justify-content: space-evenly;
+    border: 1px solid #243D4B;
+}
+#credenciales-formulario {
+    display: flex;
+    background-color: #F7BC47;
+    border-radius: 10px;
+    border: 1px solid #243D4B;
+    width: 50%;
 }
 #pagina-inicio {
     filter:contrast(50%);
-    transition: transform .2s; /* Animation */
-}
-#pagina-pokedex {
-    filter: grayscale(100%);
-    transition: transform .2s; /* Animation */
+    transition: transform .2s; 
+    margin-top: 40px;
 }
 #pagina-tienda {
     filter: grayscale(100%);
+    margin-top: 15px;
+}
+#pagina-pokedex {
+    filter: grayscale(100%);
+    transition: transform .2s; 
+    margin-top: 40px;
 }
 #pagina-inicio:hover{
     filter: contrast(100%);
     transform: scale(1.2);
 }
-
 #pagina-pokedex:hover{
     filter: grayscale(0%);
     transform: scale(1.2);
@@ -100,28 +90,23 @@ tr:hover {
     width: 50px;
 }
 #imagen-pokedex {
-    width: 60px;
+    width: 55px;
 }
-
 #imagen-tienda {
-    width: 130px;
+    width: 110px;
 }
-
-#imagen-inicio, #imagen-pokedex,#imagen-tienda {
+#imagen-inicio {
     border-radius: 10px;
 }
-#usuario {
-    width: 30px;
-}
-#password {
-    width: 50px;
-}
-#log-in {
-    border-radius: 5px;
-    background-color: #243D4B;
-    color: #F7BC47;
-}
 /*FLIP CARD*/
+.flip-card {
+    background-color: transparent;
+    width: 45px;
+    height: 62px;
+    perspective: 1000px;
+    display: flex;
+    margin-top: 40px;
+  }
 #card-back{
     width: 45px;
     filter: grayscale(100%);
@@ -137,13 +122,7 @@ tr:hover {
 #card-front:hover {
     transform: scale(1.5);
 }
-.flip-card {
-    background-color: transparent;
-    width: 45px;
-    height: 62px;
-    perspective: 1000px;
-    display: flex;
-  }
+
   .flip-card-inner {
     position: relative;
     width: 100%;
@@ -170,27 +149,64 @@ tr:hover {
     color: white;
     transform: rotateY(180deg);
   }
-/*GRID TEXTO*/
-#grid-texto {
-    width: 85%;
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
+
+#credenciales-formulario {
+    display: flex;
+    flex-direction: column;
 }
-#container-alto-mando {
-    width: 94%;
+.user-and-password {
+    display: flex;
+}
+#usuario {
+    width: 40px;
+}
+#password {
+    width: 40px;
+}
+#log-in {
+    border-radius: 5px;
+    background-color: #243D4B;
+    color: #F7BC47;
+    width: 100%;
+}
+.user-navegador, .password-navegador{
+    border-radius: 5px;
+    border-color: #243D4B;
+    margin: auto;
+}
+
+.blue-back {
+    color:#F7BC47;
+    text-align: center;
+    text-shadow: 1px 1px #284657;
+    font-size: 2em;
+    padding: 10px;
+    background-color: rgba(12, 12, 68, 0.1)
+}
+.yellow-back {
+    color:#ffffff;
+    text-align: center;
+    text-shadow: 1px 1px #284657;
+    font-size: 2em;
+    padding: 10px;
+    background-color: rgba(243, 207, 89, 0.1)
+}
+/*INFORMATION*/
+#info-container {
+  display: flex;
+  flex-direction: row;
 }
 /*MEDALLAS*/
 #section-medallas {
-    display: block;
-    width: 98%;
-    align-items: center;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
 }
 #medallas {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content:center;  
+    width: 100%;
 }
 #container-medallas .texto h2 {
     margin: 0; 
@@ -211,7 +227,6 @@ tr:hover {
     padding: 10px; 
     box-sizing: border-box;
 }
-
 #roca,
 #cascada,
 #trueno,
@@ -222,7 +237,6 @@ tr:hover {
 #tierra {
     opacity: 0.6;
 }
-
 #roca:hover {
     color:grey;
     scale: 1.1;
@@ -273,23 +287,12 @@ tr:hover {
 #youtube-link:hover {
     color: yellow;
 }
-/*FORMULARIOS*/
-#lista-navegador, #credenciales-formulario {
-    display: flex;
-    padding: 10px;
-    background-color: #F7BC47;
-}
-
-
 #credenciales-sorpresa, #credenciales-404{
     display: flex;
     padding: 10px;
     background-color: #243D4B;
 }
-.item-navegador{
-    margin:auto;
-    list-style: none;
-}
+
 #leyenda {
     border: 3px solid black;
     background-color: #243D4B;
@@ -304,8 +307,7 @@ tr:hover {
     grid-template-columns: repeat(3,1fr);
 }
 #formulario-2 {
-    width: 100% ;
-    margin: 0 auto;
+    width: 100%;
     display: grid;
     background-color: rgb(255, 255, 255);
     grid-template-rows: repeat(3,1fr);
@@ -328,16 +330,20 @@ tr:hover {
     animation-name: slides;
     animation-iteration-count: infinite;
 }
-#pikachu {
-    width:200px;
-}
 
 #pikachu, #squirtle, #charmander, #bulbasaur {
     opacity: 0;
     animation-name: appear;
     animation-duration: 6s;
     animation-iteration-count: infinite;
+    width: 110px;
 }
+
+#pikachu {
+    width:200px;
+    margin-left: -50px;
+}
+
 
 @keyframes appear {
     25%{
@@ -356,9 +362,7 @@ tr:hover {
          transform: translate(500px,0px);
      }    
 }
-img {
-    width: 100px;
-}
+
 .mensaje-container {
     display: flex;
     flex-direction: column; 
@@ -399,7 +403,7 @@ img {
     width: 180px;
 }
 #poke-1,#poke-2 ,#poke-3 ,#poke-4 ,#poke-5 ,#poke-6  {
-    width: 80px;
+    width: 160px;
 }
 
 /*RESPONSIVE 768*/
@@ -415,24 +419,26 @@ img {
         width: 100%; /* Se adapta al ancho del dispositivo */
         max-width: 768px; /* Limita su tamaño máximo */
         box-sizing: border-box; /* Considera padding y borde en el ancho total */
-        border: 2px solid black; /* Asegura que la caja sea visible */
         padding: 10px; /* Agrega espacio interno */
     }
 
-    #credenciales-formulario,#credenciales-404,#credenciales-sorpresa {
+   #credenciales-404,#credenciales-sorpresa {
         flex-direction: row; /* Alinea elementos en columna */
         justify-content: center; /* Centra los elementos */
         width: 100%; /* Ocupa todo el ancho del navegador */
         max-width: 768px;
     }
-
+    #credenciales-formulario{
+        width: 100%;
+        flex-direction: row;
+    }
     #grid-texto {
         display: block;
         width: 98%;
     }
     #lista-navegador {
         flex-direction: row; /* Alinea elementos en columna */
-        justify-content: center; /* Centra los elementos */
+        justify-content: space-evenly; /* Centra los elementos */
         width: 100%; /* Ocupa todo el ancho del navegador */
     }
     img {
@@ -456,6 +462,9 @@ img {
     }
     #formulario, #formulario-2 {
         grid-template-columns: 1fr;
+    }
+    #log-in {
+        margin: 20px
     }
 }
 /*RESPONSIVE 992*/
@@ -482,7 +491,7 @@ img {
     #ads img {
         width: 150px;
     }
-    #ad-3, #ad-4 {
+    #poke-3, #poke-4 {
         display: none;
     }
 

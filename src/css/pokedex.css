@@ -8,6 +8,7 @@ body {
     background-color: rgb(255, 245, 245);
     display: grid;
     grid-template-columns: repeat(12,1fr);
+    background-image: url("../imagenes/background-poke.png");
     header {
         grid-column-start: span 12;
         display: flex;
@@ -228,6 +229,7 @@ main{
         label{
             font-weight: bold;
             color: white;
+            margin-left: 5px;
         }
         input{
             width: 200px;
@@ -283,12 +285,6 @@ main{
 }
 
 
-.checkbox {
-    display: flex;
-    align-items: flex-start;
-width: 100%;
-}
-
 /*IDS*/
 #use{
     font-size: large;
@@ -303,9 +299,6 @@ width: 100%;
     border-radius: 5px;
 }
 
-body {
-    background-image: url("../imagenes/background-poke.png");
-}
 
 #pokemon-button {
     padding: 10px;
@@ -316,34 +309,25 @@ body {
     background-color: #919191 ;
 }
 
-#footer-form {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
+/* Estilo para el contenedor principal */
+#footer-pokedex {
+    background-color: #313131;
+    padding: 20px;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: grid;
+    grid-template-columns: span 12;
     gap: 20px;
 }
 
-/* Agrupar los campos en dos secciones */
-#footer-form .form-left,
-#footer-form .form-right {
-    flex: 1 1 45%; /* Dos columnas que ocupan un 45% del ancho cada una */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
-/* Estilos generales */
-#footer-form fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
+#form-left {
+    grid-column-start: span 6;
+    width:100%;
 }
-
-#footer-form label {
-    font-size: 14px;
-    color: white;
+#form-right {
+    grid-column-end: span 6;
+    width: 100%;
 }
 
 #footer-form input,
@@ -360,29 +344,50 @@ body {
     width: auto;
 }
 
-#footer-form .checkbox {
+#footer-form {
     display: flex;
     align-items: flex-start;
     gap: 10px;
 }
 
-/* Estilo para el contenedor principal */
-#footer-pokedex {
-    background-color: #313131;
-    padding: 20px;
-    color: white;
-    font-family: Arial, sans-serif;
+#pokedex-checkbox {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    gap: 20px;
+    align-items: flex-start;
+    width: 600px;
 }
 
-#footer-form #form-left,
-#footer-form #form-right {
-    flex: 1 1 45%; /* Dos columnas que ocupan un 45% del ancho cada una */
+#pokedex-country-date {
+    padding: 10px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
 }
+
+#country {
+    margin-right: 10px;
+    margin-left: 0px;
+    width: 220px;
+}
+
+#email {
+    padding: 10px;
+    width: 430px;
+    margin-left: 10px ;
+}
+
+#button-register {
+    padding: 30px;
+    font-weight: bold;
+    background-color: #b9b4b4;
+    color: white;
+    border-radius: 10px;
+    margin-left: 10px;
+    width: 180px;
+    font-size: 20px;
+    text-shadow: 1px 2px rgb(163, 153, 153);
+}
+
+#register-text {
+    font-weight: bold;
+    font-size: 25px;
+}  
