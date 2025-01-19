@@ -56,35 +56,31 @@
                 </li>
             </ol>
             <footer id="footer-pokedex">
+                <h1 id="register-text">Regístrate para recibir correos electrónicos!</h1>
                 <form id="footer-form">
                     <div id="form-left">
-                    <fieldset id="pokedex-email">
-                        <label for="email">Regístrate para recibir correos electrónicos</label>
                         <input type="email" id="email" placeholder="Email" />
-                    </fieldset>
-                    <fieldset id="pokedex-country">
-                        <label for="country">País</label>
+                    <fieldset id="pokedex-country-date">
                         <select name="country" id="country">
                             <option value="Spain">España</option>
                             <option value="United Kingdom">Reino Unido</option>
                             <option value="United States">Estados Unidos</option>
                             <option value="Ecuador">Ecuador</option>
                         </select>
-                        <label for="birthdaytime">Fecha de nacimiento</label>
                         <input type="datetime-local" id="birthdaytime" name="birthdaytime" />
-                        <button id="pokemon-button">Register</button>
                     </fieldset>
+                        <button id="button-register">Register</button>
                     </div>
                     <div id="form-right">
                     <fieldset id="pokedex-checkbox">
-                        <label>Me gustaría recibir correos sobre:</label>
-                        <div class="checkbox">
+                        <label>Me gustaría recibir correos sobre:</label> 
+                            <div class="checkbox">
                             <input type="checkbox" name="marketing" id="marketing" />
                             <label for="marketing">Videojuegos, aplicaciones y más cosas de Pokémon</label>
-                        </div>
-                        <div class="checkbox">
-                            <input type="checkbox" name="conditions" id="conditions" />
-                            <label for="conditions">Acepto las <a href="#">condiciones de uso</a> y el <a href="#">aviso de privacidad</a>.</label>
+                            <div class="checkbox">
+                                <input type="checkbox" name="conditions" id="conditions" />
+                                <label for="conditions">Acepto las <a href="#">condiciones de uso</a> y el <a href="#">aviso de privacidad</a>.</label>
+                            </div>
                         </div>
                     </fieldset>
                     </div>
