@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de la Compra</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/shoppingListStyle.css">
     <script src="./Java/index.js"></script>
 </head>
 <body>
@@ -19,7 +19,7 @@
                 <input type="number" id="qty" min="0" max="10" step="1" placeholder="qty    ">
                 <input type="number" id="precio" min="0" max="100" step="1" placeholder="0€">
                 <div id="button-container">
-                    <button class="buttons" onclick="addToShoppingList()">Anadir</button>
+                    <button class="buttons" id="add-button" onclick="addToShoppingList()">Anadir</button>
                     <button id="reset-button" onclick="resetShoppingList()" >Nueva Compra</button>
                     <button id="surprise-button" class="buttons" type="button" onclick="changeHeaderAndFooterColor()">Sorpresa</button>
                 </div>
@@ -46,17 +46,17 @@
     <aside>
         <nav>
             <ul>
-                <li><a href="https://wetaca.com" target="_blank"></a> Wetaca</a></li>
-                <li><a href="https://knoweats.com" target="_blank"> Knoweats</a></li>
-                <li><a href="https://www.just-eat.es/a-domicilio" target="_blank"> JustEats</a></li>
-                <li><a href="https://glovoapp.com/es" target="_blank"> Glovo</a></li>
-                <li><a href="www.ubereats.com/es" target="_blank"> Uber Eats</a></li>
+                <li><a href="https://wetaca.com" target="_blank">Wetaca</a></li>
+                <li><a href="https://knoweats.com" target="_blank">Knoweats</a></li>
+                <li><a href="https://www.just-eat.es/a-domicilio" target="_blank">JustEats</a></li>
+                <li><a href="https://glovoapp.com/es" target="_blank">Glovo</a></li>
+                <li><a href="www.ubereats.com/es" target="_blank">Uber Eats</a></li>
             </ul>
         </nav>
     </aside>
     <footer>
         &copy;Bryanprestige 2025
-        <p class="texto"><a href="./index.html" id="arriba"> Volver atras</a></p>
+        <p class="texto"><a href="./pokemonNews.html" id="arriba"> Volver atras</a></p>
     </footer>
 
 </body>
