@@ -1,10 +1,7 @@
+//SHOPPING LIST DATABASE
 let shoppingList = [];
 
-//const storeData = JSON.parse(localStorage.getItem('shoppingList'))
-//storeData.forEach(savedArticle => {
-  //  shoppingList.push(savedArticle)
-
-//TO DO: define my shopping list items 
+//MY SHOPPING LIST ITEMS
 const PRODUCTS = {
     MILK: 'leche',
     BANANA: 'platano',
@@ -22,27 +19,39 @@ const PRODUCTS = {
     OLIVE_OIL: 'aceite oliva',
     SUNFLOWER_OIL: 'aceite girasol'
 }
+// ASSIGN DOM CONTENT LOADED EVENT
+document.addEventListener('DOMContentLoaded', onDomContentLoaded)
+//=====EVENTS=====//
+function onDomContentLoaded() {
+    const addButton = document.getElementById('add-button')
+    const resetButton = document.getElementById('reset-button')
+    const surpriseButton = document.getElementById('surprise-button')
 
+    addButton.addEventListener('click',addToShoppingList)
+    resetButton.addEventListener('click',resetShoppingList)
+    surpriseButton.addEventListener('click',changeHeaderAndFooterColor)
+}
 
-
-function addToShoppingList() {
-    // Obtener los valores de los inputs
+//=====EVENTS=====//
+function addToShoppingList(e) {
+    // GET THE VALUE OF THE INPUTS
     let articleName = document.getElementById('article').value;
     let articleQty = document.getElementById('qty').value;
     let articlePrice = document.getElementById('precio').value;
-    
+    let resetButton = document.getElementById('reset-button');
+    //GET ELEMENTS TO MOFIDY
     let shoppingListTableBody = document.getElementById('shopping-list-table-body');
     let shoppingListTableTotal = document.getElementById('shopping-list-table-total');
-    let resetButton = document.getElementById('reset-button');
+    //DEFINE THE AMOUNT 
     let totalAmount = 0;
 
-    // Validar que se haya ingresado un nombre
+    // VALIDATE THAT A NAME HAS BEEN INTRODUCED
+    //WONT WORK WITHOUT THIS
     if (articleName === '') {
         console.error('Falta el nombre del artículo');
         return;
     }
-
-    // Establecer valores predeterminados según el artículo
+    // ESTABLISHED THE QUANTITY AND PRICE OF YOU FAVOURITES ARTICLES
     switch (articleName) {
         case PRODUCTS.MILK:
             articleQty = 1;
@@ -70,127 +79,119 @@ function addToShoppingList() {
             break;
         // Agregar más casos según sea necesario
     }
-
-    // Convertir a números los valores de cantidad y precio
-    articleQty = Number(articleQty);
-    articlePrice = Number(articlePrice);
-
-    // Crear el objeto del artículo
+    // CONVERT THE QUANTITY AND PRICE TO NUMBERS
+    //  CREAT THE OBJECT OF THE ARTICLE
     let newArticleObject = {
-        qty: articleQty,
         name: articleName,
-        price: articlePrice
-    };
+        qty: Number(articleQty),
+        price: Number(articlePrice),
+    }
 
-    // Agregar el artículo al array
+    // ADD THE NEW ITEM CREATED TO THE SHOPPING LIST ARRAY
     shoppingList.push(newArticleObject);
 
-    //Save shoppinh list in localstorage 
-   // localStorage.setItem('shoppingList', JSON.stringify(shoppingList))
+    //SAVE SHOPPING LIST IN LOCAL STORAGE
+   localStorage.setItem('shoppingList', JSON.stringify(shoppingList))
 
-    // Crear los elementos de la fila
+    // CREATE THE ELEMENTS OF THE ROW
     let newTableRow = document.createElement('tr');
     let qtyCell = document.createElement('td');
     let nameCell = document.createElement('td');
     let priceCell = document.createElement('td');
     let subtotalCell = document.createElement('td');
-    let borrarCell = document.createElement('button');
+    let deleteCell = document.createElement('button');
 
-    // Asignar valores a las celdas
+    // ASSIGN VALUE TO THE CELLS
     qtyCell.innerText = newArticleObject.qty;
     nameCell.innerText = newArticleObject.name;
     priceCell.innerText = newArticleObject.price.toFixed(2) + '€';
     subtotalCell.innerText = (newArticleObject.qty * newArticleObject.price).toFixed(2) + '€';
-    borrarCell.innerText = '🗑';
-    borrarCell.classList.add('delete-button');
+    deleteCell.innerText = '🗑';
+    deleteCell.classList.add('delete-button');
 
-    // Agregar evento de clic al botón de borrar
-    borrarCell.addEventListener('click', function () {
-        // Elimina la fila del DOM
-        shoppingListTableBody.removeChild(newTableRow);
-    
-        // Busca y elimina el objeto correspondiente en shoppingList
-        const indexToRemove = shoppingList.findIndex(item => 
-            item.name === newArticleObject.name && 
-            item.qty === newArticleObject.qty && 
-            item.price === newArticleObject.price
-        );
-    
-        if (indexToRemove > -1) {
-            shoppingList.splice(indexToRemove, 1);
-        }
-    
-        // Recalcula el total
-        let newTotal = shoppingList.reduce((acc, item) => acc + item.qty * item.price, 0);
-        shoppingListTableTotal.innerText = newTotal.toFixed(2) ;
-    
-        // Si la lista queda vacía, oculta el botón de reset
-        if (shoppingList.length === 0) {
-            resetButton.style.display = 'none';
-        }
-
-        //localStorage.setItem('shoppingList', JSON.stringify(shoppingList))
-    
-        //console.log('Artículo eliminado. Nueva lista:', shoppingList);
-    });
-
-    // Agregar celdas a la fila
+    //ADD CELLS TO THE RAW
     newTableRow.appendChild(qtyCell);
     newTableRow.appendChild(nameCell);
     newTableRow.appendChild(priceCell);
     newTableRow.appendChild(subtotalCell);
-    newTableRow.appendChild(borrarCell);
-
+    newTableRow.appendChild(deleteCell);
+   
+    //SAVE THE LIST TO LOCAL STORAGE
+    localStorage.setItem('shoppingList', JSON.stringify(shoppingList))
+    
     // Agregar la fila al cuerpo de la tabla
     shoppingListTableBody.appendChild(newTableRow);
 
-    // Calcular y mostrar el total
+    // ADDING EVENT TO THE DELETE RAW BUTTON
+    deleteCell.addEventListener('click', function () {
+            // REMOVE THE RAW FROM THE DOCUMENT
+            shoppingListTableBody.removeChild(newTableRow);
+        
+            // SEARCH AND FIND THE ITEMTO DELETE ON THE BODY
+            const indexToRemove = shoppingList.findIndex(item => 
+                item.name === newArticleObject.name && 
+                item.qty === newArticleObject.qty && 
+                item.price === newArticleObject.price
+            );
+
+            if (indexToRemove > -1) {
+                shoppingList.splice(indexToRemove, 1);
+            }
+        
+            // RECALCULATE THE TOTAL
+            let newTotal = shoppingList.reduce((acc, item) => acc + item.qty * item.price, 0);
+            shoppingListTableTotal.innerText = newTotal.toFixed(2) ;
+        
+            // IF THE LIST IS EMPTY, HIDE THE RESET BUTTON
+            if (shoppingList.length === 0) {
+                resetButton.style.display = 'none';
+            }
+        }
+    );
+ 
+    // CALCULATE AND SHOW THE TOTAL
     totalAmount = shoppingList.reduce((total, item) => total + item.qty * item.price, 0);
     shoppingListTableTotal.innerText = totalAmount.toFixed(2) ;
 
-    // Mostrar el botón de reset si la lista tiene elementos
+    // SHOW THE RESET BUTTON IF THE LIST HAS ANY ITEMS
     if (shoppingList.length === 1) {
         resetButton.style.display = 'block';
     }
-
-    console.log('Artículo agregado:', newArticleObject);
-    console.log('Lista de la compra:', shoppingList);
+    //EMPTY THE PRODUCT
+    document.getElementById('article').value = '';
 }
 
-function getRandomColor() {
-    // Genera un color aleatorio en formato hexadecimal
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-}
-
-function changeHeaderAndFooterColor() {
-    const header = document.querySelector('header'); // Selecciona el header
-    const footer = document.querySelector('footer'); // Selecciona el footer
-    const randomColor = getRandomColor(); // Genera un color aleatorio
-
-    header.style.backgroundColor = randomColor; // Cambia el fondo del header
-    footer.style.backgroundColor = randomColor; // Cambia el fondo del footer
-    console.log(`Nuevo color del header y footer: ${randomColor}`); // Opcional para depuración
-}
-
-function resetShoppingList() {
-    // Limpia el array de la lista de la compra
+function resetShoppingList(e) {
+    // CLEAR THE ARRY OF THE SHOPPING LIST
     shoppingList = [];
 
-    // Limpia el contenido del cuerpo de la tabla
+    // CLEAR THE CONTENT OF THE TABLE BODY
     const shoppingListTableBody = document.getElementById('shopping-list-table-body');
     shoppingListTableBody.innerHTML = '';
 
-    // Reinicia el total a 0 y actualiza el campo correspondiente
+    // RESET THE TOTAL OF THE SHOPPING LIST TO 0
     const shoppingListTableTotal = document.getElementById('shopping-list-table-total');
     shoppingListTableTotal.innerText = '0.00';
 
-    // Oculta el botón de reset
+    // HIDE THE RESET BUTTON
     const resetButton = document.getElementById('reset-button');
     resetButton.style.display = 'none';
-
+    // EMPTY THE VALUE OF THE INPUTS
     document.getElementById('article').value = '';
     document.getElementById('qty').value = '';
     document.getElementById('precio').value = '';
-
-    console.log('La lista de la compra ha sido reiniciada.');
 }
+
+function changeHeaderAndFooterColor(e) {
+    //GENERATE A RAMDON COLOR IN THE HEXA FORMAT
+        function getRandomColor() {
+            return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+        }
+        //GET THE HEADER AND THE FOOTER
+        const header = document.querySelector('header'); 
+        const footer = document.querySelector('footer'); 
+    
+        //GET A RAMDOM COLOR FOR THE HEADER AND ANOTHER FOR THE FOOTER
+        header.style.backgroundColor = getRandomColor();
+        footer.style.backgroundColor = getRandomColor(); 
+    }
