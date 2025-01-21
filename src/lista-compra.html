@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de la Compra</title>
     <link rel="stylesheet" href="./css/shoppingListStyle.css">
-    <script src="./Java/index.js"></script>
+    <script  type="module" src="Java/index.js"></script>
 </head>
 <body>
     <header>
         <h1>LISTA DE LA COMPRA</h1>
     </header>
     <main id="main-content">
+        <datalist id="productos">
+        </datalist>
         <form action="#" id="formulario">
             <fieldset>
                 <legend>Anadir a la lista</legend>
-                <input type="text" placeholder="product" id="article">
+                <input type="text" placeholder="product" list="productos" id="article">
                 <input type="number" id="qty" min="0" max="10" step="1" placeholder="qty    ">
                 <input type="number" id="precio" min="0" max="100" step="1" placeholder="0€">
                 <div id="button-container">
@@ -28,7 +30,7 @@
         <table id="shopping-list-table">
             <tr>
                 <th>Cantidad</th>
-                <th>Nombre del articulo</th>
+                <th>Nombre del articulo</th>s
                 <th>Precio</th>
                 <th>Subtotal</th>
                 <th>Borrar</th>

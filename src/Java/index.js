@@ -1,6 +1,5 @@
 //SHOPPING LIST DATABASE
 let shoppingList = [];
-
 //MY SHOPPING LIST ITEMS
 const PRODUCTS = {
     MILK: 'leche',
@@ -30,6 +29,8 @@ function onDomContentLoaded() {
     addButton.addEventListener('click',addToShoppingList)
     resetButton.addEventListener('click',resetShoppingList)
     surpriseButton.addEventListener('click',changeHeaderAndFooterColor)
+
+    getUsualProduct()
 }
 
 //=====EVENTS=====//
@@ -38,13 +39,8 @@ function addToShoppingList(e) {
     let articleName = document.getElementById('article').value;
     let articleQty = document.getElementById('qty').value;
     let articlePrice = document.getElementById('precio').value;
-    let resetButton = document.getElementById('reset-button');
     //GET ELEMENTS TO MOFIDY
     let shoppingListTableBody = document.getElementById('shopping-list-table-body');
-    let shoppingListTableTotal = document.getElementById('shopping-list-table-total');
-    //DEFINE THE AMOUNT 
-    let totalAmount = 0;
-
     // VALIDATE THAT A NAME HAS BEEN INTRODUCED
     //WONT WORK WITHOUT THIS
     if (articleName === '') {
@@ -86,13 +82,10 @@ function addToShoppingList(e) {
         qty: Number(articleQty),
         price: Number(articlePrice),
     }
-
     // ADD THE NEW ITEM CREATED TO THE SHOPPING LIST ARRAY
     shoppingList.push(newArticleObject);
-
     //SAVE SHOPPING LIST IN LOCAL STORAGE
    localStorage.setItem('shoppingList', JSON.stringify(shoppingList))
-
     // CREATE THE ELEMENTS OF THE ROW
     let newTableRow = document.createElement('tr');
     let qtyCell = document.createElement('td');
@@ -100,7 +93,6 @@ function addToShoppingList(e) {
     let priceCell = document.createElement('td');
     let subtotalCell = document.createElement('td');
     let deleteCell = document.createElement('button');
-
     // ASSIGN VALUE TO THE CELLS
     qtyCell.innerText = newArticleObject.qty;
     nameCell.innerText = newArticleObject.name;
@@ -108,56 +100,70 @@ function addToShoppingList(e) {
     subtotalCell.innerText = (newArticleObject.qty * newArticleObject.price).toFixed(2) + '€';
     deleteCell.innerText = '🗑';
     deleteCell.classList.add('delete-button');
-
     //ADD CELLS TO THE RAW
     newTableRow.appendChild(qtyCell);
     newTableRow.appendChild(nameCell);
     newTableRow.appendChild(priceCell);
     newTableRow.appendChild(subtotalCell);
     newTableRow.appendChild(deleteCell);
-   
     //SAVE THE LIST TO LOCAL STORAGE
     localStorage.setItem('shoppingList', JSON.stringify(shoppingList))
-    
     // Agregar la fila al cuerpo de la tabla
     shoppingListTableBody.appendChild(newTableRow);
-
     // ADDING EVENT TO THE DELETE RAW BUTTON
     deleteCell.addEventListener('click', function () {
-            // REMOVE THE RAW FROM THE DOCUMENT
-            shoppingListTableBody.removeChild(newTableRow);
-        
-            // SEARCH AND FIND THE ITEMTO DELETE ON THE BODY
-            const indexToRemove = shoppingList.findIndex(item => 
-                item.name === newArticleObject.name && 
-                item.qty === newArticleObject.qty && 
-                item.price === newArticleObject.price
-            );
-
-            if (indexToRemove > -1) {
-                shoppingList.splice(indexToRemove, 1);
-            }
-        
-            // RECALCULATE THE TOTAL
-            let newTotal = shoppingList.reduce((acc, item) => acc + item.qty * item.price, 0);
-            shoppingListTableTotal.innerText = newTotal.toFixed(2) ;
-        
-            // IF THE LIST IS EMPTY, HIDE THE RESET BUTTON
-            if (shoppingList.length === 0) {
-                resetButton.style.display = 'none';
-            }
+        // REMOVE THE RAW FROM THE DOCUMENT
+        shoppingListTableBody.removeChild(newTableRow);
+        // SEARCH AND FIND THE ITEMTO DELETE ON THE BODY
+        const indexToRemove = shoppingList.findIndex(item => 
+            item.name === newArticleObject.name && 
+            item.qty === newArticleObject.qty && 
+            item.price === newArticleObject.price
+        );
+        if (indexToRemove > -1) {
+            shoppingList.splice(indexToRemove, 1);
         }
-    );
- 
-    // CALCULATE AND SHOW THE TOTAL
+            // RECALCULATE THE TOTAL
+            reCalculatingTotal ()
+             // IF THE LIST IS EMPTY, HIDE THE RESET BUTTON
+            hideResetButton ()
+            }
+        );
+            // CALCULATE AND SHOW THE TOTAL
+            calculateTotalAmount ()
+            // SHOW THE RESET BUTTON IF THE LIST HAS ANY ITEMS
+           displayResetButton ()
+            //EMPTY THE PRODUCT
+           emptyArticleInput()
+}
+
+function reCalculatingTotal () {
+    let shoppingListTableTotal = document.getElementById('shopping-list-table-total');   
+    let newTotal = shoppingList.reduce((acc, item) => acc + item.qty * item.price, 0);
+        shoppingListTableTotal.innerText = newTotal.toFixed(2) ;
+}
+
+function calculateTotalAmount () {
+    let totalAmount = 0;
+    let shoppingListTableTotal = document.getElementById('shopping-list-table-total');
     totalAmount = shoppingList.reduce((total, item) => total + item.qty * item.price, 0);
     shoppingListTableTotal.innerText = totalAmount.toFixed(2) ;
+}
 
-    // SHOW THE RESET BUTTON IF THE LIST HAS ANY ITEMS
+function hideResetButton () {
+    let resetButton = document.getElementById('reset-button');
+    if (shoppingList.length === 0) {
+        resetButton.style.display = 'none';
+        }
+}
+function displayResetButton () {
+    let resetButton = document.getElementById('reset-button');
     if (shoppingList.length === 1) {
         resetButton.style.display = 'block';
     }
-    //EMPTY THE PRODUCT
+}
+
+function emptyArticleInput () {
     document.getElementById('article').value = '';
 }
 
@@ -194,4 +200,43 @@ function changeHeaderAndFooterColor(e) {
         //GET A RAMDOM COLOR FOR THE HEADER AND ANOTHER FOR THE FOOTER
         header.style.backgroundColor = getRandomColor();
         footer.style.backgroundColor = getRandomColor(); 
-    }
+}
+/**
+ * Get usual products and put them on datalist
+ */
+async function getUsualProduct() {
+    const dataListElement = document.getElementById('productos')
+    const apiData = await getAPIData ()
+    
+    apiData.forEach((product) => {
+        const newOptionElement = document.createElement('option')
+        newOptionElement.value = product.name
+        dataListElement.appendChild(newOptionElement)        
+    });
+}
+/**
+ * Get data from API
+ */
+async function getAPIData() {
+    // API endpoint
+    const API_USUAL_PRODUCTS_URL = 'api/get.articles.json'
+  
+    const apiData = await fetch(API_USUAL_PRODUCTS_URL)
+      .then((response) => {
+        if (!response.ok) {
+          showError(response.status)
+        }
+  
+        return response.json();
+      })
+  
+    return apiData
+  }
+/**
+ * Show error to user
+ */
+function showError(errorMessage) {
+    window.alert(errorMessage)
+    console.error(errorMessage)
+    throw new Error(`HTTP error! Status: ${errorMessage}`);
+  }

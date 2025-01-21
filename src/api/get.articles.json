@@ -1,0 +1,32 @@
+[
+    {
+        "id":"carne1",
+        "name":"Carne",
+        "qty":"2",
+        "price":"2.1"
+    },
+    {
+        "id":"tomate1",
+        "name":"Tomate",
+        "qty":"4",
+        "price":"3.1"
+    },
+    {
+        "id":"pan1",
+        "name":"Pan",
+        "qty":"3",
+        "price":"4.1"
+    },
+    {
+        "id":"cereales1",
+        "name":"Cereales",
+        "qty":"4",
+        "price":"5.1"
+    },
+    {
+        "id":"lechuga1",
+        "name":"Lechuga",
+        "qty":"1",
+        "price":"0.75"
+    }
+]
