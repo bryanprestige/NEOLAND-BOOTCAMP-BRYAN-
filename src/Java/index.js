@@ -32,7 +32,6 @@ function onDomContentLoaded() {
 
     getUsualProduct()
 }
-
 //=====EVENTS=====//
 function addToShoppingList(e) {
     // GET THE VALUE OF THE INPUTS
@@ -43,10 +42,7 @@ function addToShoppingList(e) {
     let shoppingListTableBody = document.getElementById('shopping-list-table-body');
     // VALIDATE THAT A NAME HAS BEEN INTRODUCED
     //WONT WORK WITHOUT THIS
-    if (articleName === '') {
-        console.error('Falta el nombre del artículo');
-        return;
-    }
+   validateArticle()
     // ESTABLISHED THE QUANTITY AND PRICE OF YOU FAVOURITES ARTICLES
     switch (articleName) {
         case PRODUCTS.MILK:
@@ -73,7 +69,6 @@ function addToShoppingList(e) {
             articleQty = 1;
             articlePrice = 6.7;
             break;
-        // Agregar más casos según sea necesario
     }
     // CONVERT THE QUANTITY AND PRICE TO NUMBERS
     //  CREAT THE OBJECT OF THE ARTICLE
@@ -134,22 +129,54 @@ function addToShoppingList(e) {
             // SHOW THE RESET BUTTON IF THE LIST HAS ANY ITEMS
            displayResetButton ()
             //EMPTY THE PRODUCT
-           emptyArticleInput()
+           emptyInputs()
 }
-
+function resetShoppingList(e) {
+    // CLEAR THE ARRY OF THE SHOPPING LIST
+    shoppingList = [];
+    // CLEAR THE CONTENT OF THE TABLE BODY
+    emptyBody()
+    // RESET THE TOTAL OF THE SHOPPING LIST TO 0
+    resetTotalAmount()
+    // HIDE THE RESET BUTTON
+    hideResetButton()
+    // EMPTY THE VALUE OF THE INPUTS
+    emptyInputs()
+}
+function changeHeaderAndFooterColor(e) {
+    //GET THE HEADER AND THE FOOTER
+    const header = document.querySelector('header'); 
+    const footer = document.querySelector('footer'); 
+    //GET A RAMDOM COLOR FOR THE HEADER AND ANOTHER FOR THE FOOTER
+    header.style.backgroundColor = getRandomColor();
+    footer.style.backgroundColor = getRandomColor(); 
+}
+//======METHODS=====//
+// VALIDATE THAT A NAME HAS BEEN INTRODUCED
+function validateArticle() {
+    let articleName = document.getElementById('article').value;
+    if (articleName === '') {
+        console.error('Falta el nombre del artículo');
+        return;
+    }
+}
+//TOTAL CALCULATIONS
 function reCalculatingTotal () {
     let shoppingListTableTotal = document.getElementById('shopping-list-table-total');   
     let newTotal = shoppingList.reduce((acc, item) => acc + item.qty * item.price, 0);
         shoppingListTableTotal.innerText = newTotal.toFixed(2) ;
 }
-
 function calculateTotalAmount () {
     let totalAmount = 0;
     let shoppingListTableTotal = document.getElementById('shopping-list-table-total');
     totalAmount = shoppingList.reduce((total, item) => total + item.qty * item.price, 0);
     shoppingListTableTotal.innerText = totalAmount.toFixed(2) ;
 }
-
+function resetTotalAmount () {
+    const shoppingListTableTotal = document.getElementById('shopping-list-table-total');
+    shoppingListTableTotal.innerText = '0.00';
+}
+//RESET BUTTON DISPLAYS
 function hideResetButton () {
     let resetButton = document.getElementById('reset-button');
     if (shoppingList.length === 0) {
@@ -162,45 +189,21 @@ function displayResetButton () {
         resetButton.style.display = 'block';
     }
 }
-
-function emptyArticleInput () {
-    document.getElementById('article').value = '';
-}
-
-function resetShoppingList(e) {
-    // CLEAR THE ARRY OF THE SHOPPING LIST
-    shoppingList = [];
-
-    // CLEAR THE CONTENT OF THE TABLE BODY
-    const shoppingListTableBody = document.getElementById('shopping-list-table-body');
-    shoppingListTableBody.innerHTML = '';
-
-    // RESET THE TOTAL OF THE SHOPPING LIST TO 0
-    const shoppingListTableTotal = document.getElementById('shopping-list-table-total');
-    shoppingListTableTotal.innerText = '0.00';
-
-    // HIDE THE RESET BUTTON
-    const resetButton = document.getElementById('reset-button');
-    resetButton.style.display = 'none';
-    // EMPTY THE VALUE OF THE INPUTS
+//CLEAR INPUTS AND BODY
+function emptyInputs () {
     document.getElementById('article').value = '';
     document.getElementById('qty').value = '';
     document.getElementById('precio').value = '';
 }
-
-function changeHeaderAndFooterColor(e) {
-    //GENERATE A RAMDON COLOR IN THE HEXA FORMAT
-        function getRandomColor() {
-            return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-        }
-        //GET THE HEADER AND THE FOOTER
-        const header = document.querySelector('header'); 
-        const footer = document.querySelector('footer'); 
-    
-        //GET A RAMDOM COLOR FOR THE HEADER AND ANOTHER FOR THE FOOTER
-        header.style.backgroundColor = getRandomColor();
-        footer.style.backgroundColor = getRandomColor(); 
+function emptyBody () {
+    const shoppingListTableBody = document.getElementById('shopping-list-table-body');
+    shoppingListTableBody.innerHTML = '';
 }
+//GENERATE A RAMDON COLOR IN THE HEXA FORMAT
+function getRandomColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
 /**
  * Get usual products and put them on datalist
  */
