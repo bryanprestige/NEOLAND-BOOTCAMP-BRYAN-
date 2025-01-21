@@ -326,25 +326,11 @@ p{
     display: flex;
     justify-content: center;
     margin: auto;
-    animation-duration: 6s;
-    animation-name: slides;
-    animation-iteration-count: infinite;
 }
-
-#pikachu, #squirtle, #charmander, #bulbasaur {
-    opacity: 0;
-    animation-name: appear;
-    animation-duration: 6s;
-    animation-iteration-count: infinite;
-    width: 110px;
-}
-
 #pikachu {
     width:200px;
     margin-left: -50px;
 }
-
-
 @keyframes appear {
     25%{
         opacity: 100%;
