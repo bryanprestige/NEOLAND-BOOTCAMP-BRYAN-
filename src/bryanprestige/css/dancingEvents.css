@@ -1,0 +1,205 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 100%;
+}
+
+nav {
+    display: flex;
+    background-color: antiquewhite;
+}
+
+ol {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+div {
+    padding:5px;
+    text-align: center;
+}
+
+img {
+    width: 32px;
+    display: block;
+    margin: 10px auto 0;
+}
+
+#logo-in {
+    display: flex;
+    margin: 0px auto
+}
+
+#app-logo{
+    width: 100px;
+    display: block;
+    margin: -20px ;
+    
+}
+#log-in {
+    display: block;
+    width: 100px;
+    margin: auto;
+    padding: 10px 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 12px;
+}
+
+header {
+    width: 50%;
+    display: block;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+form {
+    display: block;
+    margin-bottom: 20px;
+}
+
+input, label {
+    width: 40%;
+    text-align: center;
+}
+
+input {
+    margin-left: 20px ;
+}
+
+label {
+    padding-bottom: 10px;
+}
+
+.event-container {
+    display: flex;
+    flex-direction: row; /* Divide en dos columnas */
+    justify-content: space-between;
+    gap: 20px; /* Espacio entre columnas */
+    margin-bottom: 20px; 
+    padding: 15px;
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd;
+    border-radius: 8px; 
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 50%; /* Divide en dos columnas iguales */
+    gap: 10px; /* Espacio entre elementos de cada columna */
+}
+
+.image-and-details {
+    display: flex;
+    flex-direction: column; /* Organiza elementos en columnas */
+    align-items: center;
+    gap: 10px;
+}
+
+.event-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+.name-time-price, 
+.address-type-city {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Distribuye elementos con espacio entre ellos */
+    margin-bottom: 0px; /* Espacio interno entre bloques */
+}
+
+.name {
+    text-align: center;
+    background-color: aqua;
+    padding: 10px;
+    border-radius: 8px;
+}
+.address {
+    text-align: center;
+    background-color: lightgreen;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.reviews-placeholder {
+    height: 200px; /* Altura igual a la imagen */
+    background-color: #e0e0e0; /* Color placeholder */
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    color: #555;
+}
+
+.time-price, .type-city {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Espacio entre elementos */
+}
+
+.time, .price, .button-dance-type, .button-city {
+    flex: 1; /* Ocupa el mismo ancho */
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.address-type-city {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px; /* Espacio entre bloques */
+    width: 100%;
+}
+
+.button-dance-type, .button-city {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 10px;
+    text-align: center;
+    width: 48%; /* Mantiene proporción en la fila */
+}
+
+.button-dance-type {
+    background-color: cadetblue;
+}
+
+.button-city {
+    background-color: burlywood;
+}
+
+
+.name{
+    background-color: aqua;
+}
+
+.time {
+    background-color: blanchedalmond;
+}
+
+.price {
+    background-color: burlywood;
+}
+
+.address {
+    background-color: lightgreen;
+}
+
+
