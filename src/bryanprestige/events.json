@@ -1,0 +1,403 @@
+[
+    {
+       "id": 1,
+       "name": "Bachata Exchange",
+       "type": "Bachata",
+       "city": "London",
+       "address": "12 Primrose Street",
+       "time": "17:00",
+       "price": "Free",
+       "music": "Bachata 100%"
+    },
+    {
+       "id": 2,
+       "name": "Jowke",
+       "type": "Bachata",
+       "city": "Madrid",
+       "address": "Mostoles",
+       "time": "23:00",
+       "price": "20$",
+       "music": "Bachata/Zouk 80,20"
+    },
+    {
+       "id": 3,
+       "name": "Lokura",
+       "type": "Bachata",
+       "city": "Madrid",
+       "address": "La ermita",
+       "time": "22:00",
+       "price": "15$",
+       "music": "Bachata 100%"
+    },
+    {
+       "id": 4,
+       "name": "Salseritos",
+       "type": "Salsa",
+       "city": "Milan",
+       "address": "La grande figa 22",
+       "time": "19:00",
+       "price": "30$",
+       "music": "SBK 2,8,1"
+    },
+    {
+       "id": 5,
+       "name": "Zouk Fever",
+       "type": "Zouk",
+       "city": "Barcelona",
+       "address": "Passeig de Gracia 45",
+       "time": "21:00",
+       "price": "18$",
+       "music": "Zouk 100%"
+    },
+    {
+       "id": 6,
+       "name": "Tango Intenso",
+       "type": "Tango",
+       "city": "Buenos Aires",
+       "address": "Calle Florida 12",
+       "time": "20:30",
+       "price": "25$",
+       "music": "Tango 100%"
+    },
+    {
+       "id": 7,
+       "name": "Kizomba Nights",
+       "type": "Kizomba",
+       "city": "Lisboa",
+       "address": "Rua das Flores 88",
+       "time": "22:00",
+       "price": "12$",
+       "music": "SBK 3,6,1"
+    },
+    {
+       "id": 8,
+       "name": "West Coast Groove",
+       "type": "West Coast Swing",
+       "city": "San Francisco",
+       "address": "Bay Street 77",
+       "time": "19:00",
+       "price": "20$",
+       "music": "Swing 100%"
+    },
+    {
+       "id": 9,
+       "name": "Salsa Dreams",
+       "type": "Salsa",
+       "city": "Miami",
+       "address": "Ocean Drive 100",
+       "time": "21:00",
+       "price": "15$",
+       "music": "Salsa/Bachata 50,50"
+    },
+    {
+       "id": 10,
+       "name": "Bachata Beats",
+       "type": "Bachata",
+       "city": "Sevilla",
+       "address": "Plaza Nueva 5",
+       "time": "22:30",
+       "price": "20$",
+       "music": "Bachata/Zouk 80,20"
+    },
+        {
+           "id": 11,
+           "name": "Ritmo Latino",
+           "type": "Salsa",
+           "city": "Valencia",
+           "address": "Calle del Mar 12",
+           "time": "20:00",
+           "price": "18$",
+           "music": "Salsa 100%"
+        },
+        {
+           "id": 12,
+           "name": "Kiz Sensual",
+           "type": "Kizomba",
+           "city": "Porto",
+           "address": "Avenida Boavista 88",
+           "time": "22:00",
+           "price": "15$",
+           "music": "Kizomba 100%"
+        },
+        {
+           "id": 13,
+           "name": "Swing Night Fever",
+           "type": "West Coast Swing",
+           "city": "New York",
+           "address": "Broadway 45",
+           "time": "20:30",
+           "price": "25$",
+           "music": "Swing 100%"
+        },
+        {
+           "id": 14,
+           "name": "Latin Explosion",
+           "type": "SBK",
+           "city": "Barcelona",
+           "address": "Rambla Catalunya 33",
+           "time": "21:00",
+           "price": "22$",
+           "music": "SBK 4,5,1"
+        },
+        {
+           "id": 15,
+           "name": "Tango y Pasión",
+           "type": "Tango",
+           "city": "Cordoba",
+           "address": "Plaza Mayor 11",
+           "time": "20:00",
+           "price": "20$",
+           "music": "Tango 100%"
+        },
+        {
+           "id": 16,
+           "name": "Urban Bachata",
+           "type": "Bachata",
+           "city": "Bogotá",
+           "address": "Calle 85 #15",
+           "time": "22:00",
+           "price": "10$",
+           "music": "Bachata/Kizomba 70,30"
+        },
+        {
+           "id": 17,
+           "name": "Zouk Harmony",
+           "type": "Zouk",
+           "city": "Rio de Janeiro",
+           "address": "Praia de Copacabana",
+           "time": "19:00",
+           "price": "15$",
+           "music": "Zouk/Salsa 60,40"
+        },
+        {
+           "id": 18,
+           "name": "Salsa Flow",
+           "type": "Salsa",
+           "city": "Caracas",
+           "address": "Av. Principal",
+           "time": "18:30",
+           "price": "8$",
+           "music": "Salsa/Bachata 50,50"
+        },
+        {
+           "id": 19,
+           "name": "Dance Fiesta",
+           "type": "SBK",
+           "city": "Paris",
+           "address": "Rue de Rivoli 77",
+           "time": "22:30",
+           "price": "30$",
+           "music": "SBK 2,7,1"
+        },
+        {
+           "id": 20,
+           "name": "Kizomba Sensation",
+           "type": "Kizomba",
+           "city": "Berlin",
+           "address": "Alexanderplatz 3",
+           "time": "21:00",
+           "price": "17$",
+           "music": "Kizomba/Bachata 60,40"
+        },
+        {
+           "id": 21,
+           "name": "Ritmos del Caribe",
+           "type": "Salsa",
+           "city": "Havana",
+           "address": "Calle Habana Vieja",
+           "time": "19:00",
+           "price": "12$",
+           "music": "Salsa/Zouk 70,30"
+        },
+        {
+           "id": 22,
+           "name": "Swing It!",
+           "type": "West Coast Swing",
+           "city": "London",
+           "address": "Baker Street 221B",
+           "time": "20:00",
+           "price": "20$",
+           "music": "Swing/Salsa 80,20"
+        },
+        {
+           "id": 23,
+           "name": "Tango Enigma",
+           "type": "Tango",
+           "city": "Rome",
+           "address": "Piazza Navona 9",
+           "time": "21:30",
+           "price": "28$",
+           "music": "Tango/Bachata 90,10"
+        },
+        {
+           "id": 24,
+           "name": "Latin Beats",
+           "type": "Bachata",
+           "city": "Lima",
+           "address": "Calle Miraflores 20",
+           "time": "22:00",
+           "price": "10$",
+           "music": "Bachata/Salsa 60,40"
+        },
+        {
+           "id": 25,
+           "name": "Zouk Lounge",
+           "type": "Zouk",
+           "city": "Amsterdam",
+           "address": "Damrak 44",
+           "time": "23:00",
+           "price": "18$",
+           "music": "Zouk/Kizomba 70,30"
+        },
+        {
+           "id": 26,
+           "name": "Fiesta Latina",
+           "type": "SBK",
+           "city": "Munich",
+           "address": "Marienplatz 12",
+           "time": "20:00",
+           "price": "25$",
+           "music": "SBK 3,6,1"
+        },
+        {
+           "id": 27,
+           "name": "Salsa Romántica",
+           "type": "Salsa",
+           "city": "Medellin",
+           "address": "Calle Primavera",
+           "time": "18:00",
+           "price": "15$",
+           "music": "Salsa/Tango 80,20"
+        },
+        {
+           "id": 28,
+           "name": "Bachata Love",
+           "type": "Bachata",
+           "city": "Cali",
+           "address": "Avenida Estrella 45",
+           "time": "20:30",
+           "price": "10$",
+           "music": "Bachata/Kizomba 50,50"
+        },
+        {
+           "id": 29,
+           "name": "Midnight Zouk",
+           "type": "Zouk",
+           "city": "Sao Paulo",
+           "address": "Rua Augusta 77",
+           "time": "00:00",
+           "price": "20$",
+           "music": "Zouk/Bachata 50,50"
+        },
+        {
+           "id": 30,
+           "name": "Tango Elegance",
+           "type": "Tango",
+           "city": "Buenos Aires",
+           "address": "Calle Corrientes 88",
+           "time": "21:00",
+           "price": "22$",
+           "music": "Tango/Swing 70,30"
+        },
+        {
+           "id": 31,
+           "name": "Kizomba Vibes",
+           "type": "Kizomba",
+           "city": "Cape Town",
+           "address": "Long Street 45",
+           "time": "20:00",
+           "price": "15$",
+           "music": "Kizomba/Salsa 60,40"
+        },
+        {
+           "id": 32,
+           "name": "Caribbean Nights",
+           "type": "SBK",
+           "city": "Kingston",
+           "address": "Montego Bay Street",
+           "time": "22:00",
+           "price": "30$",
+           "music": "SBK 3,6,1"
+        },
+        {
+           "id": 33,
+           "name": "Bachata Dreams",
+           "type": "Bachata",
+           "city": "Guatemala City",
+           "address": "Zona 1, Centro",
+           "time": "21:00",
+           "price": "12$",
+           "music": "Bachata/Tango 70,30"
+        },
+        {
+           "id": 34,
+           "name": "Swing Stars",
+           "type": "West Coast Swing",
+           "city": "Chicago",
+           "address": "Michigan Avenue 50",
+           "time": "19:30",
+           "price": "25$",
+           "music": "Swing/Salsa 60,40"
+        },
+        {
+           "id": 35,
+           "name": "Tango Legends",
+           "type": "Tango",
+           "city": "Montevideo",
+           "address": "Avenida Artigas",
+           "time": "20:30",
+           "price": "20$",
+           "music": "Tango/Salsa 90,10"
+        },
+        {
+           "id": 36,
+           "name": "Zouk Universe",
+           "type": "Zouk",
+           "city": "Toronto",
+           "address": "Yonge Street 123",
+           "time": "22:00",
+           "price": "18$",
+           "music": "Zouk/SBK 50,50"
+        },
+        {
+           "id": 37,
+           "name": "Bachata Paradise",
+           "type": "Bachata",
+           "city": "Cancun",
+           "address": "Zona Hotelera 3",
+           "time": "23:00",
+           "price": "20$",
+           "music": "Bachata/Swing 70,30"
+        },
+        {
+           "id": 38,
+           "name": "Salsa & Friends",
+           "type": "Salsa",
+           "city": "Havana",
+           "address": "Calle Malecon",
+           "time": "19:30",
+           "price": "18$",
+           "music": "Salsa/Zouk 60,40"
+        },
+        {
+           "id": 39,
+           "name": "Midnight Dance",
+           "type": "SBK",
+           "city": "Barcelona",
+           "address": "Raval 8",
+           "time": "22:00",
+           "price": "25$",
+           "music": "SBK 2,5,3"
+        },
+        {
+           "id": 40,
+           "name": "Tango Mystique",
+           "type": "Tango",
+           "city": "Salta",
+           "address": "Calle San Martin",
+           "time": "21:00",
+           "price": "18$",
+           "music": "Tango/Zouk 80,20"
+        }
+       ]
+       

@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dancing Events</title>
-    <link rel = "stylesheet" href="./css/reset.css">
-    <link rel = "stylesheet" href="../bryanprestige/css/dancingEvents.css">
-    <link rel = "stylesheet" href="../node_modules/animate.css/animate.css">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="../bryanprestige/css/dancingEvents.css">
     <script type="module" src="./java/dancingEvents.js"></script>
 </head>
 <body>
     <nav>
         <ol>
             <div>
-                <img src="../bryanprestige/imagenes/home.png">
+                <img href="../pokedex.html" src="../bryanprestige/imagenes/home.png">
                 <li>FEED</li>
             </div>
             <div>
@@ -33,16 +32,25 @@
                 <li>PROFILE</li>
             </div>
         </ol>
+        <div id="app-name">
+            <header>DANCING EXCHANGE</header>
+        </div>
         <div id="logo-in">
             <img src="../bryanprestige/imagenes/logo.png" id="app-logo" class="animate__animated animate__fadeIn animate__delay-1s">
             <button id="log-in">LOG IN</button>
         </div>
     </nav>
-    <header>Salsa, Bachata, Zouk and many more events! If you can dance it, you can find it!</header>
-    <form>
-        <label for="seacher">what do you fancy today?</label>
-        <input type="text" name="dances" id="event-name">
-        <button id="search-button">Search</button>
+    <section>
+        <h1 id="main-title">Salsa, Bachata, Zouk and many more events! If you can dance it, you can find it!</h1>
+    </section>
+        <form>
+        <label for="seacher" id="search-label">What are you dancing today?
+           <span> You can search by event name, type or city</span>
+        </label>
+        <div id="search-section">
+            <input type="text" name="dances" id="event-name">
+            <button id="search-button">Search</button>
+        </div>
     </form>
     <section class="event-container">
     </section>
