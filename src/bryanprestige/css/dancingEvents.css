@@ -2,46 +2,71 @@
     margin: 0;
     padding: 0;
 }
-
 body {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-height: 100%;
 }
-
 nav {
     display: flex;
-    background-color: antiquewhite;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #243D4B;
+    color: #F7BC47;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    font-weight: bold;
 }
-
 ol {
     display: flex;
     flex-direction: row;
     justify-content: start;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-
 div {
     padding:5px;
     text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #243D4B;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    background-color: #F7BC47;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 5px;
+    border: 1px solid #243D4B;
 }
-
 img {
     width: 32px;
     display: block;
     margin: 10px auto 0;
 }
 
-#logo-in {
-    display: flex;
-    margin: 0px auto
+#app-name {
+    flex-grow: 1;
+    text-align: center;
+    margin:  auto;
+    padding: 22px;
+    width: 1250px;
+    margin-right: 5px;
+    font-size: 24px;
+    font-weight: bold;
 }
 
+#logo-in {
+    display: flex;
+    margin-right: 5px;
+    width: 80;
+}
 #app-logo{
     width: 100px;
     display: block;
     margin: -20px ;
-    
 }
 #log-in {
     display: block;
@@ -51,66 +76,137 @@ img {
     font-size: 16px;
     font-weight: bold;
     border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background-color: #243D4B;
+    color: #F7BC47;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    border: 1px solid #243D4B;
 }
-
-header {
+#main-title {
     width: 50%;
     display: block;
     justify-content: flex-start;
     padding: 20px;
+    text-align: center;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #243D4B;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    background-color: #F7BC47;
+    border-radius: 20px;
+}
+span {
+    display: block;
+
 }
 
 form {
     display: block;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
     margin-bottom: 20px;
+    text-align: center;
+    margin: auto; 
+    font-size: 20px;
+    font-weight: bold;
+    color: #243D4B;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
+/*give unique style to #search-section*/
 
-input, label {
-    width: 40%;
+#search-section {
+    width: 50%;
+    display: block;
+    justify-content: flex-start;
+    padding: 20px;
+    text-align: center;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #243D4B;
+    background-color: #ffffff;;
+}
+#search-label {
+    font-weight: bold;
+    font-size: 24px;
+    color: #243D4B;
+}
+#search-button,
+.buy-button {
+  padding: 5px 10px;
+  background-color: #F7BC47;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+input {
+    border: 5px solid #243D4B;
+    border-radius: 20px;
     text-align: center;
 }
-
-input {
-    margin-left: 20px ;
-}
-
-label {
-    padding-bottom: 10px;
-}
-
 .event-container {
     display: flex;
-    flex-direction: row; /* Divide en dos columnas */
-    justify-content: space-between;
-    gap: 20px; /* Espacio entre columnas */
-    margin-bottom: 20px; 
-    padding: 15px;
-    background-color: #f9f9f9; 
-    border: 1px solid #ddd;
-    border-radius: 8px; 
-    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    flex-wrap: wrap; /* Permite que los eventos se distribuyan en filas */
+    gap: 20px; /* Espacio entre eventos */
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    max-height: 80vh; /* Altura máxima del contenedor */
+    justify-content: center; /* Centra los eventos horizontalmente */
 }
-
-.left-column, .right-column {
+.event-card {
+    display: flex;
+    flex-direction: row; /* Organiza cada evento en dos columnas */
+    gap: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+    width: calc(50% - 20px); /* Cada evento ocupa la mitad del ancho disponible menos el espacio entre eventos */
+} 
+.left-column, 
+.right-column {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    width: 50%; /* Divide en dos columnas iguales */
-    gap: 10px; /* Espacio entre elementos de cada columna */
+    gap: 10px;
+    flex: 1; /* Ambas columnas ocupan el mismo espacio */
+background-color: #f9f9f9;
+box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+border: none;
 }
-
 .image-and-details {
     display: flex;
     flex-direction: column; /* Organiza elementos en columnas */
     align-items: center;
     gap: 10px;
 }
-
 .event-image {
     width: 100%;
     height: 200px;
     border-radius: 10px;
     object-fit: cover;
+}
+.reviews-placeholder {
+    background-color: #e0e0e0;
+    height: 150px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    margin-top: 10px;
+    height: 190px;
+    font-family: 'Montserrat', sans-serif; /* Cambia ligeramente la tipografía para variar */
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #666;
+    font-style: italic; /* Da un aire más casual */
+    border: none;
 }
 .name-time-price, 
 .address-type-city {
@@ -119,45 +215,6 @@ label {
     justify-content: space-between; /* Distribuye elementos con espacio entre ellos */
     margin-bottom: 0px; /* Espacio interno entre bloques */
 }
-
-.name {
-    text-align: center;
-    background-color: aqua;
-    padding: 10px;
-    border-radius: 8px;
-}
-.address {
-    text-align: center;
-    background-color: lightgreen;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.reviews-placeholder {
-    height: 200px; /* Altura igual a la imagen */
-    background-color: #e0e0e0; /* Color placeholder */
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-style: italic;
-    color: #555;
-}
-
-.time-price, .type-city {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px; /* Espacio entre elementos */
-}
-
-.time, .price, .button-dance-type, .button-city {
-    flex: 1; /* Ocupa el mismo ancho */
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
 .address-type-city {
     display: flex;
     flex-direction: row;
@@ -166,7 +223,53 @@ label {
     gap: 10px; /* Espacio entre bloques */
     width: 100%;
 }
+.time-price, .type-city {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px; /* Espacio entre elementos */
+}
+.music-ratio,
+.music-ratio.single-style,
+.music-ratio.three-styles,
+.music-ratio.two-styles,
+.button-dance-type, 
+.button-city, 
+.name, 
+.time, 
+.price, 
+.address {
+    font-family: 'Roboto', sans-serif; /* Tipografía moderna y legible */
+    font-size: 1rem; /* Tamaño estándar para buen balance */
+    font-weight: 600; /* Seminegrita para destacar */
+    letter-spacing: 0.5px; /* Espaciado para dar sensación de limpieza */
+    text-transform: capitalize; /* Capitaliza las palabras para mejor estilo */
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Agrega una sombra sutil */
+}
 
+.time, .price, .button-dance-type, .button-city {
+    flex: 1; /* Ocupa el mismo ancho */
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+}
+.name, 
+.address {
+    text-align: center;
+    padding: 10px 15px; /* Espaciado interno extra */
+    border-radius: 8px; /* Bordes redondeados */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombra sutil en el texto */
+}
+.time, 
+.price {
+    font-size: 0.95rem; /* Ajuste menor de tamaño */
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15); /* Menor sombra que el resto */
+}
 .button-dance-type, .button-city {
     border: none;
     border-radius: 4px;
@@ -175,31 +278,84 @@ label {
     padding: 5px 10px;
     text-align: center;
     width: 48%; /* Mantiene proporción en la fila */
+    font-size: 0.9rem; /* Botones ligeramente más pequeños */
+    border: none; /* Limpieza al diseño */
+    padding: 8px 12px; /* Espaciado cómodo */
+    border-radius: 6px; /* Bordes suaves */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Animación suave en hover */
 }
-
-.button-dance-type {
-    background-color: cadetblue;
+.button-dance-type:hover, 
+.button-city:hover,
+#search-button:hover,
+.buy-button:hover,
+#log-in:hover {
+    transform: scale(1.05); /* Efecto de zoom en hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Más sombra al pasar el mouse */
 }
-
-.button-city {
-    background-color: burlywood;
+.name {
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
 }
-
-
+.address {
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+}
+.music-ratio {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    color: white; /* Texto blanco para contraste */
+}
+/* Estilo para música 100% de un solo estilo */
+.music-ratio.single-style {
+    background-color: #4CAF50; /* Verde para 100% un solo estilo */
+}
+/* Estilo para dos estilos de música */
+.music-ratio.two-styles {
+    background: linear-gradient(90deg, #FF5733 50%, #33C4FF 50%);
+    /* Naranja y azul claro para dividir dos estilos */
+}
+/* Estilo para tres estilos (SBK) */
+.music-ratio.three-styles {
+    background: linear-gradient(90deg, #FF5733 33.33%, #FFC300 33.33%, #33C4FF 33.33%);
+    /* Naranja, amarillo y azul claro para tres estilos */
+}
 .name{
-    background-color: aqua;
+    background-color: #d9ed92;
+    color: white;
 }
-
+.address {
+    background-color: #b5e48c;
+    color: white;
+}
 .time {
-    background-color: blanchedalmond;
+    background-color: #99d98c;
 }
 
 .price {
-    background-color: burlywood;
+    background-color: #76c893;
+}
+.button-dance-type {
+    background-color: #52b69a;
 }
 
-.address {
-    background-color: lightgreen;
+.button-city {
+    background-color: #34a0a4;
+    color: white;
 }
 
+.error-img{
+    width: 600px;
+}
 
+#shop-img {
+    width: 30px;
+    margin-top: 0px;
+}
