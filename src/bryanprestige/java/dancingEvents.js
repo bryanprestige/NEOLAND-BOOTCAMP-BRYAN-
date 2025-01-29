@@ -1,63 +1,408 @@
-//@ts-check
 
 import EVENTS from '../events.json' with { type: 'json' };
 
+let basketCount = 0;    
+
 document.addEventListener('DOMContentLoaded', () => {
-      // Referencias a elementos del DOM
-      const searchButton = document.getElementById('search-button');
-      const searchInput = document.getElementById('event-name');
-  
-      // Desactivar el botón inicialmente si el input está vacío
-      if (searchInput?.value.trim() === '') {
+    //Display all events when the page is loaded
+    updateDefaultFeed()
+    const searchButton = document.getElementById('search-button');
+    hideShowSearchButton()
+    // Evento de clic para el botón de búsqueda
+    searchButton?.addEventListener('click', onSearchClick);
+    // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
+    const eventContainer = document.querySelector('.event-container');
+    eventContainer?.addEventListener('click', onFilterButtonClick);
+
+    const favoriteButton = document.getElementById('favorite-button');
+    favoriteButton?.addEventListener('click', displayFavoriteEvents);
+    loadBasketFromLocalStorage()
+});
+
+function hideShowSearchButton() {
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('event-name');  
+    // Desactivar el botón inicialmente si el input está vacío
+    if (searchInput?.value.trim() === '') {
           searchButton.disabled = true;
-      }
-  
-      // Evento para habilitar/deshabilitar el botón según el contenido del input
-      searchInput?.addEventListener('input', () => {
+    }
+    // Evento para habilitar/deshabilitar el botón según el contenido del input
+    searchInput?.addEventListener('input', () => {
           const isInputValid = searchInput.value.trim() !== '';
           searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
-      });
-  
-      // Evento de clic para el botón de búsqueda
-      searchButton?.addEventListener('click', onSearchClick);
-  
-      // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
-      const eventContainer = document.querySelector('.event-container');
-      eventContainer?.addEventListener('click', onFilterButtonClick);
-});
+    });
+}
+
 /**
  * @param {MouseEvent} event
  * */
-
-
 function onSearchClick(event) {
-    // Prevent the page from reloading
     event.preventDefault();
-    // Call the function to validate the event
-    /**@type HTMLElement | null */
     const searchTerm = document.getElementById('event-name').value.trim().toLowerCase();
-
-    /**@type HTMLElement | null */
     const eventContainer = document.querySelector('.event-container');
-    // Clear the container before showing results
-    eventContainer.innerHTML = '';
-    // Filter events based on user input
+
     const filteredEvents = EVENTS.filter(event =>
-        event.type.toLowerCase() === searchTerm ||
+        event.type.toLowerCase().includes(searchTerm) ||
         event.name.toLowerCase().includes(searchTerm) ||
         event.city.toLowerCase().includes(searchTerm) ||
         event.price.toLowerCase().includes(searchTerm)
     );
-    // Show a message if no events are found
+
     if (filteredEvents.length === 0) {
-        let errorImg = document.createElement ('img')
-        errorImg.className = ('error-img')
+        const errorImg = document.createElement('img');
+        errorImg.className = 'error-img';
         errorImg.src = '../bryanprestige/imagenes/noEvent.png';
-        eventContainer.appendChild(errorImg)
+        eventContainer.innerHTML = '';
+        eventContainer.appendChild(errorImg);
     } else {
-        filteredEvents.forEach(event => createEventCard(event,eventContainer));
+        eventContainer.innerHTML = '';
+        filteredEvents.forEach(event => createEventCardWithAnimation(event, eventContainer));
     }
-    scrollToTop()
+    loadBasketFromLocalStorage()
+    scrollToTop();
+}
+
+/**
+ * @param {MouseEvent} event
+ */
+function onFilterButtonClick(event) {
+    event.preventDefault();
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorites-button')) return;
+    const filterValue = target.textContent?.toLowerCase();
+    if (!filterValue) return;
+    const eventContainer = document.querySelector('.event-container');
+    if (!eventContainer) return;
+    eventContainer.innerHTML = '';
+    const filteredEvents = EVENTS.filter(event => {
+        if (target.classList.contains('button-dance-type')) return event.type.toLowerCase() === filterValue;
+        if (target.classList.contains('button-city')) return event.city.toLowerCase() === filterValue;
+    });
+    if (filteredEvents.length === 0) {
+        const errorImg = document.createElement('img');
+        errorImg.src = '../bryanprestige/imagenes/noEvent.png';
+        eventContainer.appendChild(errorImg);
+    } else {
+        filteredEvents.forEach(event => {
+            createEventCardWithAnimation(event, eventContainer);
+        });
+    }
+    const basketElement = document.querySelector('#basket-counter');
+    const storedBasketCount = localStorage.getItem('basketCount') || 0;
+    basketElement.innerText = `BASKET (${storedBasketCount})`;
+}
+
+function createEventCardElement(event) {
+    const card = document.createElement('div');
+    card.className = 'event-card';
+    card.ticketCount = 0;
+
+    const leftColumn = createLeftColumn(event, card);
+    const rightColumn = createRightColumn(event);
+
+    card.appendChild(leftColumn);
+    card.appendChild(rightColumn);
+
+    loadBasketFromLocalStorage()
+    return card;
+}
+
+function createLeftColumn(event, card) {
+    const leftColumn = document.createElement('div');
+    leftColumn.className = 'left-column';
+
+    const image = createImageElement(event.name);
+    const nameFav = createNameFavElement(event);
+    const address = createElementWithText('h1', 'address', event.address);
+    const buyButton = createBuyButton(card, event);
+
+    leftColumn.append(image, nameFav, address, buyButton);
+
+    return leftColumn;
+}
+
+function createRightColumn(event) {
+    const rightColumn = document.createElement('div');
+    rightColumn.className = 'right-column';
+
+    const reviews = createElementWithText('div', 'reviews-placeholder', 'Reviews Placeholder');
+    const timePrice = createTimePriceElement(event);
+    const date = createElementWithText('h1', 'date', event.date);
+    const musicRatio = createMusicRatioElement(event.music);
+    const typeCity = createTypeCityElement(event);
+
+    rightColumn.append(reviews, timePrice, date, musicRatio, typeCity);
+
+    return rightColumn;
+}
+
+function createImageElement(eventName) {
+    const image = document.createElement('img');
+    image.className = 'event-image';
+    image.src = '../bryanprestige/imagenes/placehold400x200.png';
+    image.alt = `${eventName} image`;
+    return image;
+}
+
+function createNameFavElement(event) {
+    const nameFav = document.createElement('div');
+    nameFav.className = 'name-fav';
+
+    const name = createElementWithText('h1', 'name', event.name);
+    const favButton = createFavButton(event);
+
+    nameFav.append(name, favButton);
+    return nameFav;
+}
+
+function createFavButton(event) {
+    const favButton = document.createElement('button');
+    favButton.className = 'fav-button';
+    favButton.innerHTML = '<img src="../bryanprestige/imagenes/fav.png" alt="heart" id="heart-img">';
+
+    const favList = JSON.parse(localStorage.getItem('favList')) || [];
+    if (favList.some(favEvent => favEvent.name === event.name)) {
+        favButton.classList.add('favorited');
+    }
+
+    favButton.addEventListener('click', () => toggleFavorite(event, favButton));
+
+    return favButton;
+}
+
+function createBuyButton(card, event) {
+    const buyButton = document.createElement('button');
+    buyButton.className = 'buy-button';
+    buyButton.innerHTML = '<img src="../bryanprestige/imagenes/shop.png" alt="shop" id="shop-img">';
+
+    const basketElement = document.querySelector('#basket-counter');
+    buyButton.addEventListener('click', () => handleBuyButtonClick(card, event, basketElement));
+
+    return buyButton;
+}
+
+function handleBuyButtonClick(card, event, basketElement) {
+    card.ticketCount++;
+    let ticketCountSpan = card.querySelector('.ticket-count');
+
+    if (!ticketCountSpan) {
+        ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
+        const leftColumn = card.querySelector('.left-column');
+        leftColumn.appendChild(ticketCountSpan);
+    } else {
+        ticketCountSpan.textContent = `(${card.ticketCount})`;
+    }
+
+    ticketCountSpan.style.display = 'inline';
+
+    let removeButton = card.querySelector('.remove-button');
+    if (!removeButton) {
+        removeButton = createRemoveButton(card, event, basketElement, ticketCountSpan);
+        const leftColumn = card.querySelector('.left-column');
+        leftColumn.appendChild(removeButton);
+    }
+
+    updateTicketCount(event, card.ticketCount);
+    updateBasketCounter(basketElement);
+    saveBasketToLocalStorage(); // Guardar cambios
+}
+
+function createRemoveButton(card, event, basketElement, ticketCountSpan) {
+    const removeButton = document.createElement('button');
+    removeButton.className = 'remove-button';
+    removeButton.textContent = 'Remove';
+
+    removeButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        card.ticketCount--;
+
+        ticketCountSpan.textContent = `(${card.ticketCount})`;
+        if (card.ticketCount === 0) {
+            ticketCountSpan.style.display = 'none';
+            removeButton.remove();
+        }
+
+        updateTicketCount(event, card.ticketCount);
+        updateBasketCounter(basketElement);
+        saveBasketToLocalStorage(); // Guardar cambios
+    });
+
+    return removeButton;
+}
+
+function saveBasketToLocalStorage() {
+    const eventCards = document.querySelectorAll('.event-card');
+    const basketData = [];
+
+    eventCards.forEach(card => {
+        const eventName = card.querySelector('.name').textContent;
+        const ticketCount = card.ticketCount || 0;
+
+        if (ticketCount > 0) {
+            basketData.push({ name: eventName, ticketCount });
+        }
+    });
+
+    localStorage.setItem('basket', JSON.stringify(basketData));
+}
+function loadBasketFromLocalStorage() {
+    const basketData = JSON.parse(localStorage.getItem('basket')) || [];
+    const basketElement = document.querySelector('#basket-counter');
+
+    basketData.forEach(savedEvent => {
+        const eventCards = document.querySelectorAll('.event-card');
+
+        eventCards.forEach(card => {
+            const eventName = card.querySelector('.name').textContent;
+
+            if (eventName === savedEvent.name) {
+                card.ticketCount = savedEvent.ticketCount;
+
+                let ticketCountSpan = card.querySelector('.ticket-count');
+                if (!ticketCountSpan) {
+                    ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
+                    const leftColumn = card.querySelector('.left-column');
+                    leftColumn.appendChild(ticketCountSpan);
+                } else {
+                    ticketCountSpan.textContent = `(${card.ticketCount})`;
+                }
+
+                ticketCountSpan.style.display = 'inline';
+
+                let removeButton = card.querySelector('.remove-button');
+                if (!removeButton) {
+                    removeButton = createRemoveButton(card, { name: eventName }, basketElement, ticketCountSpan);
+                    const leftColumn = card.querySelector('.left-column');
+                    leftColumn.appendChild(removeButton);
+                }
+            }
+        });
+    });
+
+    updateBasketCounter(basketElement);
+}
+function createTimePriceElement(event) {
+    const timePrice = document.createElement('div');
+    timePrice.className = 'time-price';
+
+    const time = createElementWithText('time', 'time', event.time);
+    time.setAttribute('datetime', event.time);
+    const price = createElementWithText('h1', 'price', event.price);
+
+    timePrice.append(time, price);
+    return timePrice;
+}
+
+function createMusicRatioElement(music) {
+    const musicRatio = createElementWithText('h1', 'music-ratio', music);
+
+    if (music.includes("100%")) {
+        musicRatio.classList.add('single-style');
+    } else {
+        const ratios = music.split(",");
+        musicRatio.classList.add(ratios.length === 2 ? 'two-styles' : 'three-styles');
+    }
+
+    return musicRatio;
+}
+
+function createTypeCityElement(event) {
+    const typeCity = document.createElement('div');
+    typeCity.className = 'type-city';
+
+    const buttonType = createButtonWithStyle('button-dance-type', event.type, getDanceTypeColor(event.type));
+    const buttonCity = createElementWithText('button', 'button-city', event.city);
+
+    typeCity.append(buttonType, buttonCity);
+    return typeCity;
+}
+
+function createButtonWithStyle(className, textContent, backgroundColor) {
+    const button = createElementWithText('button', className, textContent);
+    button.style.backgroundColor = backgroundColor;
+    return button;
+}
+
+function getDanceTypeColor(type) {
+    switch(type.toLowerCase()) {
+        case 'bachata': return 'lightgreen';
+        case 'salsa': return 'lightyellow';
+        case 'tango': return '#FF5733';
+        case 'zouk': return '#33C4FF';
+        case 'west coast swing': return '#FFC300';
+        case 'kizomba': return '#fb8500';
+        case 'sbk': return '#ff006e';
+        default: return 'white';
+    }
+}
+
+function createElementWithText(tag, className, textContent) {
+    const element = document.createElement(tag);
+    element.className = className;
+    element.textContent = textContent;
+    return element;
+}
+
+function toggleFavorite(event, button) {
+    let favList = JSON.parse(localStorage.getItem('favList')) || []; // Obtener la lista de favoritos
+    const index = favList.findIndex(favEvent => favEvent.name === event.name);
+    //VERIFY IF THE EVENT IS ALREADY IN FAVORITES
+    if (index === -1) {
+        favList.push(event);
+        button.classList.add('favorited'); 
+    } else {
+        favList.splice(index, 1);
+        button.classList.remove('favorited');
+    }
+
+    // SAVE THE UPDATED FAVORITE LIST TO LOCAL STORAGE
+    localStorage.setItem('favList', JSON.stringify(favList));
+    console.log("Lista de favoritos actualizada:", favList); 
+}
+
+function updateTicketCount(event, ticketCount) {
+    let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
+    const eventIndex = ticketList.findIndex(item => item.name === event.name);
+    //UPDATE TICKET COUNT
+    if (eventIndex === -1) {
+        ticketList.push({ name: event.name, count: ticketCount });
+    } else {
+        ticketList[eventIndex].count = ticketCount;
+    }
+    //ADD TICKETS TO LOCALSTORAGE
+    localStorage.setItem('ticketList', JSON.stringify(ticketList));
+}
+/**
+ * 
+ * Actualiza el contador de tickets en el elemento de la cesta.
+ * @param {HTMLElement | null} basketElement 
+ */
+
+function updateBasketCounter(basketElement) {
+    basketCount = 0; 
+    const events = document.querySelectorAll('.event-card')
+    //UPDATE TICKET COUNT
+    events.forEach((event) => {
+    basketCount += event.ticketCount    
+    localStorage.setItem('basketCount', basketCount)        
+    })
+    
+    //BASKET COUNTER
+    basketElement.textContent = `BASKET (${basketCount})`
+    if(basketCount === 0) {
+     basketElement.innerText = "BASKET"
+    }
+}
+function createEventCardWithAnimation(event, container) {
+    const card = createEventCardElement(event); 
+    card.classList.add('zoom-in'); 
+    
+    card.addEventListener('animationend', () => {
+        card.classList.remove('zoom-in');
+    });
+    
+    container.appendChild(card);
+    loadBasketFromLocalStorage()
 }
 
 function scrollToTop() {
@@ -67,141 +412,40 @@ function scrollToTop() {
     }
 }
 
-/**
- * @param {MouseEvent} event
- */
-function onFilterButtonClick(event) {
-    // The element where the click has happened
-    const target = event.target; 
-    // If the click was not a button, get out of the function
-    if (!(target instanceof HTMLButtonElement)) return; 
-    //Get the value of the text in the button converted to lower case
-    const filterValue = target.textContent?.toLowerCase(); 
-    //If there is no text, as in, the button has no text for any reason, get out of the function.
-    if (!filterValue) return;
-    /** @type {HTMLElement | null} */
-    //Select the events container
-    let eventContainer = document.querySelector('.event-container');
-    //If the event does not exist for any reason, get out of the function
-    if (!eventContainer) return;
-    // Clean the container before showing the filteres results
-    eventContainer.innerHTML = '';
-
-    let filteredEvents;
-    if (target.classList.contains('button-dance-type')) {
-        //If the button has the class "button-dance-type", filter the events for event type
-        filteredEvents = EVENTS.filter(event => event.type.toLowerCase() === filterValue);
-    } else if (target.classList.contains('button-city')) {
-        //If the button has the class "button-city", filter the events by city.
-        filteredEvents = EVENTS.filter(event => event.city.toLowerCase() === filterValue);
-    } else {
-        //If the click is not coming from  a button of city or type, get out of the function
-        return;
-    }
-    //If the events are not found, send a message
-    if (filteredEvents.length === 0) {
-        let errorImg = document.createElement ('img')
-        errorImg.src = '../bryanprestige/imagenes/noEvent.png';
-        eventContainer.appendChild(errorImg)
-    } else {
-        // Si se encuentran eventos, crea las tarjetas correspondientes y las agrega al contenedor.
-        filteredEvents.forEach(event => createEventCard(event, eventContainer));
-    }
-}
-/**
- * @param {EVENTS} event
- * @param {HTMLElement} container
- * */
-function createEventCard(event, container) {
-    const card = document.createElement('div');
-    card.className = 'event-card';
-
-    //Left Column
-    const leftColumn = document.createElement('div');
-    leftColumn.className = 'left-column';
-
-    const image = document.createElement('img');
-    image.className = 'event-image';
-    image.src = '../bryanprestige/imagenes/placehold400x200.png';
-    image.alt = `${event.name} image`;
-    leftColumn.appendChild(image);
-
-    const name = document.createElement('h1');
-    name.className = 'name';
-    name.textContent = event.name;
-    leftColumn.appendChild(name);
-
-    const address = document.createElement('h1');
-    address.className = 'address';
-    address.textContent = event.address;
-    leftColumn.appendChild(address);
-
-    // Crear el botón de compra
-    const buyButton = document.createElement('button');
-    buyButton.className = 'buy-button';
-    buyButton.innerHTML = '<img src="../bryanprestige/imagenes/shop.png" alt="shop" id="shop-img">'; // Texto placeholder
-    buyButton.addEventListener('click', () => {
-        alert('Acción de compra por implementar');
+function updateDefaultFeed() {
+    const eventContainer = document.querySelector('.event-container');
+    cleanEventContainer()
+    EVENTS.forEach(event => {
+        createEventCardWithAnimation(event, eventContainer);
     });
-    leftColumn.appendChild(buyButton); 
-    //Right Column
-    const rightColumn = document.createElement('div');
-    rightColumn.className = 'right-column';
+}
 
-    const reviews = document.createElement('div');
-    reviews.className = 'reviews-placeholder';
-    reviews.textContent = 'Reviews Placeholder';
-    rightColumn.appendChild(reviews);
+function displayFavoriteEvents(event) {
+    event.preventDefault(); //Prevent the page from reloading
+    cleanEventContainer() // Limpiar el contenedor antes de mostrar los favoritos
+    getFavEvents()// Recuperar favoritos desde localStorage
+}
 
-    const timePrice = document.createElement('div');
-    timePrice.className = 'time-price';
+function getFavEvents() {
+    const eventContainer = document.querySelector('.event-container');
+    let favList = JSON.parse(localStorage.getItem('favList')) || [];
 
-    const time = document.createElement('time');
-    time.className = 'time';
-    time.setAttribute('datetime', event.time);
-    time.textContent = event.time;
-    timePrice.appendChild(time);
-
-    const price = document.createElement('h1');
-    price.className = 'price';
-    price.textContent = event.price;
-    timePrice.appendChild(price);
-
-    rightColumn.appendChild(timePrice);
-
-    const typeCity = document.createElement('div');
-    typeCity.className = 'type-city';
-
-    const buttonType = document.createElement('button');
-    buttonType.className = 'button-dance-type';
-    buttonType.textContent = event.type;
-    if (event.type.toLowerCase() === 'bachata') {
-        buttonType.style.backgroundColor = 'lightgreen';
-    } else if (event.type.toLowerCase() === 'salsa') {
-        buttonType.style.backgroundColor = 'lightyellow';
-    }else if (event.type.toLowerCase() === 'tango') {
-        buttonType.style.backgroundColor = '#FF5733';
-    }else if (event.type.toLowerCase() === 'zouk') {
-        buttonType.style.backgroundColor = '#33C4FF';
-    }else if (event.type.toLowerCase() === 'west coast swing') {
-        buttonType.style.backgroundColor = '#FFC300';
-    }else if (event.type.toLowerCase() === 'kizomba') {
-        buttonType.style.backgroundColor = '#fb8500';
-    }else if (event.type.toLowerCase() === 'sbk') {
-        buttonType.style.backgroundColor = '#ff006e';
+    if (favList.length === 0) {
+        // Mostrar imagen si no hay eventos favoritos
+        let errorImg = document.createElement('img');
+        errorImg.className = 'error-img';
+        errorImg.src = '../bryanprestige/imagenes/noEvent.png';
+        eventContainer.appendChild(errorImg);
+    } else {
+        // Mostrar solo los eventos favoritos
+        favList.forEach(event => {
+            createEventCardWithAnimation(event, eventContainer);
+        });
     }
+    console.log(favList)
+}
 
-    const buttonCity = document.createElement('button');
-    buttonCity.className = 'button-city';
-    buttonCity.textContent = event.city;
-
-    typeCity.appendChild(buttonType);
-    typeCity.appendChild(buttonCity);
-
-    rightColumn.appendChild(typeCity);
-
-    card.appendChild(leftColumn);
-    card.appendChild(rightColumn);
-
-    container.appendChild(card);
+function cleanEventContainer(){
+    const eventContainer = document.querySelector('.event-container');
+    eventContainer.innerHTML = ''; 
 }

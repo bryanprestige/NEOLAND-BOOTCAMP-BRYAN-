@@ -1,5 +1,5 @@
 {
-  "include": ["./src/bryanprestige/java/*.js"],
+  "include": ["./src/bryanprestige/java/*.js", "src/bryanprestige/java/classes/eventscard.js"],
   "compileOnSave": false,  
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
