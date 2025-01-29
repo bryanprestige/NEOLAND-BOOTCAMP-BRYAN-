@@ -2,308 +2,302 @@
     margin: 0;
     padding: 0;
 }
-body {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+body {    
     max-height: 100%;
+    text-align: center;
 }
-nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+body, nav, ol, #logo-log-register,#header-container, #header-container-profile, form {
     width: 100%;
-    background-color: #243D4B;
-    color: #F7BC47;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+} 
+nav, ol, #header-container, #header-container-profile, #logo-log-register, #search-section {
+    display: flex;
+}
+img, #app-logo, .main-title, span, form {
+    display: block;
+}
+#header-container, #header-container-profile {
+    flex-direction: column;
+}
+nav, ol {
+    flex-direction: row;
+}
+nav, li, div,.main-title, form, #search-label {
     font-size: 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+#app-name, .main-title {
+    font-size: 24px;
+}
+nav, ol, #app-name, .main-title, form {
     font-weight: bold;
 }
+div, li, #header-container, #header-container-profile {
+    background-color: #F7BC47;
+}
+
+li, :link ,div, .main-title, form, #search-section, #search-label{
+    color: #243D4B;
+}
+li, div {
+    cursor: pointer;
+}
+a, .main-title, input{
+    border-radius: 20px;
+}
+li, div{
+    border-radius: 12px;
+    margin: 5px;
+    padding: 5px;
+}
+:link, a {
+    text-decoration: none;
+}
+#app-name, #logo-log-register {
+    margin-right: 5px;
+}
+nav {
+    justify-content: space-between;
+    background-color: #243D4B;
+}
 ol {
-    display: flex;
-    flex-direction: row;
     justify-content: start;
-    width: 100%;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 div {
-    padding:5px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: #243D4B;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    background-color: #F7BC47;
-    border-radius: 12px;
-    cursor: pointer;
-    margin: 5px;
     border: 1px solid #243D4B;
-}
+}   
 img {
     width: 32px;
-    display: block;
     margin: 10px auto 0;
 }
 
 #app-name {
     flex-grow: 1;
-    text-align: center;
     margin:  auto;
     padding: 22px;
     width: 1250px;
-    margin-right: 5px;
-    font-size: 24px;
-    font-weight: bold;
 }
-
-#logo-in {
-    display: flex;
-    margin-right: 5px;
-    width: 80;
+#logo-log-register {
+    gap: 5px;
 }
 #app-logo{
     width: 100px;
-    display: block;
     margin: -20px ;
 }
-#log-in {
-    display: block;
-    width: 100px;
-    margin: auto;
-    padding: 10px 14px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    background-color: #243D4B;
-    color: #F7BC47;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    border: 1px solid #243D4B;
-}
-#main-title {
+.main-title {
     width: 50%;
-    display: block;
     justify-content: flex-start;
-    padding: 20px;
-    text-align: center;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #243D4B;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    background-color: #F7BC47;
-    border-radius: 20px;
 }
-span {
-    display: block;
-
-}
-
 form {
-    display: block;
-    width: 100%;
     justify-content: center;
     flex-direction: column;
     margin-bottom: 20px;
-    text-align: center;
-    margin: auto; 
-    font-size: 20px;
-    font-weight: bold;
-    color: #243D4B;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    margin: auto;   
 }
-/*give unique style to #search-section*/
-
 #search-section {
-    width: 50%;
-    display: block;
-    justify-content: flex-start;
+    width: 30%;
+    justify-content:center;
     padding: 20px;
-    text-align: center;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    color: #243D4B;
-    background-color: #ffffff;;
+    background-color: #ffffff;
+    border: none;
+    gap: 5px 
 }
 #search-label {
-    font-weight: bold;
-    font-size: 24px;
-    color: #243D4B;
-}
-#search-button,
-.buy-button {
-  padding: 5px 10px;
-  background-color: #F7BC47;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  cursor: pointer;
+    font-size: 20px;
+    text-align: center;
 }
 input {
     border: 5px solid #243D4B;
-    border-radius: 20px;
     text-align: center;
 }
-.event-container {
+/*======EVENTS======*/
+.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details,
+.name-time-price, .address-type-city, .address-type-city, .time-price, .type-city, .name-fav,
+.reviews-placeholder    {
     display: flex;
-    width: 100%;
-    flex-wrap: wrap; /* Permite que los eventos se distribuyan en filas */
-    gap: 20px; /* Espacio entre eventos */
-    overflow-y: auto; /* Permite desplazamiento vertical */
-    max-height: 80vh; /* Altura máxima del contenedor */
-    justify-content: center; /* Centra los eventos horizontalmente */
 }
-.event-card {
-    display: flex;
-    flex-direction: row; /* Organiza cada evento en dos columnas */
-    gap: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.event-container, .event-image, .address-type-city, .remove-button, .register,
+ .login-button, .register, .remove-button, .name {
+    width: 100%;
+}
+.event-card,#event-form,.left-column, .right-column, .fav-button, .type-city, .time-price, .name-fav  {
+    background-color: white;
+}
+.event-card,#event-form,.left-column, .right-column {
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
-    width: calc(50% - 20px); /* Cada evento ocupa la mitad del ancho disponible menos el espacio entre eventos */
-} 
-.left-column, 
-.right-column {
-    display: flex;
-    flex-direction: column;
+}
+.event-image,.reviews-placeholder,.name, .address,.time, .price,
+.button-dance-type, .button-city,.date, .time, .price, .event-card,#event-form{
+    border-radius: 10px;
+}
+.left-column, .right-column, .reviews-placeholder, .time-price, .type-city, .name-fav,.fav-button{
+    border: none;
+}
+.event-container,.event-card,#event-form {
+    gap: 20px; 
+}
+.left-column, .right-column,.image-and-details, .address-type-city{
     gap: 10px;
-    flex: 1; /* Ambas columnas ocupan el mismo espacio */
-background-color: #f9f9f9;
-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
-border: none;
+}
+.event-container {
+    flex-wrap: wrap; 
+    overflow-y: auto; 
+    max-height: 80vh; 
+    justify-content: center; 
+    font-family: 'Montserrat', sans-serif; 
+    font-size: 1rem;
+    font-style: italic;
+}
+.event-card,#event-form {
+    flex-direction: row; 
+    padding: 15px;
+    border: 1px solid #ddd;
+    width: calc(50% - 20px); 
+} 
+.left-column, .right-column {
+    flex-direction: column;
+    flex: 1; 
 }
 .image-and-details {
-    display: flex;
-    flex-direction: column; /* Organiza elementos en columnas */
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
 }
 .event-image {
-    width: 100%;
     height: 200px;
-    border-radius: 10px;
     object-fit: cover;
 }
 .reviews-placeholder {
     background-color: #e0e0e0;
-    height: 150px;
-    border-radius: 10px;
-    display: flex;
     align-items: center;
     justify-content: center;
-    font-style: italic;
     margin-top: 10px;
     height: 190px;
-    font-family: 'Montserrat', sans-serif; /* Cambia ligeramente la tipografía para variar */
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: bold;
     color: #666;
-    font-style: italic; /* Da un aire más casual */
-    border: none;
 }
-.name-time-price, 
-.address-type-city {
-    display: flex;
+.name-time-price, .address-type-city {
     flex-direction: row;
-    justify-content: space-between; /* Distribuye elementos con espacio entre ellos */
-    margin-bottom: 0px; /* Espacio interno entre bloques */
+    justify-content: space-between; 
+    margin-bottom: 0px;
 }
 .address-type-city {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    gap: 10px; /* Espacio entre bloques */
-    width: 100%;
 }
-.time-price, .type-city {
-    display: flex;
+.time-price, .type-city, .name-fav {
     justify-content: space-between;
-    gap: 5px; /* Espacio entre elementos */
+    gap: 5px; 
 }
-.music-ratio,
-.music-ratio.single-style,
-.music-ratio.three-styles,
-.music-ratio.two-styles,
-.button-dance-type, 
-.button-city, 
-.name, 
-.time, 
-.price, 
-.address {
-    font-family: 'Roboto', sans-serif; /* Tipografía moderna y legible */
-    font-size: 1rem; /* Tamaño estándar para buen balance */
-    font-weight: 600; /* Seminegrita para destacar */
-    letter-spacing: 0.5px; /* Espaciado para dar sensación de limpieza */
-    text-transform: capitalize; /* Capitaliza las palabras para mejor estilo */
+.music-ratio,.music-ratio.single-style,.music-ratio.three-styles,.music-ratio.two-styles,
+.button-dance-type, .button-city, .name, .time, .price, .address,.date {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 1rem;
+    letter-spacing: 0.5px; 
     padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Agrega una sombra sutil */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-.time, .price, .button-dance-type, .button-city {
-    flex: 1; /* Ocupa el mismo ancho */
-    text-align: center;
-    border-radius: 8px;
+.time, .price, .date, .button-dance-type, .button-city, .music-ratio, .address, .name {
+    background-color:#243D4B;
+    color: #F7BC47;
+}
+.time, .price, .button-dance-type, .button-city,.date {
+    flex: 1; 
     font-weight: bold;
 }
-.name, 
-.address {
-    text-align: center;
-    padding: 10px 15px; /* Espaciado interno extra */
-    border-radius: 8px; /* Bordes redondeados */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombra sutil en el texto */
+.name, .address,.time, .price{
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
 }
-.time, 
-.price {
-    font-size: 0.95rem; /* Ajuste menor de tamaño */
+.name, .address {
+    padding: 10px 15px; 
+}
+/*=====BUTTONS=====*/
+#search-button,.buy-button, #submit-button, .login-button, .register, .remove-button,
+.button-dance-type, .button-city, .edit-button, .publish-button,.fav-button, #favorite-button {
+    cursor: pointer;
+    transition: all 0.3s ease;
     text-align: center;
-    padding: 6px 10px;
-    border-radius: 6px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15); /* Menor sombra que el resto */
+    border-radius: 10px;
+    font-weight: bold;
+}
+.remove-button:hover, .button-dance-type:hover, .button-city:hover,
+#search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
+.publish-button:hover, .edit-button:hover,.login-button:hover, .register:hover, #favorite-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+#search-button, .buy-button, #submit-button {
+    padding: 5px 10px;
+    background-color: #F7BC47;
+}
+.login-button, .register, .remove-button, .edit-button, .publish-button  {
+    background-color: #243D4B;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    padding: 10px 14px;
+}
+.login-button, .register, .remove-button {
+    display: block;
+    margin-top: 15px;
+    color: #F7BC47;
 }
 .button-dance-type, .button-city {
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 5px 10px;
-    text-align: center;
-    width: 48%; /* Mantiene proporción en la fila */
-    font-size: 0.9rem; /* Botones ligeramente más pequeños */
-    border: none; /* Limpieza al diseño */
-    padding: 8px 12px; /* Espaciado cómodo */
-    border-radius: 6px; /* Bordes suaves */
-    cursor: pointer;
-    transition: all 0.3s ease; /* Animación suave en hover */
+    width: 48%;
+    padding: 8px 12px;
 }
-.button-dance-type:hover, 
-.button-city:hover,
-#search-button:hover,
-.buy-button:hover,
-#log-in:hover {
-    transform: scale(1.05); /* Efecto de zoom en hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Más sombra al pasar el mouse */
+.edit-button, .publish-button {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.button-dance-type{
+    color: black;
+    background-color: #F7BC47;
+}
+#favorite-button{
+    background-color: #F7BC47;
+    padding: 5px 10px;
+    display: flex;
+}
+.fav-button {
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+.favorited {
+    transform: scale(1.1);
+    animation: pop 0.3s ease-in-out;
+    background-color: rgb(230, 158, 158);
+}
+.fav-button:hover{
+    transform: scale(1.1); 
+}
+.type-city, .time-price {
+    padding: 10px;
+    margin: 0px;
 }
 .name {
     text-align: center;
     padding: 10px;
     border-radius: 8px;
-    margin-top: 10px;
+    margin: auto;
 }
 .address {
     text-align: center;
     padding: 10px;
     border-radius: 8px;
 }
+.error-img{
+    width: 600px;
+}
+#shop-img {
+    width: 30px;
+    margin-top: 0px;
+}
+/*=====MUSIC RATIO STYLES======*/
 .music-ratio {
     margin-top: 10px;
     font-size: 14px;
@@ -311,51 +305,129 @@ border: none;
     text-align: center;
     padding: 10px;
     border-radius: 8px;
-    color: white; /* Texto blanco para contraste */
 }
-/* Estilo para música 100% de un solo estilo */
 .music-ratio.single-style {
-    background-color: #4CAF50; /* Verde para 100% un solo estilo */
+    background-color:#243D4B;
 }
-/* Estilo para dos estilos de música */
 .music-ratio.two-styles {
-    background: linear-gradient(90deg, #FF5733 50%, #33C4FF 50%);
-    /* Naranja y azul claro para dividir dos estilos */
+    background: linear-gradient(90deg, #F7BC47 50%, #243D4B 50%);
+    color: white;
 }
-/* Estilo para tres estilos (SBK) */
 .music-ratio.three-styles {
-    background: linear-gradient(90deg, #FF5733 33.33%, #FFC300 33.33%, #33C4FF 33.33%);
-    /* Naranja, amarillo y azul claro para tres estilos */
-}
-.name{
-    background-color: #d9ed92;
+    background: linear-gradient(90deg, #F7BC47 33.33%, #243D4B 33.33%, #F7BC47 33.33%);
     color: white;
 }
-.address {
-    background-color: #b5e48c;
+/* Animación de "pop" cuando se marca como favorito */
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.1); }
+}
+
+/* ZOOM ANIMATION */
+@keyframes zoomIn {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+}
+.zoom-in {
+    animation: zoomIn 0.5s ease-in-out;
+}
+/*=====PROFILE STYLES======*/
+#event-form {
+    display: flex;
+}
+#event-fieldset {
+    display: flex;
+    width: 100%;
+}
+#submit-flyer {
+    color: #F7BC47;
+}
+.invalid-field {
+    border: 2px solid red;
+    background-color: #ffe5e5;
+}
+.preview-container {
+    display: flex;
+    flex-direction: row;
+    margin: 0px 300px;
+    gap: 50px;
+}
+.preview-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    padding-top: 8px;
+}
+
+
+  /*=====LOG IN STYLES=====*/
+.login-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    width: 500px;
+    text-align: center;
+    margin: auto;
+    margin-top: 10px;
+}
+label {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: none;
+}
+#submit-button-login {
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: none;
     color: white;
+    cursor: pointer;
+    background-color:#243D4B;
+    width: 100%;
+    font-size: 16px;
 }
-.time {
-    background-color: #99d98c;
+/*=====REGISTER STYLES=====*/
+.register-container {
+    padding: 16px;
+    background-color: white;
 }
-
-.price {
-    background-color: #76c893;
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
 }
-.button-dance-type {
-    background-color: #52b69a;
-}
-
-.button-city {
-    background-color: #34a0a4;
+.register-button {
+    background-color:#243D4B;
     color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
 }
-
-.error-img{
-    width: 600px;
-}
-
-#shop-img {
-    width: 30px;
-    margin-top: 0px;
+.container-signin {
+    background-color: white;
+    border: none;
 }

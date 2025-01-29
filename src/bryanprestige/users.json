@@ -1,0 +1,44 @@
+[
+    {
+      "id": 1,
+      "username": "bryanprestige",
+      "password": "password123",
+      "dancerole": "leader",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "jane_smith",
+      "password": "passw0rd!",
+      "dancerole": "follower",
+      "role": "noAdmin"
+    },
+    {
+      "id": 3,
+      "username": "salsa_king",
+      "password": "kingDance45",
+      "dancerole": "leader",
+      "role": "noAdmin"
+    },
+    {
+      "id": 4,
+      "username": "bachata_queen",
+      "password": "queen123",
+      "dancerole": "follower",
+      "role": "noAdmin"
+    },
+    {
+      "id": 5,
+      "username": "swing_guy",
+      "password": "danceSwing789",
+      "dancerole": "leader",
+      "role": "noAdmin"
+    },
+    {
+      "id": 6,
+      "username": "zouk_lady",
+      "password": "zouky123",
+      "dancerole": "follower",
+      "role": "noAdmin"
+    }
+  ]
