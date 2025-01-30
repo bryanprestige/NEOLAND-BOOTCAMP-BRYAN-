@@ -6,13 +6,13 @@ body {
     max-height: 100%;
     text-align: center;
 }
-body, nav, ol, #logo-log-register,#header-container, #header-container-profile, form {
+body, nav, ol, .logo-log-register,#header-container, #header-container-profile, form {
     width: 100%;
 } 
-nav, ol, #header-container, #header-container-profile, #logo-log-register, #search-section {
+nav, ol, #header-container, #header-container-profile, .logo-log-register, #search-section {
     display: flex;
 }
-img, #app-logo, .main-title, span, form {
+img, .app-logo, .main-title, span, form {
     display: block;
 }
 #header-container, #header-container-profile {
@@ -25,10 +25,10 @@ nav, li, div,.main-title, form, #search-label {
     font-size: 16px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
-#app-name, .main-title {
+.app-name, .main-title {
     font-size: 24px;
 }
-nav, ol, #app-name, .main-title, form {
+nav, ol, .app-name, .main-title, form {
     font-weight: bold;
 }
 div, li, #header-container, #header-container-profile {
@@ -52,12 +52,14 @@ li, div{
 :link, a {
     text-decoration: none;
 }
-#app-name, #logo-log-register {
+.app-name, .logo-log-register {
     margin-right: 5px;
 }
 nav {
     justify-content: space-between;
     background-color: #243D4B;
+    position: sticky;
+    top: 0;
 }
 ol {
     justify-content: start;
@@ -73,16 +75,16 @@ img {
     margin: 10px auto 0;
 }
 
-#app-name {
+.app-name {
     flex-grow: 1;
     margin:  auto;
     padding: 22px;
     width: 1250px;
 }
-#logo-log-register {
+.logo-log-register {
     gap: 5px;
 }
-#app-logo{
+.app-logo{
     width: 100px;
     margin: -20px ;
 }
@@ -106,7 +108,7 @@ form {
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    background-color: #ffffff;
+    background-color: white;
     border: none;
     gap: 5px 
 }
@@ -217,8 +219,9 @@ input {
     padding: 10px 15px; 
 }
 /*=====BUTTONS=====*/
-#search-button,.buy-button, #submit-button, .login-button, .register, .remove-button,
-.button-dance-type, .button-city, .edit-button, .publish-button,.fav-button, #favorite-button {
+#search-button,.buy-button, #submit-button, .login-button,.register,
+ .remove-button, .button-dance-type, .button-city, .edit-button,
+  .publish-button,.fav-button, #favorite-button, .address, .name, .music-ratio {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -233,6 +236,8 @@ input {
 }
 #search-button, .buy-button, #submit-button {
     padding: 5px 10px;
+}
+#search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button {
     background-color: #F7BC47;
 }
 .login-button, .register, .remove-button, .edit-button, .publish-button  {
@@ -254,15 +259,11 @@ input {
     font-size: 16px;
     color: #ffffff;
 }
-
 .button-dance-type{
     color: black;
-    background-color: #F7BC47;
 }
 #favorite-button{
-    background-color: #F7BC47;
     padding: 5px 10px;
-    display: flex;
 }
 .fav-button {
     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
@@ -275,20 +276,14 @@ input {
 .fav-button:hover{
     transform: scale(1.1); 
 }
-.type-city, .time-price {
+.type-city, .time-price, .name,.address, .music-ratio{
     padding: 10px;
+}
+.type-city, .time-price {
     margin: 0px;
 }
 .name {
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
     margin: auto;
-}
-.address {
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
 }
 .error-img{
     width: 600px;
@@ -301,10 +296,6 @@ input {
 .music-ratio {
     margin-top: 10px;
     font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
 }
 .music-ratio.single-style {
     background-color:#243D4B;
@@ -323,7 +314,6 @@ input {
     50% { transform: scale(1.2); }
     100% { transform: scale(1.1); }
 }
-
 /* ZOOM ANIMATION */
 @keyframes zoomIn {
     0% {
@@ -338,13 +328,23 @@ input {
 .zoom-in {
     animation: zoomIn 0.5s ease-in-out;
 }
-/*=====PROFILE STYLES======*/
-#event-form {
-    display: flex;
+/*=====FOOTER STYLES=====*/
+.follow-us{
+    background-color: #F7BC47;
+    padding-top: 30px;
+    padding-bottom: 15px;
+    font-size: 2rem;
 }
-#event-fieldset {
+.social-media {
     display: flex;
-    width: 100%;
+    width: 10%;
+    margin: auto;
+    border: none;
+}
+
+/*=====PROFILE STYLES======*/
+#event-form, .preview-container, #event-fieldset {
+    display: flex;
 }
 #submit-flyer {
     color: #F7BC47;
@@ -354,7 +354,6 @@ input {
     background-color: #ffe5e5;
 }
 .preview-container {
-    display: flex;
     flex-direction: row;
     margin: 0px 300px;
     gap: 50px;
@@ -366,15 +365,18 @@ input {
     color: #333;
     padding-top: 8px;
 }
-
-
   /*=====LOG IN STYLES=====*/
+  .wrap, #submit-button-login, .register-button, .container-signin{
+    border: none;
+}
+
+.login-container, .wrap,.register-container, .container-signin{
+    background-color: white;
+}
 .login-container {
-    background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
-    transition: transform 0.2s;
     width: 500px;
     text-align: center;
     margin: auto;
@@ -393,15 +395,12 @@ label {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    border: none;
 }
 #submit-button-login {
     padding: 15px;
     border-radius: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
-    border: none;
     color: white;
     cursor: pointer;
     background-color:#243D4B;
@@ -411,8 +410,8 @@ label {
 /*=====REGISTER STYLES=====*/
 .register-container {
     padding: 16px;
-    background-color: white;
 }
+
 hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
@@ -422,12 +421,8 @@ hr {
     color: white;
     padding: 16px 20px;
     margin: 8px 0;
-    border: none;
     cursor: pointer;
     width: 100%;
     opacity: 0.9;
 }
-.container-signin {
-    background-color: white;
-    border: none;
-}
+

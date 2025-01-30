@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
     //Declare buttons
-   
     const submitButton =document.getElementById('submit-button')
     submitButton.addEventListener('click',onClickSubmitButton)   
 
@@ -59,7 +58,7 @@ function validateForm() {
     });
   }
 
-function onClickSubmitButton(event) {
+  function onClickSubmitButton(event) {
     event.preventDefault()
 
     validateForm();
