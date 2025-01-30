@@ -1,48 +1,43 @@
-
 import EVENTS from '../events.json' with { type: 'json' };
+import {EVENTCREATOR} from './classes/event.js' 
 
 let basketCount = 0;    
+let formIsValid = false;
+let eventList = []
+let totalPriceValue = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-    //Display all events when the page is loaded
-    updateDefaultFeed()
-    const searchButton = document.getElementById('search-button');
-    hideShowSearchButton()
-    // Evento de clic para el botón de búsqueda
-    searchButton?.addEventListener('click', onSearchClick);
-    // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
-    const eventContainer = document.querySelector('.event-container');
-    eventContainer?.addEventListener('click', onFilterButtonClick);
+    if (window.location.pathname.includes('profile.html')) {
+        const submitButton =document.getElementById('submit-button')
+        submitButton.addEventListener('click',onClickSubmitButton)   
+        
+        document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', validateForm);
+        })
+    } else if (window.location.pathname.includes('dancingEvents.html')) {
+        updateDefaultFeed()
+        const searchButton = document.getElementById('search-button');
+        hideShowSearchButton()
+        // Evento de clic para el botón de búsqueda
+        searchButton?.addEventListener('click', onSearchClick);
+        // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
+        const eventContainer = document.querySelector('.event-container');
+        eventContainer?.addEventListener('click', onFilterButtonClick);
 
-    const favoriteButton = document.getElementById('favorite-button');
-    favoriteButton?.addEventListener('click', displayFavoriteEvents);
-    loadBasketFromLocalStorage()
+        const favoriteButton = document.getElementById('favorite-button');
+        favoriteButton?.addEventListener('click', displayFavoriteEvents);
+        
+        loadBasketFromLocalStorage()
+    }
 });
 
-function hideShowSearchButton() {
-    const searchButton = document.getElementById('search-button');
-    const searchInput = document.getElementById('event-name');  
-    // Desactivar el botón inicialmente si el input está vacío
-    if (searchInput?.value.trim() === '') {
-          searchButton.disabled = true;
-    }
-    // Evento para habilitar/deshabilitar el botón según el contenido del input
-    searchInput?.addEventListener('input', () => {
-          const isInputValid = searchInput.value.trim() !== '';
-          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
-    });
-}
-
-/**
- * @param {MouseEvent} event
- * */
 function onSearchClick(event) {
     event.preventDefault();
     const searchTerm = document.getElementById('event-name').value.trim().toLowerCase();
     const eventContainer = document.querySelector('.event-container');
 
     const filteredEvents = EVENTS.filter(event =>
-        event.type.toLowerCase().includes(searchTerm) ||
+        event.dance.toLowerCase().includes(searchTerm) ||
         event.name.toLowerCase().includes(searchTerm) ||
         event.city.toLowerCase().includes(searchTerm) ||
         event.price.toLowerCase().includes(searchTerm)
@@ -58,10 +53,49 @@ function onSearchClick(event) {
         eventContainer.innerHTML = '';
         filteredEvents.forEach(event => createEventCardWithAnimation(event, eventContainer));
     }
+
     loadBasketFromLocalStorage()
     scrollToTop();
 }
 
+function onClickSubmitButton(e) {
+    e.preventDefault()
+
+    validateForm();
+    if (!formIsValid) {
+        alert("Please ensure all fields are correctly filled before submitting.");
+        return; // Detener si el formulario no es válido
+    }
+
+    //const flyer = document.getElementById('subtmit-flyer')
+    const name = document.getElementById('input-event-name')
+    const location = document.getElementById('input-address')
+    const date = document.getElementById('input-date')
+    const time = document.getElementById('input-time')
+    const price = document.getElementById('input-price')
+    const music = document.getElementById('input-music-ratio')
+    const city = document.getElementById('input-city')
+    const dance = document.getElementById('input-dance')
+    const eventContainer = document.querySelector('.event-container');
+
+    let event = {
+        //flyer: getInputValue(flyer),
+        name: getInputValue(name),
+        location: getInputValue(location),
+        date: getInputValue(date),
+        time: getInputValue(time),
+        price: getInputValue(price),
+        music: getInputValue(music),
+        city: getInputValue(city),
+        dance: getInputValue(dance),
+    }
+
+    const newEventCreator = new EVENTCREATOR(event)
+    console.log (newEventCreator)
+
+    createEventCardWithAnimation(newEventCreator, eventContainer)
+    hideForm() 
+}
 /**
  * @param {MouseEvent} event
  */
@@ -75,7 +109,7 @@ function onFilterButtonClick(event) {
     if (!eventContainer) return;
     eventContainer.innerHTML = '';
     const filteredEvents = EVENTS.filter(event => {
-        if (target.classList.contains('button-dance-type')) return event.type.toLowerCase() === filterValue;
+        if (target.classList.contains('button-dance-type')) return event.dance.toLowerCase() === filterValue;
         if (target.classList.contains('button-city')) return event.city.toLowerCase() === filterValue;
     });
     if (filteredEvents.length === 0) {
@@ -87,9 +121,11 @@ function onFilterButtonClick(event) {
             createEventCardWithAnimation(event, eventContainer);
         });
     }
-    const basketElement = document.querySelector('#basket-counter');
+    const basketElement = document.querySelector('.basket-counter');
     const storedBasketCount = localStorage.getItem('basketCount') || 0;
     basketElement.innerText = `BASKET (${storedBasketCount})`;
+
+    scrollToTop();
 }
 
 function createEventCardElement(event) {
@@ -103,9 +139,36 @@ function createEventCardElement(event) {
     card.appendChild(leftColumn);
     card.appendChild(rightColumn);
 
-    loadBasketFromLocalStorage()
+    createPreviewContainer()   
+
+    //loadBasketFromLocalStorage()
+    eventList.push(card)
     return card;
 }
+
+function createPreviewContainer() {
+    if (window.location.pathname.includes('profile.html')) {
+     
+    const previewContainer = document.createElement('div')
+    previewContainer.className = 'preview-container'
+   
+    const previewTitle = document.createElement('h1');
+    previewTitle.className = 'preview-title';
+    previewTitle.innerText = 'YOUR EVENT PREVIEW'; 
+
+    const publishButton = document.createElement('button')
+    publishButton.className = 'publish-button'
+    publishButton.innerText = 'PUBLISH'
+    
+    const editButton = document.createElement('button')
+    editButton.className = 'edit-button'
+    editButton.innerText = 'EDIT'
+
+    previewContainer.append(previewTitle,publishButton,editButton);
+    document.body.appendChild(previewContainer);
+    
+    return previewContainer
+}}
 
 function createLeftColumn(event, card) {
     const leftColumn = document.createElement('div');
@@ -113,7 +176,7 @@ function createLeftColumn(event, card) {
 
     const image = createImageElement(event.name);
     const nameFav = createNameFavElement(event);
-    const address = createElementWithText('h1', 'address', event.address);
+    const address = createElementWithText('h1', 'address', event.location);
     const buyButton = createBuyButton(card, event);
 
     leftColumn.append(image, nameFav, address, buyButton);
@@ -153,7 +216,7 @@ function createNameFavElement(event) {
 
     nameFav.append(name, favButton);
     return nameFav;
-}
+} 
 
 function createFavButton(event) {
     const favButton = document.createElement('button');
@@ -175,13 +238,17 @@ function createBuyButton(card, event) {
     buyButton.className = 'buy-button';
     buyButton.innerHTML = '<img src="../bryanprestige/imagenes/shop.png" alt="shop" id="shop-img">';
 
-    const basketElement = document.querySelector('#basket-counter');
+    const basketElement = document.querySelector('.basket-counter');
     buyButton.addEventListener('click', () => handleBuyButtonClick(card, event, basketElement));
 
     return buyButton;
 }
 
+
 function handleBuyButtonClick(card, event, basketElement) {
+
+    sumPriceValue(card)    
+
     card.ticketCount++;
     let ticketCountSpan = card.querySelector('.ticket-count');
 
@@ -194,18 +261,26 @@ function handleBuyButtonClick(card, event, basketElement) {
     }
 
     ticketCountSpan.style.display = 'inline';
-
-    let removeButton = card.querySelector('.remove-button');
+ 
+    let removeButton = card.querySelector('.remove-button'); 
     if (!removeButton) {
         removeButton = createRemoveButton(card, event, basketElement, ticketCountSpan);
         const leftColumn = card.querySelector('.left-column');
         leftColumn.appendChild(removeButton);
-    }
-
+    } 
     updateTicketCount(event, card.ticketCount);
     updateBasketCounter(basketElement);
     saveBasketToLocalStorage(); // Guardar cambios
 }
+function sumPriceValue(card)  {
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+
+    totalPriceValue += parseInt(priceValue);
+    console.log(`Total price: ${totalPriceValue}`);
+    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+}
+
 
 function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     const removeButton = document.createElement('button');
@@ -213,6 +288,7 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     removeButton.textContent = 'Remove';
 
     removeButton.addEventListener('click', (e) => {
+        resPricevalue(card)
         e.stopPropagation();
         card.ticketCount--;
 
@@ -230,57 +306,16 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     return removeButton;
 }
 
-function saveBasketToLocalStorage() {
-    const eventCards = document.querySelectorAll('.event-card');
-    const basketData = [];
 
-    eventCards.forEach(card => {
-        const eventName = card.querySelector('.name').textContent;
-        const ticketCount = card.ticketCount || 0;
+function resPricevalue(card) {
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+    totalPriceValue -= parseInt(priceValue);
+    console.log(`Total price: ${totalPriceValue}`)
 
-        if (ticketCount > 0) {
-            basketData.push({ name: eventName, ticketCount });
-        }
-    });
-
-    localStorage.setItem('basket', JSON.stringify(basketData));
+    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
 }
-function loadBasketFromLocalStorage() {
-    const basketData = JSON.parse(localStorage.getItem('basket')) || [];
-    const basketElement = document.querySelector('#basket-counter');
 
-    basketData.forEach(savedEvent => {
-        const eventCards = document.querySelectorAll('.event-card');
-
-        eventCards.forEach(card => {
-            const eventName = card.querySelector('.name').textContent;
-
-            if (eventName === savedEvent.name) {
-                card.ticketCount = savedEvent.ticketCount;
-
-                let ticketCountSpan = card.querySelector('.ticket-count');
-                if (!ticketCountSpan) {
-                    ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
-                    const leftColumn = card.querySelector('.left-column');
-                    leftColumn.appendChild(ticketCountSpan);
-                } else {
-                    ticketCountSpan.textContent = `(${card.ticketCount})`;
-                }
-
-                ticketCountSpan.style.display = 'inline';
-
-                let removeButton = card.querySelector('.remove-button');
-                if (!removeButton) {
-                    removeButton = createRemoveButton(card, { name: eventName }, basketElement, ticketCountSpan);
-                    const leftColumn = card.querySelector('.left-column');
-                    leftColumn.appendChild(removeButton);
-                }
-            }
-        });
-    });
-
-    updateBasketCounter(basketElement);
-}
 function createTimePriceElement(event) {
     const timePrice = document.createElement('div');
     timePrice.className = 'time-price';
@@ -310,7 +345,7 @@ function createTypeCityElement(event) {
     const typeCity = document.createElement('div');
     typeCity.className = 'type-city';
 
-    const buttonType = createButtonWithStyle('button-dance-type', event.type, getDanceTypeColor(event.type));
+    const buttonType = createButtonWithStyle('button-dance-type', event.dance, getDanceTypeColor(event.dance));
     const buttonCity = createElementWithText('button', 'button-city', event.city);
 
     typeCity.append(buttonType, buttonCity);
@@ -323,8 +358,8 @@ function createButtonWithStyle(className, textContent, backgroundColor) {
     return button;
 }
 
-function getDanceTypeColor(type) {
-    switch(type.toLowerCase()) {
+function getDanceTypeColor(dance) {
+    switch(dance.toLowerCase()) {
         case 'bachata': return 'lightgreen';
         case 'salsa': return 'lightyellow';
         case 'tango': return '#FF5733';
@@ -377,7 +412,6 @@ function updateTicketCount(event, ticketCount) {
  * Actualiza el contador de tickets en el elemento de la cesta.
  * @param {HTMLElement | null} basketElement 
  */
-
 function updateBasketCounter(basketElement) {
     basketCount = 0; 
     const events = document.querySelectorAll('.event-card')
@@ -391,8 +425,8 @@ function updateBasketCounter(basketElement) {
     basketElement.textContent = `BASKET (${basketCount})`
     if(basketCount === 0) {
      basketElement.innerText = "BASKET"
-    }
-}
+}}
+
 function createEventCardWithAnimation(event, container) {
     const card = createEventCardElement(event); 
     card.classList.add('zoom-in'); 
@@ -419,11 +453,10 @@ function updateDefaultFeed() {
         createEventCardWithAnimation(event, eventContainer);
     });
 }
-
 function displayFavoriteEvents(event) {
     event.preventDefault(); //Prevent the page from reloading
     cleanEventContainer() // Limpiar el contenedor antes de mostrar los favoritos
-    getFavEvents()// Recuperar favoritos desde localStorage
+    getFavEvents(event)// Recuperar favoritos desde localStorage
 }
 
 function getFavEvents() {
@@ -448,4 +481,134 @@ function getFavEvents() {
 function cleanEventContainer(){
     const eventContainer = document.querySelector('.event-container');
     eventContainer.innerHTML = ''; 
+}
+
+function saveBasketToLocalStorage() {
+    const eventCards = document.querySelectorAll('.event-card');
+    const basketData = [];
+
+    eventCards.forEach(card => {
+        const eventName = card.querySelector('.name').textContent;
+        const ticketCount = card.ticketCount || 0;
+
+        if (ticketCount > 0) {
+            basketData.push({ name: eventName, ticketCount });
+        }
+    });
+
+    localStorage.setItem('basket', JSON.stringify(basketData));
+}
+function loadBasketFromLocalStorage() {
+    const basketData = JSON.parse(localStorage.getItem('basket')) || [];
+    const basketElement = document.querySelector('.basket-counter');
+
+    basketData.forEach(savedEvent => {
+        const eventCards = document.querySelectorAll('.event-card');
+
+        eventCards.forEach(card => {
+            const eventName = card.querySelector('.name').textContent;
+
+            if (eventName === savedEvent.name) {
+                card.ticketCount = savedEvent.ticketCount;
+
+                let ticketCountSpan = card.querySelector('.ticket-count');
+                if (!ticketCountSpan) {
+                    ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
+                    const leftColumn = card.querySelector('.left-column');
+                    leftColumn.appendChild(ticketCountSpan);
+                } else {
+                    ticketCountSpan.textContent = `(${card.ticketCount})`;
+                }
+
+                ticketCountSpan.style.display = 'inline';
+
+                let removeButton = card.querySelector('.remove-button');
+                if (!removeButton) {
+                    removeButton = createRemoveButton(card, { name: eventName }, basketElement, ticketCountSpan);
+                    const leftColumn = card.querySelector('.left-column');
+                    leftColumn.appendChild(removeButton);
+                }
+                
+            }
+        });
+    });
+
+    updateBasketCounter(basketElement);
+}
+
+function hideShowSearchButton() {
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('event-name');  
+    // Desactivar el botón inicialmente si el input está vacío
+    if (searchInput?.value.trim() === '') {
+          searchButton.disabled = true;
+    }
+    // Evento para habilitar/deshabilitar el botón según el contenido del input
+    searchInput?.addEventListener('input', () => {
+          const isInputValid = searchInput.value.trim() !== '';
+          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
+    });
+}
+
+function getInputValue(inputElement) {
+    if (inputElement) {
+      return /** @type {HTMLInputElement} */(inputElement).value
+    } else {
+      return ''
+    }
+}
+
+function hideForm () {
+    
+    let form = document.getElementById('event-creator');
+    if (eventList.length === 1) {
+        form.style.display = 'none';
+        }
+}
+
+function validateForm() {
+    const name = document.getElementById('input-event-name');
+    const location = document.getElementById('input-address');
+    const date = document.getElementById('input-date');
+    const time = document.getElementById('input-time');
+    const price = document.getElementById('input-price');
+    const music = document.getElementById('input-music-ratio');
+    const city = document.getElementById('input-city');
+    const dance = document.getElementById('input-dance');
+  
+    const submitButton = document.getElementById('submit-button');
+
+    // Verificar si todos los campos están rellenos
+    const fields = [name, location, date, time, price, music, city, dance];
+    formIsValid = fields.every(field => field?.value.trim() !== '');
+
+    // Habilitar o deshabilitar el botón según la validez
+    submitButton.disabled = !formIsValid;
+
+    const fieldsEmpty = [
+        'input-event-name',
+        'input-address',
+        'input-date',
+        'input-time',
+        'input-price',
+        'input-music-ratio',
+        'input-city',
+        'input-dance',
+    ].map(id => document.getElementById(id));
+
+    formIsValid = fieldsEmpty.every(fieldsEmpty => {
+        if (fieldsEmpty?.value.trim() === '') {
+            fieldsEmpty?.classList.add('invalid-field');
+            return false;
+        } else {
+            fieldsEmpty?.classList.remove('invalid-field');
+            return true;
+        }
+    });
+}
+        
+function getPriceValue(card) {
+    const priceElement = card.querySelector('.price');
+    const priceValue = priceElement.textContent.replace('$', '');
+    return priceValue;
 }
