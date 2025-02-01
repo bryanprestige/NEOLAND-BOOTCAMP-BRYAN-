@@ -71,7 +71,7 @@ div {
     border: 1px solid #243D4B;
 }   
 img {
-    width: 32px;
+    width: 52px;
     margin: 10px auto 0;
 }
 
@@ -121,12 +121,11 @@ input {
     text-align: center;
 }
 /*======EVENTS======*/
-.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details,
-.name-time-price, .address-type-city, .address-type-city, .time-price, .type-city, .name-fav,
+.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .type-city, .name-fav,
 .reviews-placeholder    {
     display: flex;
 }
-.event-container, .event-image, .address-type-city, .remove-button, .register,
+.event-container, .event-image, .remove-button, .register,
  .login-button, .register, .remove-button, .name {
     width: 100%;
 }
@@ -146,7 +145,7 @@ input {
 .event-container,.event-card,#event-form {
     gap: 20px; 
 }
-.left-column, .right-column,.image-and-details, .address-type-city{
+.left-column, .right-column,.image-and-details{
     gap: 10px;
 }
 .event-container {
@@ -184,27 +183,20 @@ input {
     font-weight: bold;
     color: #666;
 }
-.name-time-price, .address-type-city {
-    flex-direction: row;
-    justify-content: space-between; 
-    margin-bottom: 0px;
-}
-.address-type-city {
-    align-items: center;
-}
-.time-price, .type-city, .name-fav {
+
+.price-currency, .type-city, .name-fav {
     justify-content: space-between;
     gap: 5px; 
 }
 .music-ratio,.music-ratio.single-style,.music-ratio.three-styles,.music-ratio.two-styles,
-.button-dance-type, .button-city, .name, .time, .price, .address,.date {
+.button-dance-type, .button-city, .name, .time, .price, .address,.date-time {
     font-family: 'Roboto', sans-serif; 
     font-size: 1rem;
     letter-spacing: 0.5px; 
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.time, .price, .date, .button-dance-type, .button-city, .music-ratio, .address, .name {
+.time, .price, .date-time, .button-dance-type, .button-city, .music-ratio, .address, .name {
     background-color:#243D4B;
     color: #F7BC47;
 }

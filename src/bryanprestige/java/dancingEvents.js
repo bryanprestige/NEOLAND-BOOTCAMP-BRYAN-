@@ -1,8 +1,14 @@
 import EVENTS from '../events.json' with { type: 'json' };
-import {EVENTCREATOR} from './classes/event.js' 
+//import {EVENTCREATOR} from './classes/Event.js' 
+import {store} from '../storeRedux/redux.js'
+
+/**
+ * @import {Event} from '../java/classes/Event.js'
+ */
+
 
 let basketCount = 0;    
-let formIsValid = false;
+
 let eventList = []
 let totalPriceValue = 0;
 
@@ -33,101 +39,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function onSearchClick(event) {
     event.preventDefault();
-    const searchTerm = document.getElementById('event-name').value.trim().toLowerCase();
+    const searchField = document.getElementById('search-field').value.trim().toLowerCase();
+
+    const filteredEvents =  store.event.filter(searchField)
+    console.log(filteredEvents)
+    
     const eventContainer = document.querySelector('.event-container');
 
-    const filteredEvents = EVENTS.filter(event =>
-        event.dance.toLowerCase().includes(searchTerm) ||
-        event.name.toLowerCase().includes(searchTerm) ||
-        event.city.toLowerCase().includes(searchTerm) ||
-        event.price.toLowerCase().includes(searchTerm)
-    );
-
     if (filteredEvents.length === 0) {
-        const errorImg = document.createElement('img');
-        errorImg.className = 'error-img';
-        errorImg.src = '../bryanprestige/imagenes/noEvent.png';
-        eventContainer.innerHTML = '';
-        eventContainer.appendChild(errorImg);
+        cleanEventContainer()
+        noEventFound()
+        console.log('aqui pasa algo',filteredEvents.length)
     } else {
-        eventContainer.innerHTML = '';
-        filteredEvents.forEach(event => createEventCardWithAnimation(event, eventContainer));
+        cleanEventContainer()
+        filteredEvents.forEach(event => createEventCardWithAnimation(event,eventContainer));
     }
-
-    loadBasketFromLocalStorage()
-    scrollToTop();
+    loadBasketFromLocalStorage()  
 }
-
 function onClickSubmitButton(e) {
     e.preventDefault()
 
-    validateForm();
-    if (!formIsValid) {
+    if (validateForm() === false) {
         alert("Please ensure all fields are correctly filled before submitting.");
-        return; // Detener si el formulario no es válido
-    }
-
-    //const flyer = document.getElementById('subtmit-flyer')
-    const name = document.getElementById('input-event-name')
-    const location = document.getElementById('input-address')
-    const date = document.getElementById('input-date')
-    const time = document.getElementById('input-time')
-    const price = document.getElementById('input-price')
-    const music = document.getElementById('input-music-ratio')
-    const city = document.getElementById('input-city')
-    const dance = document.getElementById('input-dance')
-    const eventContainer = document.querySelector('.event-container');
-
-    let event = {
-        //flyer: getInputValue(flyer),
-        name: getInputValue(name),
-        location: getInputValue(location),
-        date: getInputValue(date),
-        time: getInputValue(time),
-        price: getInputValue(price),
-        music: getInputValue(music),
-        city: getInputValue(city),
-        dance: getInputValue(dance),
-    }
-
-    const newEventCreator = new EVENTCREATOR(event)
-    console.log (newEventCreator)
-
-    createEventCardWithAnimation(newEventCreator, eventContainer)
-    hideForm() 
+        return; 
+    }else {
+     createEvent()
+    
+    hideForm() }
 }
 /**
  * @param {MouseEvent} event
  */
 function onFilterButtonClick(event) {
     event.preventDefault();
+    
     const target = event.target;
-    if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorites-button')) return;
     const filterValue = target.textContent?.toLowerCase();
+    const filteredEvents =  store.event.filter(filterValue)
+    console.log(filteredEvents)
+
+    if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorites-button')) return;
     if (!filterValue) return;
     const eventContainer = document.querySelector('.event-container');
     if (!eventContainer) return;
-    eventContainer.innerHTML = '';
-    const filteredEvents = EVENTS.filter(event => {
-        if (target.classList.contains('button-dance-type')) return event.dance.toLowerCase() === filterValue;
-        if (target.classList.contains('button-city')) return event.city.toLowerCase() === filterValue;
-    });
+    cleanEventContainer();
+    
     if (filteredEvents.length === 0) {
-        const errorImg = document.createElement('img');
-        errorImg.src = '../bryanprestige/imagenes/noEvent.png';
-        eventContainer.appendChild(errorImg);
+        noEventFound()
     } else {
-        filteredEvents.forEach(event => {
-            createEventCardWithAnimation(event, eventContainer);
-        });
+            filteredEvents.forEach(event => {
+                createEventCardWithAnimation(event, eventContainer);
+                });
     }
+        
     const basketElement = document.querySelector('.basket-counter');
     const storedBasketCount = localStorage.getItem('basketCount') || 0;
     basketElement.innerText = `BASKET (${storedBasketCount})`;
-
-    scrollToTop();
+    scrollToTop();   
 }
 
+function createEventCardWithAnimation(event, container) {
+    const card = createEventCardElement(event); 
+    card.classList.add('zoom-in'); 
+    
+    card.addEventListener('animationend', () => {
+        card.classList.remove('zoom-in');
+    });
+    
+    container.appendChild(card);
+    loadBasketFromLocalStorage()
+}
+
+function updateDefaultFeed() {
+    const eventContainer = document.querySelector('.event-container');
+    cleanEventContainer()
+    EVENTS.forEach(event => {
+        store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
+        createEventCardWithAnimation(event, eventContainer);
+    });
+}
 function createEventCardElement(event) {
     const card = document.createElement('div');
     card.className = 'event-card';
@@ -146,6 +136,35 @@ function createEventCardElement(event) {
     return card;
 }
 
+
+function createLeftColumn(event, card) {
+    const leftColumn = document.createElement('div');
+    leftColumn.className = 'left-column';
+    
+    const image = createImageElement(event.name);
+    const nameFav = createNameFavElement(event);
+    const address = createElementWithText('h1', 'address', event.location);
+    const buyButton = createBuyButton(card, event);
+    
+    leftColumn.append(image, nameFav, address, buyButton);
+    
+    return leftColumn;
+}
+
+function createRightColumn(event) {
+    const rightColumn = document.createElement('div');
+    rightColumn.className = 'right-column';
+    
+    const reviews = createElementWithText('div', 'reviews-placeholder', 'Reviews Placeholder');
+    const priceCurrency = createPriceCurrencyElement(event);
+    const date = createElementWithText('h1', 'date-time', event.dateTime);
+    const musicRatio = createMusicRatioElement(event.music);
+    const typeCity = createTypeCityElement(event);
+    
+    rightColumn.append(reviews, priceCurrency, date, musicRatio, typeCity);
+    
+    return rightColumn;
+}
 function createPreviewContainer() {
     if (window.location.pathname.includes('profile.html')) {
      
@@ -169,35 +188,6 @@ function createPreviewContainer() {
     
     return previewContainer
 }}
-
-function createLeftColumn(event, card) {
-    const leftColumn = document.createElement('div');
-    leftColumn.className = 'left-column';
-
-    const image = createImageElement(event.name);
-    const nameFav = createNameFavElement(event);
-    const address = createElementWithText('h1', 'address', event.location);
-    const buyButton = createBuyButton(card, event);
-
-    leftColumn.append(image, nameFav, address, buyButton);
-
-    return leftColumn;
-}
-
-function createRightColumn(event) {
-    const rightColumn = document.createElement('div');
-    rightColumn.className = 'right-column';
-
-    const reviews = createElementWithText('div', 'reviews-placeholder', 'Reviews Placeholder');
-    const timePrice = createTimePriceElement(event);
-    const date = createElementWithText('h1', 'date', event.date);
-    const musicRatio = createMusicRatioElement(event.music);
-    const typeCity = createTypeCityElement(event);
-
-    rightColumn.append(reviews, timePrice, date, musicRatio, typeCity);
-
-    return rightColumn;
-}
 
 function createImageElement(eventName) {
     const image = document.createElement('img');
@@ -229,7 +219,6 @@ function createFavButton(event) {
     }
 
     favButton.addEventListener('click', () => toggleFavorite(event, favButton));
-
     return favButton;
 }
 
@@ -243,7 +232,6 @@ function createBuyButton(card, event) {
 
     return buyButton;
 }
-
 
 function handleBuyButtonClick(card, event, basketElement) {
 
@@ -272,15 +260,6 @@ function handleBuyButtonClick(card, event, basketElement) {
     updateBasketCounter(basketElement);
     saveBasketToLocalStorage(); // Guardar cambios
 }
-function sumPriceValue(card)  {
-    const priceValue = getPriceValue(card);
-    console.log(`Event price: ${priceValue}`);
-
-    totalPriceValue += parseInt(priceValue);
-    console.log(`Total price: ${totalPriceValue}`);
-    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
-}
-
 
 function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     const removeButton = document.createElement('button');
@@ -306,26 +285,16 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     return removeButton;
 }
 
+function createPriceCurrencyElement(event) {
+    const priceCurrency = document.createElement('div');
+    priceCurrency.className = 'price-currency';
 
-function resPricevalue(card) {
-    const priceValue = getPriceValue(card);
-    console.log(`Event price: ${priceValue}`);
-    totalPriceValue -= parseInt(priceValue);
-    console.log(`Total price: ${totalPriceValue}`)
-
-    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
-}
-
-function createTimePriceElement(event) {
-    const timePrice = document.createElement('div');
-    timePrice.className = 'time-price';
-
-    const time = createElementWithText('time', 'time', event.time);
-    time.setAttribute('datetime', event.time);
+    const currency = createElementWithText('currency', 'currencly', event.currency);
+    currency.setAttribute('select', event.currency);
     const price = createElementWithText('h1', 'price', event.price);
 
-    timePrice.append(time, price);
-    return timePrice;
+    priceCurrency.append(currency, price);
+    return priceCurrency
 }
 
 function createMusicRatioElement(music) {
@@ -394,7 +363,6 @@ function toggleFavorite(event, button) {
     localStorage.setItem('favList', JSON.stringify(favList));
     console.log("Lista de favoritos actualizada:", favList); 
 }
-
 function updateTicketCount(event, ticketCount) {
     let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
     const eventIndex = ticketList.findIndex(item => item.name === event.name);
@@ -427,18 +395,6 @@ function updateBasketCounter(basketElement) {
      basketElement.innerText = "BASKET"
 }}
 
-function createEventCardWithAnimation(event, container) {
-    const card = createEventCardElement(event); 
-    card.classList.add('zoom-in'); 
-    
-    card.addEventListener('animationend', () => {
-        card.classList.remove('zoom-in');
-    });
-    
-    container.appendChild(card);
-    loadBasketFromLocalStorage()
-}
-
 function scrollToTop() {
     const scrollList = document.querySelector('.event-container');
     if (scrollList) {
@@ -446,17 +402,12 @@ function scrollToTop() {
     }
 }
 
-function updateDefaultFeed() {
-    const eventContainer = document.querySelector('.event-container');
-    cleanEventContainer()
-    EVENTS.forEach(event => {
-        createEventCardWithAnimation(event, eventContainer);
-    });
-}
+
 function displayFavoriteEvents(event) {
-    event.preventDefault(); //Prevent the page from reloading
-    cleanEventContainer() // Limpiar el contenedor antes de mostrar los favoritos
-    getFavEvents(event)// Recuperar favoritos desde localStorage
+    event.preventDefault(); 
+    cleanEventContainer() 
+    getFavEvents(event)
+    scrollToTop()
 }
 
 function getFavEvents() {
@@ -464,18 +415,13 @@ function getFavEvents() {
     let favList = JSON.parse(localStorage.getItem('favList')) || [];
 
     if (favList.length === 0) {
-        // Mostrar imagen si no hay eventos favoritos
-        let errorImg = document.createElement('img');
-        errorImg.className = 'error-img';
-        errorImg.src = '../bryanprestige/imagenes/noEvent.png';
-        eventContainer.appendChild(errorImg);
+       noEventFound()
     } else {
         // Mostrar solo los eventos favoritos
         favList.forEach(event => {
             createEventCardWithAnimation(event, eventContainer);
         });
     }
-    console.log(favList)
 }
 
 function cleanEventContainer(){
@@ -527,12 +473,10 @@ function loadBasketFromLocalStorage() {
                     removeButton = createRemoveButton(card, { name: eventName }, basketElement, ticketCountSpan);
                     const leftColumn = card.querySelector('.left-column');
                     leftColumn.appendChild(removeButton);
-                }
-                
+                } 
             }
         });
     });
-
     updateBasketCounter(basketElement);
 }
 
@@ -567,6 +511,7 @@ function hideForm () {
 }
 
 function validateForm() {
+    let formIsValid = false;
     const name = document.getElementById('input-event-name');
     const location = document.getElementById('input-address');
     const date = document.getElementById('input-date');
@@ -578,11 +523,9 @@ function validateForm() {
   
     const submitButton = document.getElementById('submit-button');
 
-    // Verificar si todos los campos están rellenos
     const fields = [name, location, date, time, price, music, city, dance];
     formIsValid = fields.every(field => field?.value.trim() !== '');
 
-    // Habilitar o deshabilitar el botón según la validez
     submitButton.disabled = !formIsValid;
 
     const fieldsEmpty = [
@@ -605,10 +548,85 @@ function validateForm() {
             return true;
         }
     });
+    return formIsValid
 }
-        
+
 function getPriceValue(card) {
     const priceElement = card.querySelector('.price');
     const priceValue = priceElement.textContent.replace('$', '');
     return priceValue;
+}
+
+function noEventFound () {
+    const eventContainer = document.querySelector('.event-container');
+    const errorImg = document.createElement('img');
+    errorImg.className = 'error-img';
+    errorImg.src = '../bryanprestige/imagenes/noEvent.png';
+    eventContainer.appendChild(errorImg);
+}
+
+function createEvent () {
+    //const flyer = document.getElementById('subtmit-flyer')
+    const name = document.getElementById('input-event-name')
+    const location = document.getElementById('input-address')
+    const dateTime = document.getElementById('input-dateTime')
+    const price = document.getElementById('input-price')
+    const currency = document.getElementById('input-currency')
+    const music = document.getElementById('input-music-ratio')
+    const city = document.getElementById('input-city')
+    const dance = document.getElementById('input-dance')
+    const eventContainer = document.querySelector('.event-container');
+    
+    /**
+     * @type {Event}
+     */
+    let event = {
+        //flyer: getInputValue(flyer),
+        name: getInputValue(name),
+        location: getInputValue(location),
+        dateTime: getInputValue(dateTime),
+        price: getInputValue(price),
+        currency: getInputValue(currency),
+        music: getInputValue(music),
+        city: getInputValue(city),
+        dance: getInputValue(dance),
+    }
+    
+    console.log (event)
+    store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
+    console.log(store.getState())
+    createEventCardWithAnimation(event, eventContainer)
+}
+
+function sumPriceValue(card)  {
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+
+    totalPriceValue += parseInt(priceValue);
+    console.log(`Total price: ${totalPriceValue}`);
+    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+}
+
+function resPricevalue(card) {
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+    totalPriceValue -= parseInt(priceValue);
+    console.log(`Total price: ${totalPriceValue}`)
+
+    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+}
+
+function setLocalStorageFromState(key = 'eventStorage') {
+    const storeData = store.getState()
+    //delete storeData.user
+    updateLocalStorage(storeData, key)
+}
+
+/**
+ * @param{State} storeValue
+ */
+
+function updateLocalStorage(storeValue, key = 'eventStorage') {
+    localStorage.setItem(key, JSON.stringify(storeValue));
+    console.log(key)
 }
