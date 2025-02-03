@@ -1,11 +1,14 @@
-import EVENTS from '../events.json' with { type: 'json' };
-//import {EVENTCREATOR} from './classes/Event.js' 
+
+/*
+// @ts-check
+// */
 import {store} from '../storeRedux/redux.js'
-
+import { simpleFetch } from './lib/simpleFetch.js'
+import { HttpError } from './classes/HttpError.js'
 /**
- * @import {Event} from '../java/classes/Event.js'
+ * @import {Event} from './classes/Event.js'
+ * @import {User}   from './classes/User.js'
  */
-
 
 let basketCount = 0;    
 
@@ -15,12 +18,24 @@ let totalPriceValue = 0;
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('profile.html')) {
         const submitButton =document.getElementById('submit-button')
-        submitButton.addEventListener('click',onClickSubmitButton)   
+        submitButton?.addEventListener('click',onClickSubmitButton)   
         
         document.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', validateForm);
         })
-    } else if (window.location.pathname.includes('dancingEvents.html')) {
+    }
+    
+    else if (window.location.pathname.includes('register.html')) {
+        const registerButton =document.getElementById('register-button-register')
+        registerButton?.addEventListener('click',onClickRegisterButton)
+    }
+    
+    /*else if (window.location.pathname.includes('login.htm')) {
+        const submitButtonLogin =document.getElementByClassName('submit-button-login')
+        submitButtonLogin?.addEventListener('click',onClickSubmitButtonLogin)
+    }*/
+     
+    else if (window.location.pathname.includes('dancingEvents.html')) {
         updateDefaultFeed()
         const searchButton = document.getElementById('search-button');
         hideShowSearchButton()
@@ -37,8 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+/**
+ * @param {MouseEvent} event
+ */
+
 function onSearchClick(event) {
     event.preventDefault();
+    
     const searchField = document.getElementById('search-field').value.trim().toLowerCase();
 
     const filteredEvents =  store.event.filter(searchField)
@@ -46,16 +66,21 @@ function onSearchClick(event) {
     
     const eventContainer = document.querySelector('.event-container');
 
-    if (filteredEvents.length === 0) {
+    if (filteredEvents.length === 0) { 
         cleanEventContainer()
         noEventFound()
-        console.log('aqui pasa algo',filteredEvents.length)
     } else {
         cleanEventContainer()
         filteredEvents.forEach(event => createEventCardWithAnimation(event,eventContainer));
     }
     loadBasketFromLocalStorage()  
+    scrollToTop();
 }
+
+/**
+ * @param {MouseEvent} e
+ */
+
 function onClickSubmitButton(e) {
     e.preventDefault()
 
@@ -74,7 +99,7 @@ function onFilterButtonClick(event) {
     event.preventDefault();
     
     const target = event.target;
-    const filterValue = target.textContent?.toLowerCase();
+    const filterValue = target?.textContent?.toLowerCase();
     const filteredEvents =  store.event.filter(filterValue)
     console.log(filteredEvents)
 
@@ -87,16 +112,59 @@ function onFilterButtonClick(event) {
     if (filteredEvents.length === 0) {
         noEventFound()
     } else {
-            filteredEvents.forEach(event => {
+   
+         filteredEvents.forEach(event => {
                 createEventCardWithAnimation(event, eventContainer);
                 });
-    }
-        
+    } 
     const basketElement = document.querySelector('.basket-counter');
     const storedBasketCount = localStorage.getItem('basketCount') || 0;
     basketElement.innerText = `BASKET (${storedBasketCount})`;
     scrollToTop();   
 }
+/**
+ * @param {MouseEvent} event
+ */
+
+function displayFavoriteEvents(event) {
+    event.preventDefault(); 
+    const eventContainer = document.querySelector('.event-container');
+    let favList = JSON.parse(localStorage.getItem('favList')) || [];
+
+    if (favList.length === 0) {
+        noEventFound()
+     } else {
+        cleanEventContainer() 
+         // Mostrar solo los eventos favoritos
+         favList.forEach(event => {
+             createEventCardWithAnimation(event, eventContainer);
+         });
+     }
+    scrollToTop()
+}
+
+/*
+function onClickSubmitButtonLogin(){
+    validateCredentials()
+    sendToProfile()
+}
+*/
+async function updateDefaultFeed() {
+    const apiData = await getAPIData(`http://${location.hostname}:1337`)
+
+    const eventContainer = document.querySelector('.event-container');
+    cleanEventContainer()
+    apiData.forEach(event => {
+        store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
+        createEventCardWithAnimation(event, eventContainer);
+    });
+}
+
+
+/**
+ * @param {Event} event 
+ * @param {HTMLElement} container
+ */ 
 
 function createEventCardWithAnimation(event, container) {
     const card = createEventCardElement(event); 
@@ -109,19 +177,15 @@ function createEventCardWithAnimation(event, container) {
     container.appendChild(card);
     loadBasketFromLocalStorage()
 }
+/**
+ * 
+ * @param {Event} event 
+ */ 
 
-function updateDefaultFeed() {
-    const eventContainer = document.querySelector('.event-container');
-    cleanEventContainer()
-    EVENTS.forEach(event => {
-        store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
-        createEventCardWithAnimation(event, eventContainer);
-    });
-}
 function createEventCardElement(event) {
     const card = document.createElement('div');
     card.className = 'event-card';
-    card.ticketCount = 0;
+    card.ticketCount = 0;   
 
     const leftColumn = createLeftColumn(event, card);
     const rightColumn = createRightColumn(event);
@@ -136,7 +200,11 @@ function createEventCardElement(event) {
     return card;
 }
 
-
+/**
+ * 
+ * @param {MouseEvent} event 
+ * @param {HTMLElement} card
+ */ 
 function createLeftColumn(event, card) {
     const leftColumn = document.createElement('div');
     leftColumn.className = 'left-column';
@@ -150,6 +218,11 @@ function createLeftColumn(event, card) {
     
     return leftColumn;
 }
+
+/**
+ * 
+ * @param {MouseEvent} event 
+ */ 
 
 function createRightColumn(event) {
     const rightColumn = document.createElement('div');
@@ -189,6 +262,10 @@ function createPreviewContainer() {
     return previewContainer
 }}
 
+/**
+ * 
+ * @param {string} eventName 
+ */ 
 function createImageElement(eventName) {
     const image = document.createElement('img');
     image.className = 'event-image';
@@ -197,6 +274,10 @@ function createImageElement(eventName) {
     return image;
 }
 
+/**
+ * 
+ * @param {object} event 
+ */ 
 function createNameFavElement(event) {
     const nameFav = document.createElement('div');
     nameFav.className = 'name-fav';
@@ -207,6 +288,11 @@ function createNameFavElement(event) {
     nameFav.append(name, favButton);
     return nameFav;
 } 
+
+/**
+ * 
+ * @param {object} event 
+ */ 
 
 function createFavButton(event) {
     const favButton = document.createElement('button');
@@ -222,6 +308,11 @@ function createFavButton(event) {
     return favButton;
 }
 
+/**
+ * 
+ * @param {object} card
+ * @param {object} event 
+ */ 
 function createBuyButton(card, event) {
     const buyButton = document.createElement('button');
     buyButton.className = 'buy-button';
@@ -233,6 +324,12 @@ function createBuyButton(card, event) {
     return buyButton;
 }
 
+/**
+ * 
+ * @param {object} card
+ * @param {object} event
+ * @param {HTMLElement | null} basketElement
+ */ 
 function handleBuyButtonClick(card, event, basketElement) {
 
     sumPriceValue(card)    
@@ -261,6 +358,14 @@ function handleBuyButtonClick(card, event, basketElement) {
     saveBasketToLocalStorage(); // Guardar cambios
 }
 
+/**
+ * 
+ * @param {object} card
+ * @param {object} event
+ * @param {HTMLElement | null} basketElement
+ * @param {HTMLElement | null} ticketCountSpan 
+ */ 
+
 function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     const removeButton = document.createElement('button');
     removeButton.className = 'remove-button';
@@ -285,6 +390,10 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     return removeButton;
 }
 
+/**
+ * 
+ * @param {object} event 
+ */ 
 function createPriceCurrencyElement(event) {
     const priceCurrency = document.createElement('div');
     priceCurrency.className = 'price-currency';
@@ -297,6 +406,10 @@ function createPriceCurrencyElement(event) {
     return priceCurrency
 }
 
+/**
+ * 
+ * @param {string} music
+ */ 
 function createMusicRatioElement(music) {
     const musicRatio = createElementWithText('h1', 'music-ratio', music);
 
@@ -310,6 +423,10 @@ function createMusicRatioElement(music) {
     return musicRatio;
 }
 
+/**
+ * 
+ * @param {object} event
+ */
 function createTypeCityElement(event) {
     const typeCity = document.createElement('div');
     typeCity.className = 'type-city';
@@ -320,12 +437,23 @@ function createTypeCityElement(event) {
     typeCity.append(buttonType, buttonCity);
     return typeCity;
 }
+/**
+ * 
+ * @param {string} className
+ * @param {string} textContent
+ * @param {string} backgroundColor
+ */ 
 
 function createButtonWithStyle(className, textContent, backgroundColor) {
     const button = createElementWithText('button', className, textContent);
     button.style.backgroundColor = backgroundColor;
     return button;
 }
+
+/**
+ * 
+ * @param {string} dance
+ */ 
 
 function getDanceTypeColor(dance) {
     switch(dance.toLowerCase()) {
@@ -340,12 +468,25 @@ function getDanceTypeColor(dance) {
     }
 }
 
+/**
+ * 
+ * @param {string} tag
+ * @param {string} className
+ * @param {string} textContent
+ */ 
+
 function createElementWithText(tag, className, textContent) {
     const element = document.createElement(tag);
     element.className = className;
     element.textContent = textContent;
     return element;
 }
+
+/**
+ * 
+ * @param {object} event
+ * @param {HTMLElement | null} button
+ */ 
 
 function toggleFavorite(event, button) {
     let favList = JSON.parse(localStorage.getItem('favList')) || []; // Obtener la lista de favoritos
@@ -363,6 +504,13 @@ function toggleFavorite(event, button) {
     localStorage.setItem('favList', JSON.stringify(favList));
     console.log("Lista de favoritos actualizada:", favList); 
 }
+
+/**
+ * 
+ * @param {object} event
+ * @param {number} ticketCount
+ */ 
+
 function updateTicketCount(event, ticketCount) {
     let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
     const eventIndex = ticketList.findIndex(item => item.name === event.name);
@@ -402,31 +550,11 @@ function scrollToTop() {
     }
 }
 
-
-function displayFavoriteEvents(event) {
-    event.preventDefault(); 
-    cleanEventContainer() 
-    getFavEvents(event)
-    scrollToTop()
-}
-
-function getFavEvents() {
+function cleanEventContainer() {
     const eventContainer = document.querySelector('.event-container');
-    let favList = JSON.parse(localStorage.getItem('favList')) || [];
-
-    if (favList.length === 0) {
-       noEventFound()
-    } else {
-        // Mostrar solo los eventos favoritos
-        favList.forEach(event => {
-            createEventCardWithAnimation(event, eventContainer);
-        });
+    while (eventContainer.firstChild) {
+        eventContainer.removeChild(eventContainer.firstChild);
     }
-}
-
-function cleanEventContainer(){
-    const eventContainer = document.querySelector('.event-container');
-    eventContainer.innerHTML = ''; 
 }
 
 function saveBasketToLocalStorage() {
@@ -444,6 +572,7 @@ function saveBasketToLocalStorage() {
 
     localStorage.setItem('basket', JSON.stringify(basketData));
 }
+
 function loadBasketFromLocalStorage() {
     const basketData = JSON.parse(localStorage.getItem('basket')) || [];
     const basketElement = document.querySelector('.basket-counter');
@@ -494,6 +623,11 @@ function hideShowSearchButton() {
     });
 }
 
+/**
+ * 
+ * @param {HTMLElement | null} inputElement
+ */
+
 function getInputValue(inputElement) {
     if (inputElement) {
       return /** @type {HTMLInputElement} */(inputElement).value
@@ -517,13 +651,14 @@ function validateForm() {
     const date = document.getElementById('input-date');
     const time = document.getElementById('input-time');
     const price = document.getElementById('input-price');
+    const currency = document.getElementById('input-currency');
     const music = document.getElementById('input-music-ratio');
     const city = document.getElementById('input-city');
     const dance = document.getElementById('input-dance');
   
     const submitButton = document.getElementById('submit-button');
 
-    const fields = [name, location, date, time, price, music, city, dance];
+    const fields = [name, location, date, time, price, currency, music, city, dance];
     formIsValid = fields.every(field => field?.value.trim() !== '');
 
     submitButton.disabled = !formIsValid;
@@ -534,6 +669,7 @@ function validateForm() {
         'input-date',
         'input-time',
         'input-price',
+        'input-currency',
         'input-music-ratio',
         'input-city',
         'input-dance',
@@ -551,6 +687,11 @@ function validateForm() {
     return formIsValid
 }
 
+/**
+ * 
+ * @param {HTMLElement | null} card
+ */
+
 function getPriceValue(card) {
     const priceElement = card.querySelector('.price');
     const priceValue = priceElement.textContent.replace('$', '');
@@ -562,6 +703,7 @@ function noEventFound () {
     const errorImg = document.createElement('img');
     errorImg.className = 'error-img';
     errorImg.src = '../bryanprestige/imagenes/noEvent.png';
+    
     eventContainer.appendChild(errorImg);
 }
 
@@ -597,6 +739,10 @@ function createEvent () {
     console.log(store.getState())
     createEventCardWithAnimation(event, eventContainer)
 }
+/**
+ * 
+ * @param {HTMLElement | null} card
+ */
 
 function sumPriceValue(card)  {
     const priceValue = getPriceValue(card);
@@ -606,6 +752,11 @@ function sumPriceValue(card)  {
     console.log(`Total price: ${totalPriceValue}`);
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
 }
+
+/**
+ * 
+ * @param {HTMLElement | null} card
+ */
 
 function resPricevalue(card) {
     const priceValue = getPriceValue(card);
@@ -630,3 +781,61 @@ function updateLocalStorage(storeValue, key = 'eventStorage') {
     localStorage.setItem(key, JSON.stringify(storeValue));
     console.log(key)
 }
+
+
+async function getAPIData(apiURL = './api/get.events.json') {
+    let apiData
+  
+    try {
+      // apiData = await simpleFetch(API_USUAL_PRODUCTS_URL, {
+      apiData = await simpleFetch(apiURL, {
+        // Si la petición tarda demasiado, la abortamos
+        signal: AbortSignal.timeout(3000),
+        headers: {
+          'Content-Type': 'application/json',
+          // Add cross-origin header
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+    } catch (/** @type {any | HttpError} */err) {
+      if (err.name === 'AbortError') {
+        console.error('Fetch abortado');
+      }
+      if (err instanceof HttpError) {
+        if (err.response.status === 404) {
+          console.error('Not found');
+        }
+        if (err.response.status === 500) {
+          console.error('Internal server error');
+        }
+      }
+    }
+    return apiData
+  }
+
+function onClickRegisterButton (e) {
+    e.preventDefault()
+    createUser ()
+}
+
+  function createUser () {
+      const email = document.getElementById('input-email-register')
+      const nickname = document.getElementById('input-nickname-register')
+    const name = document.getElementById('input-name-register')
+    const rol = document.getElementById('input-rol-register')
+    const password = document.getElementById('input-password-regisger')
+    
+    /**
+     * @type {User}
+     */
+    let user = {
+        email: getInputValue(email),
+        nickname: getInputValue(nickname),
+        name: getInputValue(name),
+        rol: getInputValue(rol),
+        password: getInputValue(password),
+    }
+    
+    console.log (user)
+    store.user.create(user, setLocalStorageFromState.bind(this, 'eventStorage'))
+  }
