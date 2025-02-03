@@ -28,7 +28,7 @@
         //this.flyer = flyer
         this.name = name
         this.location = location
-        this.date = dateTime 
+        this.dateTime = dateTime 
         this.price = price
         this.currency = currency
         this.music = music

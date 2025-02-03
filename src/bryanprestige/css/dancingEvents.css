@@ -6,16 +6,16 @@ body {
     max-height: 100%;
     text-align: center;
 }
-body, nav, ol, .logo-log-register,#header-container, #header-container-profile, form {
+body, nav, ol, .logo-log-register,#header-container, .header-container-profile, form {
     width: 100%;
 } 
-nav, ol, #header-container, #header-container-profile, .logo-log-register, #search-section {
+nav, ol, #header-container, .header-container-profile, .logo-log-register, #search-section {
     display: flex;
 }
 img, .app-logo, .main-title, span, form {
     display: block;
 }
-#header-container, #header-container-profile {
+#header-container, .header-container-profile {
     flex-direction: column;
 }
 nav, ol {
@@ -31,7 +31,7 @@ nav, li, div,.main-title, form, #search-label {
 nav, ol, .app-name, .main-title, form {
     font-weight: bold;
 }
-div, li, #header-container, #header-container-profile {
+div, li, #header-container,.header-container-profile {
     background-color: #F7BC47;
 }
 
@@ -41,7 +41,7 @@ li, :link ,div, .main-title, form, #search-section, #search-label{
 li, div {
     cursor: pointer;
 }
-a, .main-title, input{
+a, .main-title, input, select{
     border-radius: 20px;
 }
 li, div{
@@ -116,7 +116,7 @@ form {
     font-size: 20px;
     text-align: center;
 }
-input {
+input, select {
     border: 5px solid #243D4B;
     text-align: center;
 }
@@ -135,7 +135,7 @@ input {
 .event-card,#event-form,.left-column, .right-column {
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
 }
-.event-image,.reviews-placeholder,.name, .address,.time, .price,
+.event-image,.reviews-placeholder,.name, .address,.time, .currency,
 .button-dance-type, .button-city,.date, .time, .price, .event-card,#event-form{
     border-radius: 10px;
 }
@@ -189,7 +189,7 @@ input {
     gap: 5px; 
 }
 .music-ratio,.music-ratio.single-style,.music-ratio.three-styles,.music-ratio.two-styles,
-.button-dance-type, .button-city, .name, .time, .price, .address,.date-time {
+.button-dance-type, .button-city, .name, .time, .price,.currency, .address,.date-time {
     font-family: 'Roboto', sans-serif; 
     font-size: 1rem;
     letter-spacing: 0.5px; 
@@ -204,7 +204,7 @@ input {
     flex: 1; 
     font-weight: bold;
 }
-.name, .address,.time, .price{
+.name, .address,.time, .price, .currency{
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
 }
 .name, .address {
@@ -212,8 +212,9 @@ input {
 }
 /*=====BUTTONS=====*/
 #search-button,.buy-button, #submit-button, .login-button,.register,
- .remove-button, .button-dance-type, .button-city, .edit-button,
-  .publish-button,.fav-button, #favorite-button, .address, .name, .music-ratio {
+.remove-button, .button-dance-type, .button-city, .edit-button,
+.publish-button,.fav-button, #favorite-button, .address, .name, .music-ratio,
+.edit-button-profile {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -222,14 +223,16 @@ input {
 }
 .remove-button:hover, .button-dance-type:hover, .button-city:hover,
 #search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
-.publish-button:hover, .edit-button:hover,.login-button:hover, .register:hover, #favorite-button:hover {
+.publish-button:hover, .edit-button:hover,.login-button:hover, .register:hover,
+#favorite-button:hover, .edit-button-profile:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 #search-button, .buy-button, #submit-button {
     padding: 5px 10px;
 }
-#search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button {
+#search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button,
+.edit-button-profile {
     background-color: #F7BC47;
 }
 .login-button, .register, .remove-button, .edit-button, .publish-button  {
@@ -254,7 +257,7 @@ input {
 .button-dance-type{
     color: black;
 }
-#favorite-button{
+#favorite-button, .edit-button-profile{
     padding: 5px 10px;
 }
 .fav-button {
@@ -357,8 +360,50 @@ input {
     color: #333;
     padding-top: 8px;
 }
+
+#profile-picture {
+    width: 200px;
+    object-fit: cover;
+    margin: auto;
+    border-radius: 20px;
+}
+
+.profile-card {
+    margin: 0px auto;
+    width: 30%;
+    height: 200px;
+    display: flex;
+    padding: 15px;
+    background: #1D3557;
+    border-radius: 10px; 
+    border-bottom: 5px solid #1D3557;
+    animation-name: fade;
+    animation-duration: 1s;
+}
+
+@keyframes fade {
+    from {background-color: #F7BC47;}
+ to {background-color: #1D3557;}
+}
+
+.profile-info{
+    width: 100%;
+    height: 90%;
+    margin: auto;
+    text-align:start;
+    font-size: 1.2rem;
+    background-color: white;
+}
+
+.nickname, .bio, .company{
+    margin-bottom: 5px;
+    background-color:#1D3557 ;
+    color: #F7BC47;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
   /*=====LOG IN STYLES=====*/
-  .wrap, #submit-button-login, .register-button, .container-signin{
+  .wrap, #submit-button-login, .register-button,#register-button-register, .container-signin{
     border: none;
 }
 
@@ -408,7 +453,7 @@ hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
 }
-.register-button {
+ #register-button-register {
     background-color:#243D4B;
     color: white;
     padding: 16px 20px;
@@ -417,4 +462,3 @@ hr {
     width: 100%;
     opacity: 0.9;
 }
-

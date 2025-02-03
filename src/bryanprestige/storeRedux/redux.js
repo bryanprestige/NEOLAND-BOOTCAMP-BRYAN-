@@ -1,5 +1,6 @@
 //@ts-check
 /** @import {Event} from '../java/classes/Event.js' */
+/** @import {User} from '../java/classes/User.js' */
  
 /**
  * @typedef {Object} ActionTypeEvent
@@ -8,15 +9,25 @@
  * 
  */
 
+/**
+ * @typedef {Object} ActionTypeUser
+ * @property {string} type
+ * @property {User} [user]
+ */
+ 
 const ACTION_TYPES = {
     CREATE_EVENT: 'CREATE_EVENT',
-    READ_LIST: 'READ_LIST',
+    READ_EVENTS: 'READ_EVENTS',
+    CREATE_USER: 'CREATE_USER',
+    READ_USERS: 'READ_USERS',
  //   FILTER_ARTICLE: 'UPDATE_ARTICLE',
  //   DELETE_ARTICLE: 'DELETE_ARTICLE'
   }
+
 /**
  * @typedef {Object.<(string), any>} State
  * @property {Array<Event>} events
+ * @property {Array<User>} user
  * @property {boolean} isLoading
  * @property {boolean} error
  */
@@ -26,6 +37,7 @@ const ACTION_TYPES = {
 
   export const INITIAL_STATE = {
     events: [],
+    users: [],
     isLoading: false,
     error: false
   }
@@ -33,13 +45,14 @@ const ACTION_TYPES = {
   /**
    * 
    * @param {State} state 
-   * @param {ActionTypeEvent} action 
+   * @param {ActionTypeEvent | ActionTypeUser} action 
    * @returns {State}
    */
 
 
   const appReducer = (state = INITIAL_STATE, action) => {
     const actionWithEvent = /**@type {ActionTypeEvent} */ (action)
+    const actionWithUser = /**@type {ActionTypeUser} */ (action)
     console.log(action)
 
     switch (action.type) {
@@ -51,14 +64,34 @@ const ACTION_TYPES = {
                       actionWithEvent.event
                     ]
                 };
-            default:
+              case ACTION_TYPES.READ_EVENTS:
+                  return state;
+              case ACTION_TYPES.CREATE_USER:
+                return {
+                  ...state,
+                  users: [
+                    ...state.users,
+                    actionWithUser.user
+                  ]
+              }
+              case ACTION_TYPES.READ_USERS:
+                return state;
+              default:
                 return {...state};
         }
   }
   
 /**
+ * @typedef {Object} AnswerUser
+ * @property {boolean} next
+ * @property {boolean} before
+ * @property {Array<User>} users
+ */
+
+/**
  *  * @typedef {Object} PublicMethods
  * * @property {function} create
+ * @property {function} read
  * @property {function} getById
  * @property {function} filter
  */
@@ -67,6 +100,7 @@ const ACTION_TYPES = {
  * @typedef {Object} Store
  * @property {function} getState 
  * @property {PublicMethods} event
+ *  @property {PublicMethods} user
  */
 
 /**
@@ -77,16 +111,23 @@ const ACTION_TYPES = {
     let currentState = INITIAL_STATE
     let currentReducer = reducer
 
- // Actions
+ // ACTIONS EVENTS //
 
-  /**
+  /**Create a new event
    * @param {Event} event
    * @param {function | undefined} [onEventDispatched]
    * @returns void
    */
-    const createEvent = (event,onEventDispatched) => _dispatch({ type: ACTION_TYPES.CREATE_EVENT, event }, onEventDispatched);
+    
+  const createEvent = (event,onEventDispatched) => _dispatch({ type: ACTION_TYPES.CREATE_EVENT, event }, onEventDispatched);
   
-    // PUBLIC METHODS
+  /** 
+    * Reads the events
+    * @param {function | undefined} [onEventDispatched]
+    * @returns void
+    */
+    const readEvents = (onEventDispatched) => _dispatch({ type: ACTION_TYPES.READ_EVENTS }, onEventDispatched);
+    /// PUBLIC METHODS EVENTS ///
     const getState = () => { return currentState };
 
     /**
@@ -110,11 +151,49 @@ const ACTION_TYPES = {
              }
             )}
             
+
+    // ACTIONS USERS //
+
+ /**Create a new event
+   * @param {User} user
+   * @param {function | undefined} [onEventDispatched]
+   * @returns void
+   */
+  
+    const createUser = (user, onEventDispatched) => _dispatch({ type: ACTION_TYPES.CREATE_USER, user }, onEventDispatched);
+
+     /** 
+    * Reads the events
+    * @param {function | undefined} [onEventDispatched]
+    * @returns void
+    */
+    const readUsers = (onEventDispatched) => _dispatch({ type: ACTION_TYPES.READ_USERS }, onEventDispatched);
+
+    /// PUBLIC METHODS USERS ///
+
+    /**
+     * 
+     * @param {string} id 
+     * @returns {User}
+     */
+    const getUserById = (id) => { return currentState.users.find((/**@type {User} */ user) => user.id === id)}
+   
+     /**
+     * @param {string} searchField
+     * @returns {Array<Event>} 
+     */
+
+    const filterUser = (searchField) => { return currentState.users.filter((/**@type {User} */ user) =>
+            {
+             return user.rol.toLowerCase() === searchField ||
+              user.nickname.toLowerCase().includes(searchField)    
+             }
+            )}
     // Private methods
    
     /**
      * 
-     * @param {ActionTypeEvent} action 
+     * @param {ActionTypeEvent | ActionTypeUser} action 
      * @param {function | undefined} [onEventDispatched]
 
      */
@@ -140,6 +219,8 @@ const ACTION_TYPES = {
      * 
      * @param {State} previousValue 
      * @param {State} currentValue 
+     * @returns {Object} - A new object with the differences between the two
+     *     arguments.
      * @private
      */
     const _getDifferences = (previousValue, currentValue) => {
@@ -155,13 +236,21 @@ const ACTION_TYPES = {
     /*** @type {PublicMethods}*/
     const event = {
         create : createEvent,
+        read: readEvents,
         getById : getEventById,
         filter: filterEvents
     }
 
+    const user = {
+        create : createUser,
+        read : readUsers,
+        getById : getUserById,
+        filter : filterUser
+    }
     return {
       getState,
-      event
+      event,
+      user
     }
   }
   
