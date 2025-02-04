@@ -112,7 +112,7 @@ function onFilterButtonClick(event) {
     if (filteredEvents.length === 0) {
         noEventFound()
     } else {
-   
+        
          filteredEvents.forEach(event => {
                 createEventCardWithAnimation(event, eventContainer);
                 });
@@ -150,7 +150,8 @@ function onClickSubmitButtonLogin(){
 }
 */
 async function updateDefaultFeed() {
-    const apiData = await getAPIData(`http://${location.hostname}:1337`)
+    
+    const apiData = await getAPIData(`http://${location.hostname}:1337/api/get.events.json`);
 
     const eventContainer = document.querySelector('.event-container');
     cleanEventContainer()
@@ -159,7 +160,6 @@ async function updateDefaultFeed() {
         createEventCardWithAnimation(event, eventContainer);
     });
 }
-
 
 /**
  * @param {Event} event 
@@ -269,7 +269,7 @@ function createPreviewContainer() {
 function createImageElement(eventName) {
     const image = document.createElement('img');
     image.className = 'event-image';
-    image.src = '../bryanprestige/imagenes/placehold400x200.png';
+    image.src = './imagenes/placehold400x200.png';
     image.alt = `${eventName} image`;
     return image;
 }
@@ -297,7 +297,7 @@ function createNameFavElement(event) {
 function createFavButton(event) {
     const favButton = document.createElement('button');
     favButton.className = 'fav-button';
-    favButton.innerHTML = '<img src="../bryanprestige/imagenes/fav.png" alt="heart" id="heart-img">';
+    favButton.innerHTML = '<img src="./imagenes/fav.png" alt="heart" id="heart-img">';
 
     const favList = JSON.parse(localStorage.getItem('favList')) || [];
     if (favList.some(favEvent => favEvent.name === event.name)) {
@@ -316,7 +316,7 @@ function createFavButton(event) {
 function createBuyButton(card, event) {
     const buyButton = document.createElement('button');
     buyButton.className = 'buy-button';
-    buyButton.innerHTML = '<img src="../bryanprestige/imagenes/shop.png" alt="shop" id="shop-img">';
+    buyButton.innerHTML = '<img src="./imagenes/shop.png" alt="shop" id="shop-img">';
 
     const basketElement = document.querySelector('.basket-counter');
     buyButton.addEventListener('click', () => handleBuyButtonClick(card, event, basketElement));
@@ -707,7 +707,7 @@ function noEventFound () {
     eventContainer.appendChild(errorImg);
 }
 
-function createEvent () {
+async function createEvent () {
     //const flyer = document.getElementById('subtmit-flyer')
     const name = document.getElementById('input-event-name')
     const location = document.getElementById('input-address')
@@ -734,6 +734,10 @@ function createEvent () {
         dance: getInputValue(dance),
     }
     
+    //const searchParams = new URLSearchParams(event).toString();
+    //const apiData = await getAPIData(`http://${location.hostname}:1333/create/get.events.json${searchParams}`);
+
+    //console.log(apiData)
     console.log (event)
     store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
     console.log(store.getState())
@@ -783,11 +787,11 @@ function updateLocalStorage(storeValue, key = 'eventStorage') {
 }
 
 
-async function getAPIData(apiURL = './api/get.events.json') {
+async function getAPIData(apiURL = 'api/get.events.json') {
     let apiData
+    console.log(apiURL)
   
     try {
-      // apiData = await simpleFetch(API_USUAL_PRODUCTS_URL, {
       apiData = await simpleFetch(apiURL, {
         // Si la petición tarda demasiado, la abortamos
         signal: AbortSignal.timeout(3000),

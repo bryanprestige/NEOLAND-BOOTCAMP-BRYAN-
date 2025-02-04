@@ -5,6 +5,7 @@
   "description": "practica neoland",
   "main": "index.js",
   "scripts": {
+    "server:statics:start": "node --env-file=. env server/server.statics.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
     "build:docks": "jsdoc ./src -r"
