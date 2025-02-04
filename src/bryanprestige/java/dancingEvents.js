@@ -89,34 +89,53 @@ function onClickSubmitButton(e) {
         return; 
     }else {
      createEvent()
+     hideForm()
+    }
     
-    hideForm() }
 }
 /**
  * @param {MouseEvent} event
  */
-function onFilterButtonClick(event) {
+async function onFilterButtonClick(event) {
     event.preventDefault();
-    
     const target = event.target;
+    
+
+    const filterParams = new URLSearchParams(event).toString();
+    const apiData = await getAPIData(`http://${location.hostname}:1337/filter/event?${filterParams}`);
+
+    
+    console.log(apiData)
+    
+    /*
     const filterValue = target?.textContent?.toLowerCase();
     const filteredEvents =  store.event.filter(filterValue)
     console.log(filteredEvents)
-
+    */
     if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorites-button')) return;
-    if (!filterValue) return;
+    if (!filterParams) return;
     const eventContainer = document.querySelector('.event-container');
     if (!eventContainer) return;
     cleanEventContainer();
     
-    if (filteredEvents.length === 0) {
+    if (filterParams.length === 0) {
+        noEventFound()
+    } else {
+        
+         filterParams.forEach(event => {
+                createEventCardWithAnimation(event, eventContainer);
+                });
+    } 
+   
+   /* if (filteredEvents.length === 0) {
         noEventFound()
     } else {
         
          filteredEvents.forEach(event => {
                 createEventCardWithAnimation(event, eventContainer);
                 });
-    } 
+    }
+                */ 
     const basketElement = document.querySelector('.basket-counter');
     const storedBasketCount = localStorage.getItem('basketCount') || 0;
     basketElement.innerText = `BASKET (${storedBasketCount})`;
@@ -641,7 +660,7 @@ function hideForm () {
     let form = document.getElementById('event-creator');
     if (eventList.length === 1) {
         form.style.display = 'none';
-        }
+       }
 }
 
 function validateForm() {
@@ -702,7 +721,7 @@ function noEventFound () {
     const eventContainer = document.querySelector('.event-container');
     const errorImg = document.createElement('img');
     errorImg.className = 'error-img';
-    errorImg.src = '../bryanprestige/imagenes/noEvent.png';
+    errorImg.src = './imagenes/noEvent.png';
     
     eventContainer.appendChild(errorImg);
 }
@@ -734,14 +753,14 @@ async function createEvent () {
         dance: getInputValue(dance),
     }
     
-    //const searchParams = new URLSearchParams(event).toString();
-    //const apiData = await getAPIData(`http://${location.hostname}:1333/create/get.events.json${searchParams}`);
+    const searchParams = new URLSearchParams(event).toString();
+    const apiData = await getAPIData(`http://${location.hostname}:1337/create/event?${searchParams}`);
 
-    //console.log(apiData)
-    console.log (event)
-    store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
-    console.log(store.getState())
+    
+    console.log(apiData)
+    
     createEventCardWithAnimation(event, eventContainer)
+    hideForm()
 }
 /**
  * 

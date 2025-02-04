@@ -19,6 +19,7 @@ async function insertData(file, data, callback) {
   let parsedData = []
   await read(file, (readData) => {
     parsedData = [...readData];
+    parsedData.push(data);
     console.log('insertData parsedData', parsedData);
     parsedData.push(data);
 
