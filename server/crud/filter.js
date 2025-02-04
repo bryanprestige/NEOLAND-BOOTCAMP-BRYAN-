@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+
+
 export async function filter(file, filterParams, callback) {
   try {
     if (fs.existsSync(file)) {
@@ -7,7 +9,13 @@ export async function filter(file, filterParams, callback) {
         const parsedData = JSON.parse(data.toString());
         // Filter by filterParams
         const filteredData = parsedData.filter((event) => {
-          return event.name.includes(filterParams.name)
+
+          const filterSearch = filterParams.search.toLowerCase();
+
+          return event.name.includes(filterSearch) ||
+            event.city.toLowerCase().includes(filterSearch) ||
+            event.dance.toLowerCase().includes(filterSearch) ||
+            event.price.toLowerCase().includes(filterSearch);
         });
         if (filteredData.length === 0) {
           console.log('read', 'No se encontraron resultados');

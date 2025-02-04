@@ -25,7 +25,7 @@ http
     const urlParams = Object.fromEntries(url.searchParams);
     const statusCode = 200
     let responseData = []
-    console.log(request.method,url.pathname, URLSearchParams)
+    console.log(request.method,url.pathname, urlParams)
     // Determine if the request is creating a new user
 
     console.log(url.pathname, url.searchParams);

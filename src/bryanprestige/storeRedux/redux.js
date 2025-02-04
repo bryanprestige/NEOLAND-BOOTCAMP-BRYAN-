@@ -150,7 +150,6 @@ const ACTION_TYPES = {
              }
             )}
             
-
     // ACTIONS USERS //
 
  /**Create a new event
