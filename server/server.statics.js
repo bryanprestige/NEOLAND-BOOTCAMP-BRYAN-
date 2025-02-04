@@ -16,13 +16,13 @@ const MIME_TYPES = {
   svg: "image/svg+xml",
 };
 
-const STATIC_PATH = path.join(process.cwd(), "./src/bryanprestige.api");
+const STATIC_PATH = path.join(process.cwd(), "/src/bryanprestige");
 
 const toBool = [() => true, () => false];
 
 const prepareFile = async (url) => {
   const paths = [STATIC_PATH, url];
-  if (url.endsWith("/")) paths.push("index.html");
+  if (url.endsWith("/")) paths.push("/index.html");
   const filePath = path.join(...paths);
   const pathTraversal = !filePath.startsWith(STATIC_PATH);
   const exists = await fs.promises.access(filePath).then(...toBool);
@@ -39,7 +39,8 @@ http
     const file = await prepareFile(url.pathname);
     const statusCode = file.found ? 200 : 404;
     const mimeType = MIME_TYPES[file.ext] || MIME_TYPES.default;
-    console.log(`${request.method} ${request.url} ${statusCode}`);
+
+    console.log(url.pathname);
 
     // Set Up CORS
     response.setHeader('Access-Control-Allow-Origin', '*');
