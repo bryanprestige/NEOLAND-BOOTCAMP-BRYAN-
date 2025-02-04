@@ -22,9 +22,10 @@ const EVENTS_URL = './server/BBDD/events.json'
 http
   .createServer(async (request, response) => {
     const url = new URL(`http://${request.headers.host}${request.url}`);
+    const urlParams = Object.fromEntries(url.searchParams);
     const statusCode = 200
     let responseData = []
-    console.log(`${request.method} ${request.url} ${statusCode}`);
+    console.log(request.method,url.pathname, URLSearchParams)
     // Determine if the request is creating a new user
 
     console.log(url.pathname, url.searchParams);
@@ -36,9 +37,14 @@ http
     response.setHeader('Access-Control-Max-Age', 2592000); // 30 days
     response.writeHead(statusCode);
 
+    if (request.method === 'OPTIONS') {
+      response.end();
+      return;
+    }
+
     switch (url.pathname) {
       case '/create/events':
-        crud.create(EVENTS_URL, url.searchParams, (data) => {
+        crud.create(EVENTS_URL, url.urlParams, (data) => {
           console.log(`server ${data.name} creado`, data)
           responseData = data
 
@@ -56,7 +62,7 @@ http
         });
         break;
       case '/filter/events':
-        crud.filter(EVENTS_URL, url.searchParams, (data) => {
+        crud.filter(EVENTS_URL, urlParams, (data) => {
           console.log('server filter articles', data)
           responseData = data
 
