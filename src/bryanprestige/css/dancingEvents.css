@@ -9,7 +9,8 @@ body {
 body, nav, ol, .logo-log-register,#header-container, .header-container-profile, form {
     width: 100%;
 } 
-nav, ol, #header-container, .header-container-profile, .logo-log-register, #search-section {
+nav, ol, #header-container, .header-container-profile,
+.logo-log-register, #search-section {
     display: flex;
 }
 img, .app-logo, .main-title, span, form {
@@ -213,8 +214,8 @@ input, select {
 /*=====BUTTONS=====*/
 #search-button,.buy-button, #submit-button, .login-button,.register,
 .remove-button, .button-dance-type, .button-city, .edit-button,
-.publish-button,.fav-button, #favorite-button, .address, .name, .music-ratio,
-.edit-button-profile {
+.publish-button,.fav-button, #favorite-button, .address, .name,
+ .music-ratio,.edit-button-profile, .fav-button-profile {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -224,7 +225,7 @@ input, select {
 .remove-button:hover, .button-dance-type:hover, .button-city:hover,
 #search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
 .publish-button:hover, .edit-button:hover,.login-button:hover, .register:hover,
-#favorite-button:hover, .edit-button-profile:hover {
+#favorite-button:hover, .edit-button-profile:hover, .fav-button-profile:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -232,7 +233,7 @@ input, select {
     padding: 5px 10px;
 }
 #search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button,
-.edit-button-profile {
+.edit-button-profile, .fav-button-profile {
     background-color: #F7BC47;
 }
 .login-button, .register, .remove-button, .edit-button, .publish-button  {
@@ -370,8 +371,8 @@ input, select {
 
 .profile-card {
     margin: 0px auto;
-    width: 30%;
-    height: 200px;
+    width: 40%;
+    height: 220px;
     display: flex;
     padding: 15px;
     background: #1D3557;
@@ -379,6 +380,7 @@ input, select {
     border-bottom: 5px solid #1D3557;
     animation-name: fade;
     animation-duration: 1s;
+    gap: 20px;
 }
 
 @keyframes fade {
@@ -401,6 +403,17 @@ input, select {
     color: #F7BC47;
     padding: 5px 10px;
     border-radius: 10px;
+}
+
+.edit-fav-profile{
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    border: none;
+}
+
+.fav-button-profile{
+    padding: 5px 10px;
 }
   /*=====LOG IN STYLES=====*/
   .wrap, #submit-button-login, .register-button,#register-button-register, .container-signin{
@@ -462,3 +475,8 @@ hr {
     width: 100%;
     opacity: 0.9;
 }
+#register-button-register:hover{
+    transform: scale(1,1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+

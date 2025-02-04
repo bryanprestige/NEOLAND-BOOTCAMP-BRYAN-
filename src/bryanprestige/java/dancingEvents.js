@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (window.location.pathname.includes('register.html')) {
         const registerButton =document.getElementById('register-button-register')
         registerButton?.addEventListener('click',onClickRegisterButton)
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', validateRegister);
+            })
     }
     
     /*else if (window.location.pathname.includes('login.htm')) {
@@ -67,7 +71,6 @@ function onSearchClick(event) {
     const eventContainer = document.querySelector('.event-container');
 
     if (filteredEvents.length === 0) { 
-        cleanEventContainer()
         noEventFound()
     } else {
         cleanEventContainer()
@@ -91,51 +94,31 @@ function onClickSubmitButton(e) {
      createEvent()
      hideForm()
     }
-    
 }
 /**
  * @param {MouseEvent} event
  */
-async function onFilterButtonClick(event) {
-    event.preventDefault();
-    const target = event.target;
-    
-
-    const filterParams = new URLSearchParams(event).toString();
-    const apiData = await getAPIData(`http://${location.hostname}:1337/filter/event?${filterParams}`);
-
-    
-    console.log(apiData)
-    
-    /*
+async function onFilterButtonClick(e) {
+    e.preventDefault();
+    const target = e.target;
     const filterValue = target?.textContent?.toLowerCase();
-    const filteredEvents =  store.event.filter(filterValue)
-    console.log(filteredEvents)
-    */
-    if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorites-button')) return;
+    const filterDanceCity = {
+    search: filterValue,
+    }
+
+    if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorite-button') || target.classList.contains('buy-button')) return;
+    const filterParams = new URLSearchParams(filterDanceCity).toString();
+    const apiData = await getAPIData(`http://${location.hostname}:1333/filter/events?${filterParams}`);
+
     if (!filterParams) return;
     const eventContainer = document.querySelector('.event-container');
     if (!eventContainer) return;
     cleanEventContainer();
-    
-    if (filterParams.length === 0) {
-        noEventFound()
-    } else {
-        
-         filterParams.forEach(event => {
-                createEventCardWithAnimation(event, eventContainer);
-                });
-    } 
+
+    apiData.forEach(e => {
+        createEventCardWithAnimation(e, eventContainer);
+    })
    
-   /* if (filteredEvents.length === 0) {
-        noEventFound()
-    } else {
-        
-         filteredEvents.forEach(event => {
-                createEventCardWithAnimation(event, eventContainer);
-                });
-    }
-                */ 
     const basketElement = document.querySelector('.basket-counter');
     const storedBasketCount = localStorage.getItem('basketCount') || 0;
     basketElement.innerText = `BASKET (${storedBasketCount})`;
@@ -144,6 +127,76 @@ async function onFilterButtonClick(event) {
 /**
  * @param {MouseEvent} event
  */
+
+function onClickRegisterButton (e) {
+    e.preventDefault()
+    if (validateRegister() === false) {
+        alert("Please ensure all fields are correctly filled before submitting.");
+        return; 
+    } else{
+    createUser ()
+
+    }
+
+    //sendToLogin()
+}
+
+
+function validateRegister() {
+    let formIsValid = false;
+        const email = document.getElementById('input-email-register')
+        const nickname = document.getElementById('input-nickname-register')
+        const name = document.getElementById('input-name-register')
+        const rol = document.getElementById('input-rol-register')
+        const password = document.getElementById('input-password-register')
+  
+    const registerButton = document.getElementById('register-button-register');
+
+    const fields = [email, nickname, name, rol, password];
+    formIsValid = fields.every(field => field?.value.trim() !== '');
+
+    registerButton.disabled = !formIsValid;
+
+    const fieldsEmpty = [
+       'input-email-register',
+       'input-nickname-register',
+       'input-name-register',
+       'input-rol-register',
+       'input-password-register',
+    ].map(id => document.getElementById(id));
+
+    formIsValid = fieldsEmpty.every(fieldsEmpty => {
+        if (fieldsEmpty?.value.trim() === '') {
+            fieldsEmpty?.classList.add('invalid-field');
+            return false;
+        } else {
+            fieldsEmpty?.classList.remove('invalid-field');
+            return true;
+        }
+    });
+    return formIsValid
+}
+function createUser () {
+        const email = document.getElementById('input-email-register')
+        const nickname = document.getElementById('input-nickname-register')
+        const name = document.getElementById('input-name-register')
+        const rol = document.getElementById('input-rol-register')
+        const password = document.getElementById('input-password-register')
+    
+    /**
+     * @type {User}
+     */
+    let user = {
+        email: getInputValue(email),
+        nickname: getInputValue(nickname),
+        name: getInputValue(name),
+        rol: getInputValue(rol),
+        password: getInputValue(password),
+    }
+    
+    console.log (user)
+    store.user.create(user, setLocalStorageFromState.bind(this, 'userStorage'))
+}
 
 function displayFavoriteEvents(event) {
     event.preventDefault(); 
@@ -159,7 +212,6 @@ function displayFavoriteEvents(event) {
              createEventCardWithAnimation(event, eventContainer);
          });
      }
-    scrollToTop()
 }
 
 /*
@@ -316,7 +368,7 @@ function createNameFavElement(event) {
 function createFavButton(event) {
     const favButton = document.createElement('button');
     favButton.className = 'fav-button';
-    favButton.innerHTML = '<img src="./imagenes/fav.png" alt="heart" id="heart-img">';
+    favButton.innerHTML = '<img src="./imagenes/fav.png">';
 
     const favList = JSON.parse(localStorage.getItem('favList')) || [];
     if (favList.some(favEvent => favEvent.name === event.name)) {
@@ -337,6 +389,7 @@ function createBuyButton(card, event) {
     buyButton.className = 'buy-button';
     buyButton.innerHTML = '<img src="./imagenes/shop.png" alt="shop" id="shop-img">';
 
+
     const basketElement = document.querySelector('.basket-counter');
     buyButton.addEventListener('click', () => handleBuyButtonClick(card, event, basketElement));
 
@@ -344,13 +397,11 @@ function createBuyButton(card, event) {
 }
 
 /**
- * 
  * @param {object} card
  * @param {object} event
  * @param {HTMLElement | null} basketElement
  */ 
 function handleBuyButtonClick(card, event, basketElement) {
-
     sumPriceValue(card)    
 
     card.ticketCount++;
@@ -562,20 +613,6 @@ function updateBasketCounter(basketElement) {
      basketElement.innerText = "BASKET"
 }}
 
-function scrollToTop() {
-    const scrollList = document.querySelector('.event-container');
-    if (scrollList) {
-        scrollList.scrollTop = 0;
-    }
-}
-
-function cleanEventContainer() {
-    const eventContainer = document.querySelector('.event-container');
-    while (eventContainer.firstChild) {
-        eventContainer.removeChild(eventContainer.firstChild);
-    }
-}
-
 function saveBasketToLocalStorage() {
     const eventCards = document.querySelectorAll('.event-card');
     const basketData = [];
@@ -628,20 +665,137 @@ function loadBasketFromLocalStorage() {
     updateBasketCounter(basketElement);
 }
 
-function hideShowSearchButton() {
-    const searchButton = document.getElementById('search-button');
-    const searchInput = document.getElementById('event-name');  
-    // Desactivar el botón inicialmente si el input está vacío
-    if (searchInput?.value.trim() === '') {
-          searchButton.disabled = true;
+async function createEvent () {
+    //const flyer = document.getElementById('subtmit-flyer')
+    const name = document.getElementById('input-event-name')
+    const location = document.getElementById('input-address')
+    const dateTime = document.getElementById('input-dateTime')
+    const price = document.getElementById('input-price')
+    const currency = document.getElementById('input-currency')
+    const music = document.getElementById('input-music-ratio')
+    const city = document.getElementById('input-city')
+    const dance = document.getElementById('input-dance')
+    const eventContainer = document.querySelector('.event-container');
+    
+    /**
+     * @type {Event}
+     */
+    let event = {
+        //flyer: getInputValue(flyer),
+        name: getInputValue(name),
+        location: getInputValue(location),
+        dateTime: getInputValue(dateTime),
+        price: getInputValue(price),
+        currency: getInputValue(currency),
+        music: getInputValue(music),
+        city: getInputValue(city),
+        dance: getInputValue(dance),
     }
-    // Evento para habilitar/deshabilitar el botón según el contenido del input
-    searchInput?.addEventListener('input', () => {
-          const isInputValid = searchInput.value.trim() !== '';
-          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
-    });
+    
+    const searchParams = new URLSearchParams(event).toString();
+    const apiData = await getAPIData(`http://${location.hostname}:1333/create/event?${searchParams}`);
+
+    
+    console.log(apiData)
+    
+    createEventCardWithAnimation(event, eventContainer)
+    hideForm()
 }
 
+function setLocalStorageFromState(key = 'eventStorage') {
+    const storeData = store.getState()
+    //delete storeData.user
+    updateLocalStorage(storeData, key)
+}
+
+/**
+ * @param{State} storeValue
+ */
+
+function updateLocalStorage(storeValue, key = 'eventStorage') {
+    localStorage.setItem(key, JSON.stringify(storeValue));
+    console.log(key)
+}
+/**
+ * 
+ * @param {HTMLElement | null} card
+ */
+function getPriceValue(card) {
+    const priceElement = card.querySelector('.price');
+    const priceValue = priceElement.textContent.replace('$', '');
+    return priceValue;
+}
+/**
+ * 
+ * @param {HTMLElement | null} card
+ */
+function sumPriceValue(card)  {
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+
+    totalPriceValue += parseInt(priceValue);
+    console.log(`Total price: ${totalPriceValue}`);
+    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+}
+/**
+ * 
+ * @param {HTMLElement | null} card
+ */
+
+function resPricevalue(card) {
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+    totalPriceValue -= parseInt(priceValue);
+    console.log(`Total price: ${totalPriceValue}`)
+
+    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+}
+
+async function getAPIData(apiURL = 'api/get.events.json') {
+    let apiData
+    console.log(apiURL)
+  
+    try {
+      apiData = await simpleFetch(apiURL, {
+        // Si la petición tarda demasiado, la abortamos
+        signal: AbortSignal.timeout(3000),
+        headers: {
+          'Content-Type': 'application/json',
+          // Add cross-origin header
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+    } catch (/** @type {any | HttpError} */err) {
+      if (err.name === 'AbortError') {
+        console.error('Fetch abortado');
+      }
+      if (err instanceof HttpError) {
+        if (err.response.status === 404) {
+          console.error('Not found');
+        }
+        if (err.response.status === 500) {
+          console.error('Internal server error');
+        }
+      }
+    }
+    return apiData
+  }
+
+  function scrollToTop() {
+    const scrollList = document.querySelector('.event-container');
+    if (scrollList) {
+        scrollList.scrollTop = 0;
+    }
+}
+function noEventFound () {
+    cleanEventContainer()
+    const eventContainer = document.querySelector('.event-container');
+    const errorImg = document.createElement('img');
+    errorImg.className = 'error-img';
+    errorImg.src = './imagenes/noEvent.png';
+    
+    eventContainer.appendChild(errorImg);
+}
 /**
  * 
  * @param {HTMLElement | null} inputElement
@@ -656,7 +810,6 @@ function getInputValue(inputElement) {
 }
 
 function hideForm () {
-    
     let form = document.getElementById('event-creator');
     if (eventList.length === 1) {
         form.style.display = 'none';
@@ -705,160 +858,23 @@ function validateForm() {
     });
     return formIsValid
 }
-
-/**
- * 
- * @param {HTMLElement | null} card
- */
-
-function getPriceValue(card) {
-    const priceElement = card.querySelector('.price');
-    const priceValue = priceElement.textContent.replace('$', '');
-    return priceValue;
+function hideShowSearchButton() {
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('event-name');  
+    // Desactivar el botón inicialmente si el input está vacío
+    if (searchInput?.value.trim() === '') {
+          searchButton.disabled = true;
+    }
+    // Evento para habilitar/deshabilitar el botón según el contenido del input
+    searchInput?.addEventListener('input', () => {
+          const isInputValid = searchInput.value.trim() !== '';
+          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
+    });
 }
 
-function noEventFound () {
+function cleanEventContainer() {
     const eventContainer = document.querySelector('.event-container');
-    const errorImg = document.createElement('img');
-    errorImg.className = 'error-img';
-    errorImg.src = './imagenes/noEvent.png';
-    
-    eventContainer.appendChild(errorImg);
-}
-
-async function createEvent () {
-    //const flyer = document.getElementById('subtmit-flyer')
-    const name = document.getElementById('input-event-name')
-    const location = document.getElementById('input-address')
-    const dateTime = document.getElementById('input-dateTime')
-    const price = document.getElementById('input-price')
-    const currency = document.getElementById('input-currency')
-    const music = document.getElementById('input-music-ratio')
-    const city = document.getElementById('input-city')
-    const dance = document.getElementById('input-dance')
-    const eventContainer = document.querySelector('.event-container');
-    
-    /**
-     * @type {Event}
-     */
-    let event = {
-        //flyer: getInputValue(flyer),
-        name: getInputValue(name),
-        location: getInputValue(location),
-        dateTime: getInputValue(dateTime),
-        price: getInputValue(price),
-        currency: getInputValue(currency),
-        music: getInputValue(music),
-        city: getInputValue(city),
-        dance: getInputValue(dance),
+    while (eventContainer.firstChild) {
+        eventContainer.removeChild(eventContainer.firstChild);
     }
-    
-    const searchParams = new URLSearchParams(event).toString();
-    const apiData = await getAPIData(`http://${location.hostname}:1337/create/event?${searchParams}`);
-
-    
-    console.log(apiData)
-    
-    createEventCardWithAnimation(event, eventContainer)
-    hideForm()
 }
-/**
- * 
- * @param {HTMLElement | null} card
- */
-
-function sumPriceValue(card)  {
-    const priceValue = getPriceValue(card);
-    console.log(`Event price: ${priceValue}`);
-
-    totalPriceValue += parseInt(priceValue);
-    console.log(`Total price: ${totalPriceValue}`);
-    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
-}
-
-/**
- * 
- * @param {HTMLElement | null} card
- */
-
-function resPricevalue(card) {
-    const priceValue = getPriceValue(card);
-    console.log(`Event price: ${priceValue}`);
-    totalPriceValue -= parseInt(priceValue);
-    console.log(`Total price: ${totalPriceValue}`)
-
-    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
-}
-
-function setLocalStorageFromState(key = 'eventStorage') {
-    const storeData = store.getState()
-    //delete storeData.user
-    updateLocalStorage(storeData, key)
-}
-
-/**
- * @param{State} storeValue
- */
-
-function updateLocalStorage(storeValue, key = 'eventStorage') {
-    localStorage.setItem(key, JSON.stringify(storeValue));
-    console.log(key)
-}
-
-
-async function getAPIData(apiURL = 'api/get.events.json') {
-    let apiData
-    console.log(apiURL)
-  
-    try {
-      apiData = await simpleFetch(apiURL, {
-        // Si la petición tarda demasiado, la abortamos
-        signal: AbortSignal.timeout(3000),
-        headers: {
-          'Content-Type': 'application/json',
-          // Add cross-origin header
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-    } catch (/** @type {any | HttpError} */err) {
-      if (err.name === 'AbortError') {
-        console.error('Fetch abortado');
-      }
-      if (err instanceof HttpError) {
-        if (err.response.status === 404) {
-          console.error('Not found');
-        }
-        if (err.response.status === 500) {
-          console.error('Internal server error');
-        }
-      }
-    }
-    return apiData
-  }
-
-function onClickRegisterButton (e) {
-    e.preventDefault()
-    createUser ()
-}
-
-  function createUser () {
-      const email = document.getElementById('input-email-register')
-      const nickname = document.getElementById('input-nickname-register')
-    const name = document.getElementById('input-name-register')
-    const rol = document.getElementById('input-rol-register')
-    const password = document.getElementById('input-password-regisger')
-    
-    /**
-     * @type {User}
-     */
-    let user = {
-        email: getInputValue(email),
-        nickname: getInputValue(nickname),
-        name: getInputValue(name),
-        rol: getInputValue(rol),
-        password: getInputValue(password),
-    }
-    
-    console.log (user)
-    store.user.create(user, setLocalStorageFromState.bind(this, 'eventStorage'))
-  }
