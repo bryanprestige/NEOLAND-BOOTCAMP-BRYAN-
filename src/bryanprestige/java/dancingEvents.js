@@ -1,8 +1,8 @@
 
 /*
 // @ts-check
-// */
-import {store} from '../storeRedux/redux.js'
+*/
+import {INITIAL_STATE,store} from '../storeRedux/redux.js'
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
 /**
@@ -10,21 +10,41 @@ import { HttpError } from './classes/HttpError.js'
  * @import {User}   from './classes/User.js'
  */
 
+
+
+const PORT = 1337
+
 let basketCount = 0;    
 
 let eventList = []
 let totalPriceValue = 0;
+let userList = []
+let newEventList = []
 
 document.addEventListener('DOMContentLoaded', () => {
+
     if (window.location.pathname.includes('profile.html')) {
-        const submitButton =document.getElementById('submit-button')
+        
+        const submitButton = document.getElementById('submit-button')
         submitButton?.addEventListener('click',onClickSubmitButton)   
         
+        /*
+        const editEventProfile = document.getElementById('edit-event-button')
+        editEventProfile?.addEventListener('click',displayEditForm)
+        */
+       const favoriteButtonProfile = document.getElementById('fav-button-profile') 
+       favoriteButtonProfile?.addEventListener('click',displayFavoriteEvents)
+       displayBasketCount() 
+
         document.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', validateForm);
         })
     }
+    else if (window.location.pathname.includes('login.html')) {
     
+    const loginForm = document.getElementById('login-container')
+    loginForm?.addEventListener('submit', onLoginFormSubmit)
+    }
     else if (window.location.pathname.includes('register.html')) {
         const registerButton =document.getElementById('register-button-register')
         registerButton?.addEventListener('click',onClickRegisterButton)
@@ -33,7 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
             input.addEventListener('input', validateRegister);
             })
     }
-    
+    else if (window.location.pathname.includes('basket.html')) {
+        const checkoutButtonContainer = document.getElementById('checkout-button-container')
+        checkoutButtonContainer.textContent = `Total: $${totalPriceValue}`
+    }
     /*else if (window.location.pathname.includes('login.htm')) {
         const submitButtonLogin =document.getElementByClassName('submit-button-login')
         submitButtonLogin?.addEventListener('click',onClickSubmitButtonLogin)
@@ -50,31 +73,31 @@ document.addEventListener('DOMContentLoaded', () => {
         eventContainer?.addEventListener('click', onFilterButtonClick);
 
         const favoriteButton = document.getElementById('favorite-button');
-        favoriteButton?.addEventListener('click', displayFavoriteEvents);
-        
-        loadBasketFromLocalStorage()
+        favoriteButton?.addEventListener('click', displayFavoriteEvents);        
     }
+    checkLoginStatus()
 });
+
+/*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
+
 
 /**
  * @param {MouseEvent} event
  */
 
-function onSearchClick(event) {
+async function onSearchClick(event) {
     event.preventDefault();
     
     const searchField = document.getElementById('search-field').value.trim().toLowerCase();
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/filter/events/${searchField}`);
 
-    const filteredEvents =  store.event.filter(searchField)
-    console.log(filteredEvents)
-    
     const eventContainer = document.querySelector('.event-container');
 
-    if (filteredEvents.length === 0) { 
+    if (apiData.length === 0) { 
         noEventFound()
     } else {
         cleanEventContainer()
-        filteredEvents.forEach(event => createEventCardWithAnimation(event,eventContainer));
+        apiData.forEach(event => createEventCardWithAnimation(event,eventContainer));
     }
     loadBasketFromLocalStorage()  
     scrollToTop();
@@ -91,7 +114,8 @@ function onClickSubmitButton(e) {
         alert("Please ensure all fields are correctly filled before submitting.");
         return; 
     }else {
-     createEvent()
+     cleanEventContainer()   
+     createNewEvent()
      hideForm()
     }
 }
@@ -101,16 +125,16 @@ function onClickSubmitButton(e) {
 async function onFilterButtonClick(e) {
     e.preventDefault();
     const target = e.target;
-    const filterValue = target?.textContent?.toLowerCase();
-    const filterDanceCity = {
-    search: filterValue,
-    }
-
-    if (!(target instanceof HTMLButtonElement) || target.classList.contains('remove-button') || target.classList.contains('favorite-button') || target.classList.contains('buy-button')) return;
-    const filterParams = new URLSearchParams(filterDanceCity).toString();
-    const apiData = await getAPIData(`http://${location.hostname}:1333/filter/events?${filterParams}`);
-
-    if (!filterParams) return;
+    const filterValue = target?.textContent?.toLowerCase();  
+    
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/filter/events/${filterValue}`);
+    
+    if (!(target instanceof HTMLButtonElement) ||
+        target.classList.contains('remove-button') ||
+        target.classList.contains('favorite-button') ||
+        target.classList.contains('buy-button')) 
+        return;
+    if (!apiData) return;
     const eventContainer = document.querySelector('.event-container');
     if (!eventContainer) return;
     cleanEventContainer();
@@ -134,49 +158,26 @@ function onClickRegisterButton (e) {
         alert("Please ensure all fields are correctly filled before submitting.");
         return; 
     } else{
+        
     createUser ()
-
     }
-
+    saveUserListToLocalStorage(userList)
     //sendToLogin()
+    alert('User registered successfully')
+    navigateTo('./login.html')
 }
 
+function navigateTo(pathname) {
+    const newLocation = {
+      ...window.location.href = pathname,
+    }
+    window.history.pushState({}, '', pathname)
+    const newLocationLinked = location.pathname.replace(/\/src/, '')
+    console.log(newLocation)
+    console.log(newLocationLinked)
+  }
 
-function validateRegister() {
-    let formIsValid = false;
-        const email = document.getElementById('input-email-register')
-        const nickname = document.getElementById('input-nickname-register')
-        const name = document.getElementById('input-name-register')
-        const rol = document.getElementById('input-rol-register')
-        const password = document.getElementById('input-password-register')
-  
-    const registerButton = document.getElementById('register-button-register');
-
-    const fields = [email, nickname, name, rol, password];
-    formIsValid = fields.every(field => field?.value.trim() !== '');
-
-    registerButton.disabled = !formIsValid;
-
-    const fieldsEmpty = [
-       'input-email-register',
-       'input-nickname-register',
-       'input-name-register',
-       'input-rol-register',
-       'input-password-register',
-    ].map(id => document.getElementById(id));
-
-    formIsValid = fieldsEmpty.every(fieldsEmpty => {
-        if (fieldsEmpty?.value.trim() === '') {
-            fieldsEmpty?.classList.add('invalid-field');
-            return false;
-        } else {
-            fieldsEmpty?.classList.remove('invalid-field');
-            return true;
-        }
-    });
-    return formIsValid
-}
-function createUser () {
+async function createUser () {
         const email = document.getElementById('input-email-register')
         const nickname = document.getElementById('input-nickname-register')
         const name = document.getElementById('input-name-register')
@@ -190,13 +191,57 @@ function createUser () {
         email: getInputValue(email),
         nickname: getInputValue(nickname),
         name: getInputValue(name),
-        rol: getInputValue(rol),
+        rol: getInputValue(rol),    
         password: getInputValue(password),
     }
-    
-    console.log (user)
-    store.user.create(user, setLocalStorageFromState.bind(this, 'userStorage'))
+    const payload = JSON.stringify(user)
+
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/users?`, 'POST',payload);
+    console.log(apiData)
+
+    userList.push(user)
 }
+
+async function createNewEvent () {
+    //const flyer = document.getElementById('subtmit-flyer')
+    const name = document.getElementById('input-event-name')
+    const address = document.getElementById('input-address')
+    const dateTime = document.getElementById('input-dateTime')
+    const price = document.getElementById('input-price')
+    const currency = document.getElementById('input-currency')
+    const music = document.getElementById('input-music-ratio')
+    const city = document.getElementById('input-city')
+    const dance = document.getElementById('input-dance')
+    const eventContainer = document.querySelector('.event-container');
+    
+    /**
+     * @type {Event}
+     */
+    let event = {
+        //flyer: getInputValue(flyer),
+        name: getInputValue(name),
+        address: getInputValue(address),
+        dateTime: getInputValue(dateTime),
+        price: getInputValue(price),
+        currency: getInputValue(currency),
+        music: getInputValue(music),
+        city: getInputValue(city),
+        dance: getInputValue(dance),
+    }
+    const payload = JSON.stringify(event)
+
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/events?`,'POST',payload);
+    console.log(apiData)
+    
+    newEventList.push(event)
+    saveNewEventToLocalStorage(newEventList)
+    createEventCardWithAnimation(event, eventContainer)
+    hideForm()
+}
+
+//function displayboughtEvents () {
+
+
 
 function displayFavoriteEvents(event) {
     event.preventDefault(); 
@@ -212,32 +257,28 @@ function displayFavoriteEvents(event) {
              createEventCardWithAnimation(event, eventContainer);
          });
      }
+     const previewContainer = document.querySelector('.preview-container');
+     if (previewContainer) {
+       previewContainer.remove();
+    }
 }
 
-/*
-function onClickSubmitButtonLogin(){
-    validateCredentials()
-    sendToProfile()
-}
-*/
 async function updateDefaultFeed() {
     
-    const apiData = await getAPIData(`http://${location.hostname}:1337/api/get.events.json`);
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/read/events?`,'GET');
 
     const eventContainer = document.querySelector('.event-container');
     cleanEventContainer()
     apiData.forEach(event => {
-        store.event.create(event, setLocalStorageFromState.bind(this, 'eventStorage'))
         createEventCardWithAnimation(event, eventContainer);
+        setLocalStorageFromState(this, 'eventStorage')
     });
 }
-
 /**
  * @param {Event} event 
  * @param {HTMLElement} container
  */ 
-
-function createEventCardWithAnimation(event, container) {
+function createEventCardWithAnimation(event, container)     {
     const card = createEventCardElement(event); 
     card.classList.add('zoom-in'); 
     
@@ -252,7 +293,6 @@ function createEventCardWithAnimation(event, container) {
  * 
  * @param {Event} event 
  */ 
-
 function createEventCardElement(event) {
     const card = document.createElement('div');
     card.className = 'event-card';
@@ -266,11 +306,9 @@ function createEventCardElement(event) {
 
     createPreviewContainer()   
 
-    //loadBasketFromLocalStorage()
     eventList.push(card)
     return card;
 }
-
 /**
  * 
  * @param {MouseEvent} event 
@@ -282,14 +320,13 @@ function createLeftColumn(event, card) {
     
     const image = createImageElement(event.name);
     const nameFav = createNameFavElement(event);
-    const address = createElementWithText('h1', 'address', event.location);
+    const address = createElementWithText('h1', 'address', event.address);
     const buyButton = createBuyButton(card, event);
     
     leftColumn.append(image, nameFav, address, buyButton);
     
     return leftColumn;
 }
-
 /**
  * 
  * @param {MouseEvent} event 
@@ -311,28 +348,28 @@ function createRightColumn(event) {
 }
 function createPreviewContainer() {
     if (window.location.pathname.includes('profile.html')) {
-     
-    const previewContainer = document.createElement('div')
-    previewContainer.className = 'preview-container'
+        let previewContainer = document.querySelector('.preview-container'); 
+        if (!previewContainer) {
+        const previewContainer = document.createElement('div')
+        previewContainer.className = 'preview-container'
    
-    const previewTitle = document.createElement('h1');
-    previewTitle.className = 'preview-title';
-    previewTitle.innerText = 'YOUR EVENT PREVIEW'; 
+        const previewTitle = document.createElement('h1');
+        previewTitle.className = 'preview-title';
+        previewTitle.innerText = 'YOUR EVENT PREVIEW'; 
 
-    const publishButton = document.createElement('button')
-    publishButton.className = 'publish-button'
-    publishButton.innerText = 'PUBLISH'
-    
-    const editButton = document.createElement('button')
-    editButton.className = 'edit-button'
-    editButton.innerText = 'EDIT'
+        const publishButton = document.createElement('button')
+        publishButton.className = 'publish-button'
+        publishButton.innerText = 'PUBLISH'
+        
+        const editButton = document.createElement('button')
+        editButton.className = 'edit-event-button'
+        editButton.innerText = 'EDIT'
 
-    previewContainer.append(previewTitle,publishButton,editButton);
-    document.body.appendChild(previewContainer);
-    
+        previewContainer.append(previewTitle,publishButton,editButton);
+        document.body.appendChild(previewContainer);
+    }
     return previewContainer
 }}
-
 /**
  * 
  * @param {string} eventName 
@@ -344,7 +381,6 @@ function createImageElement(eventName) {
     image.alt = `${eventName} image`;
     return image;
 }
-
 /**
  * 
  * @param {object} event 
@@ -359,7 +395,6 @@ function createNameFavElement(event) {
     nameFav.append(name, favButton);
     return nameFav;
 } 
-
 /**
  * 
  * @param {object} event 
@@ -378,7 +413,6 @@ function createFavButton(event) {
     favButton.addEventListener('click', () => toggleFavorite(event, favButton));
     return favButton;
 }
-
 /**
  * 
  * @param {object} card
@@ -395,7 +429,6 @@ function createBuyButton(card, event) {
 
     return buyButton;
 }
-
 /**
  * @param {object} card
  * @param {object} event
@@ -427,15 +460,12 @@ function handleBuyButtonClick(card, event, basketElement) {
     updateBasketCounter(basketElement);
     saveBasketToLocalStorage(); // Guardar cambios
 }
-
 /**
- * 
  * @param {object} card
  * @param {object} event
  * @param {HTMLElement | null} basketElement
  * @param {HTMLElement | null} ticketCountSpan 
  */ 
-
 function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     const removeButton = document.createElement('button');
     removeButton.className = 'remove-button';
@@ -459,7 +489,6 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
 
     return removeButton;
 }
-
 /**
  * 
  * @param {object} event 
@@ -508,20 +537,16 @@ function createTypeCityElement(event) {
     return typeCity;
 }
 /**
- * 
  * @param {string} className
  * @param {string} textContent
  * @param {string} backgroundColor
  */ 
-
 function createButtonWithStyle(className, textContent, backgroundColor) {
     const button = createElementWithText('button', className, textContent);
     button.style.backgroundColor = backgroundColor;
     return button;
 }
-
 /**
- * 
  * @param {string} dance
  */ 
 
@@ -537,9 +562,7 @@ function getDanceTypeColor(dance) {
         default: return 'white';
     }
 }
-
 /**
- * 
  * @param {string} tag
  * @param {string} className
  * @param {string} textContent
@@ -551,9 +574,7 @@ function createElementWithText(tag, className, textContent) {
     element.textContent = textContent;
     return element;
 }
-
 /**
- * 
  * @param {object} event
  * @param {HTMLElement | null} button
  */ 
@@ -572,11 +593,8 @@ function toggleFavorite(event, button) {
 
     // SAVE THE UPDATED FAVORITE LIST TO LOCAL STORAGE
     localStorage.setItem('favList', JSON.stringify(favList));
-    console.log("Lista de favoritos actualizada:", favList); 
 }
-
 /**
- * 
  * @param {object} event
  * @param {number} ticketCount
  */ 
@@ -594,7 +612,6 @@ function updateTicketCount(event, ticketCount) {
     localStorage.setItem('ticketList', JSON.stringify(ticketList));
 }
 /**
- * 
  * Actualiza el contador de tickets en el elemento de la cesta.
  * @param {HTMLElement | null} basketElement 
  */
@@ -665,56 +682,17 @@ function loadBasketFromLocalStorage() {
     updateBasketCounter(basketElement);
 }
 
-async function createEvent () {
-    //const flyer = document.getElementById('subtmit-flyer')
-    const name = document.getElementById('input-event-name')
-    const location = document.getElementById('input-address')
-    const dateTime = document.getElementById('input-dateTime')
-    const price = document.getElementById('input-price')
-    const currency = document.getElementById('input-currency')
-    const music = document.getElementById('input-music-ratio')
-    const city = document.getElementById('input-city')
-    const dance = document.getElementById('input-dance')
-    const eventContainer = document.querySelector('.event-container');
-    
-    /**
-     * @type {Event}
-     */
-    let event = {
-        //flyer: getInputValue(flyer),
-        name: getInputValue(name),
-        location: getInputValue(location),
-        dateTime: getInputValue(dateTime),
-        price: getInputValue(price),
-        currency: getInputValue(currency),
-        music: getInputValue(music),
-        city: getInputValue(city),
-        dance: getInputValue(dance),
-    }
-    
-    const searchParams = new URLSearchParams(event).toString();
-    const apiData = await getAPIData(`http://${location.hostname}:1333/create/event?${searchParams}`);
-
-    
-    console.log(apiData)
-    
-    createEventCardWithAnimation(event, eventContainer)
-    hideForm()
-}
-
 function setLocalStorageFromState(key = 'eventStorage') {
     const storeData = store.getState()
     //delete storeData.user
     updateLocalStorage(storeData, key)
 }
-
 /**
  * @param{State} storeValue
  */
 
 function updateLocalStorage(storeValue, key = 'eventStorage') {
     localStorage.setItem(key, JSON.stringify(storeValue));
-    console.log(key)
 }
 /**
  * 
@@ -734,7 +712,6 @@ function sumPriceValue(card)  {
     console.log(`Event price: ${priceValue}`);
 
     totalPriceValue += parseInt(priceValue);
-    console.log(`Total price: ${totalPriceValue}`);
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
 }
 /**
@@ -744,37 +721,39 @@ function sumPriceValue(card)  {
 
 function resPricevalue(card) {
     const priceValue = getPriceValue(card);
-    console.log(`Event price: ${priceValue}`);
     totalPriceValue -= parseInt(priceValue);
-    console.log(`Total price: ${totalPriceValue}`)
 
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
 }
 
-async function getAPIData(apiURL = 'api/get.events.json') {
+async function getAPIData(apiURL = 'api/get.events.json', method = 'GET' , data) {
     let apiData
-    console.log(apiURL)
   
     try {
-      apiData = await simpleFetch(apiURL, {
-        // Si la petición tarda demasiado, la abortamos
-        signal: AbortSignal.timeout(3000),
-        headers: {
-          'Content-Type': 'application/json',
-          // Add cross-origin header
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-    } catch (/** @type {any | HttpError} */err) {
+        let headers = new Headers()
+
+        headers.append('Content-Type', 'application/json')
+        headers.append('Access-Control-Allow-Origin', '*')
+        if (data) {
+          headers.append('Content-Length', String(JSON.stringify(data).length))
+        }
+        apiData = await simpleFetch(apiURL, {
+          // Si la petición tarda demasiado, la abortamos
+          signal: AbortSignal.timeout(3000),
+          method: method,
+          body: data ?? undefined,
+          headers: headers
+        });
+      } catch (/** @type {any | HttpError} */err) {
       if (err.name === 'AbortError') {
-        console.error('Fetch abortado');
+        //console.error('Fetch abortado');
       }
       if (err instanceof HttpError) {
         if (err.response.status === 404) {
-          console.error('Not found');
+          //console.error('Not found');
         }
         if (err.response.status === 500) {
-          console.error('Internal server error');
+          //console.error('Internal server error');
         }
       }
     }
@@ -819,7 +798,7 @@ function hideForm () {
 function validateForm() {
     let formIsValid = false;
     const name = document.getElementById('input-event-name');
-    const location = document.getElementById('input-address');
+    const address = document.getElementById('input-address');
     const date = document.getElementById('input-date');
     const time = document.getElementById('input-time');
     const price = document.getElementById('input-price');
@@ -830,7 +809,7 @@ function validateForm() {
   
     const submitButton = document.getElementById('submit-button');
 
-    const fields = [name, location, date, time, price, currency, music, city, dance];
+    const fields = [name, address, date, time, price, currency, music, city, dance];
     formIsValid = fields.every(field => field?.value.trim() !== '');
 
     submitButton.disabled = !formIsValid;
@@ -877,4 +856,159 @@ function cleanEventContainer() {
     while (eventContainer.firstChild) {
         eventContainer.removeChild(eventContainer.firstChild);
     }
+}
+
+function validateRegister() {
+    let formIsValid = false;
+        const email = document.getElementById('input-email-register')
+        const nickname = document.getElementById('input-nickname-register')
+        const name = document.getElementById('input-name-register')
+        const rol = document.getElementById('input-rol-register')
+        const password = document.getElementById('input-password-register')
+  
+    const registerButton = document.getElementById('register-button-register');
+
+    const fields = [email, nickname, name, rol, password];
+    formIsValid = fields.every(field => field?.value.trim() !== '');
+    if (!formIsValid) {
+        registerButton.disabled = true;
+        registerButton.style.backgroundColor = 'grey';
+    } else {
+        registerButton.disabled = false;
+        registerButton.style.backgroundColor = '#243D4B';
+    }
+    
+    const fieldsEmpty = [
+       'input-email-register',
+       'input-nickname-register',
+       'input-name-register',
+       'input-rol-register',
+       'input-password-register',
+    ].map(id => document.getElementById(id));
+
+    formIsValid = fieldsEmpty.every(fieldsEmpty => {
+        if (fieldsEmpty?.value.trim() === '') {
+            fieldsEmpty?.classList.add('invalid-field');
+            return false;
+        } else {
+            fieldsEmpty?.classList.remove('invalid-field');
+            return true;
+        }
+    });
+    
+    return formIsValid
+}
+function saveNewEventToLocalStorage (newEventList) {
+    localStorage.setItem('newEventList', JSON.stringify(newEventList));
+}
+
+function displayBasketCount () {
+    //const basketData = JSON.parse(localStorage.getItem('basket')) || [];
+    const basketElement = document.querySelector('.basket-counter');
+    basketElement.textContent = `BASKET (${basketCount})`
+    if(basketCount === 0) {
+     basketElement.innerText = "BASKET"
+    }
+    updateBasketCounter(basketElement)
+}
+
+
+async function onLoginFormSubmit(e){
+    const emailElement = document.getElementById('email')
+    const passwordElement = document.getElementById('password')
+    const loginData = {
+      email: getInputValue(emailElement),
+      password: getInputValue(passwordElement)
+    }
+  
+    e.preventDefault()
+  
+    if (loginData.email !== '' && loginData.password !== '') {
+      const apiData = await getAPIData(`http://${location.hostname}:${PORT}/read/users?`,'GET');
+
+      let userData = apiData.find((itemData) => {
+        const user = /** @type {User} */(itemData)
+  
+        return user.email === loginData.email && user.password === loginData.password
+      })
+  
+      if (!userData) {
+        // Show error
+        alert('El usuario no existe')
+      } else {
+        const storeUserData = /** @type {User} */(userData)
+        delete storeUserData.password
+        // Login user
+        store.user.login(storeUserData, setSessionStorageFromStore)
+        // Redirect to home
+      }
+    }
+  }
+
+function saveUserListToLocalStorage(userList) {
+    localStorage.setItem('userList', JSON.stringify(userList));
+}
+
+function updateSessionStorage(storeValue) {
+    sessionStorage.setItem('userList', JSON.stringify(storeValue))
+  }
+/**
+ * Saves the current state of the store in local storage.
+ * Removes the user's data from the store before saving.
+ */
+function setLocalStorageFromStore() {
+    // Remove user data from store before saving
+    const storeState = store.getState()
+    delete storeState.user
+    updateLocalStorage(storeState)
+  }
+
+/**
+ * Saves the current state of the store in session storage.
+ * Removes all data except the user data from the store before saving.
+ */
+
+function setSessionStorageFromStore() {
+    // Remove unused data from store before saving
+    const storeState = store.getState()
+    delete storeState.articles
+    delete storeState.error
+    delete storeState.isLoading
+    delete storeState.route
+    updateSessionStorage(storeState)
+  }
+
+ /**
+ * Retrieves the shopping list data from session storage.
+ *
+ * @returns {State} Saved state.
+ * If no data is found, returns an empty State object.
+ */
+
+function getDataFromLocalStorage() {
+    const defaultValue = JSON.stringify(INITIAL_STATE)
+    return JSON.parse(localStorage.getItem('userList') || defaultValue)
+  }
+
+function getDataFromSessionStorage() {
+    const defaultValue = JSON.stringify(INITIAL_STATE)
+    return JSON.parse(sessionStorage.getItem('userList') || defaultValue)
+  }
+
+/**
+ * Check user login status
+ */
+function checkLoginStatus() {
+    /** @type {State} */
+    const storedData = getDataFromSessionStorage()
+    if (storedData?.user?.token) {
+      const storeUserData = /** @type {User} */(storedData?.user)
+      delete storeUserData.password
+      store.user.login(storeUserData)
+    }
+}
+
+export {
+    getDataFromLocalStorage,
+    setLocalStorageFromStore
 }

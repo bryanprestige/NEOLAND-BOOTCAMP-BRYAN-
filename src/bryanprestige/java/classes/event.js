@@ -3,7 +3,7 @@
     id
     name
     //flyer
-    location 
+    address 
     dateTime
     price
     currency
@@ -14,7 +14,7 @@
     /**
      * @param {string} name 
     
-     * @param {string} location 
+     * @param {string} address
     * @param {Date} dateTime
     * @param {number} price
     * @param {string} currency
@@ -22,12 +22,12 @@
     * @param {string} city 
      * @param {string} dance
      */
-    constructor ({id,name,location,dateTime,price,currency,music,city,dance}){
+    constructor ({id,name,address,dateTime,price,currency,music,city,dance}){
         const timestamp = new Date()
         this.id = id || String(timestamp.getTime())
         //this.flyer = flyer
         this.name = name
-        this.location = location
+        this.address = address
         this.dateTime = dateTime 
         this.price = price
         this.currency = currency

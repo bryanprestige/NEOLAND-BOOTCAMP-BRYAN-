@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dancing Events USER</title>
     <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="../bryanprestige/css/dancingEvents.css">
+    <link rel="stylesheet" href="./css/dancingEvents.css">
     <script type="module" src="./java/dancingEvents.js"></script>
 </head>
 <body id="body-login">
@@ -72,27 +72,17 @@
                 </a>
             </div>
         </nav>
-    <div class="login-container">
+    <div id="login-container">
         <h1>DANCING EXCHANGE</h1>
         <h3>Enter your login credentials</h3>
 
         <form action="">
-            <label for="first">
-                Username:
-            </label>
-            <input type="text" id="username" name="username" 
-                placeholder="Enter your Username" required>
-
-            <label for="password">
-                Password:
-            </label>
-            <input type="password" id="password" name="password" 
-                placeholder="Enter your Password" required>
-
-            <div class="wrap">
-                <button type="submit" id="submit-button-login">
-                    Submit
-                </button>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="on">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+            <div class="wrap"> 
+            <button type="submit" id="submit-button-login">Submit</button>
             </div>
         </form>
         <p>Not registered?

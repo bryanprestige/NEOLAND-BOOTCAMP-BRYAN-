@@ -1,13 +1,6 @@
 //@ts-check
-/** @import {Event} from '../java/classes/Event.js' */
 /** @import {User} from '../java/classes/User.js' */
  
-/**
- * @typedef {Object} ActionTypeEvent
- * @property {String} type
- * @property {Event} [event]
- * 
- */
 
 /**
  * @typedef {Object} ActionTypeUser
@@ -15,17 +8,25 @@
  * @property {User} [user]
  */
  
+/**
+ * @typedef {Object} User
+ * @property {string} id
+ * @property {string} name
+ * @property {string} email
+ * @property {string} [password]
+ * @property {string} token
+ * @property {string} role
+ */
+
 const ACTION_TYPES = {
-    CREATE_EVENT: 'CREATE_EVENT',
-    READ_EVENTS: 'READ_EVENTS',
-    CREATE_USER: 'CREATE_USER',
-    READ_USERS: 'READ_USERS',
+  //USER
+  LOGIN : 'LOGIN ',
+  LOGOUT: 'LOGOUT'
 
   }
 
 /**
  * @typedef {Object.<(string), any>} State
- * @property {Array<Event>} events
  * @property {Array<User>} user
  * @property {boolean} isLoading
  * @property {boolean} error
@@ -35,7 +36,6 @@ const ACTION_TYPES = {
    */
 
   export const INITIAL_STATE = {
-    events: [],
     users: [],
     isLoading: false,
     error: false
@@ -44,62 +44,45 @@ const ACTION_TYPES = {
   /**
    * 
    * @param {State} state 
-   * @param {ActionTypeEvent | ActionTypeUser} action 
+   * @param  {ActionTypeUser} action 
    * @returns {State}
    */
 
 
   const appReducer = (state = INITIAL_STATE, action) => {
-    const actionWithEvent = /**@type {ActionTypeEvent} */ (action)
     const actionWithUser = /**@type {ActionTypeUser} */ (action)
-    console.log(action)
 
     switch (action.type) {
-            case ACTION_TYPES.CREATE_EVENT:
-                return {
-                    ...state,
-                    events: [
-                      ...state.events,
-                      actionWithEvent.event
-                    ]
-                };
-              case ACTION_TYPES.READ_EVENTS:
-                  return state;
-              case ACTION_TYPES.CREATE_USER:
-                return {
-                  ...state,
-                  users: [
-                    ...state.users,
-                    actionWithUser.user
-                  ]
-              }
-              case ACTION_TYPES.READ_USERS:
-                return state;
+      case ACTION_TYPES.LOGIN:
+        return {
+          ...state,
+          user: actionWithUser.user
+        };
+      case ACTION_TYPES.LOGOUT:
+        return {
+          ...state,
+          user: {}
+        };
               default:
                 return {...state};
         }
   }
   
-/**
- * @typedef {Object} AnswerUser
- * @property {boolean} next
- * @property {boolean} before
- * @property {Array<User>} users
- */
 
 /**
- *  * @typedef {Object} PublicMethods
- * * @property {function} create
- * @property {function} read
+ * @typedef {Object} PublicUser
  * @property {function} getById
  * @property {function} filter
+ * @property {function} login
+ * @property {function} logout
  */
+
+
 
 /**
  * @typedef {Object} Store
  * @property {function} getState 
- * @property {PublicMethods} event
- *  @property {PublicMethods} user
+ *  @property {PublicUser} user
  */
 
 /**
@@ -112,63 +95,29 @@ const ACTION_TYPES = {
 
  // ACTIONS EVENTS //
 
-  /**Create a new event
-   * @param {Event} event
-   * @param {function | undefined} [onEventDispatched]
-   * @returns void
-   */
     
-  const createEvent = (event,onEventDispatched) => _dispatch({ type: ACTION_TYPES.CREATE_EVENT, event }, onEventDispatched);
-  
-  /** 
-    * Reads the events
-    * @param {function | undefined} [onEventDispatched]
-    * @returns void
-    */
-    const readEvents = (onEventDispatched) => _dispatch({ type: ACTION_TYPES.READ_EVENTS }, onEventDispatched);
+
     /// PUBLIC METHODS EVENTS ///
     const getState = () => { return currentState };
 
-    /**
-     * 
-     * @param {string} id 
-     * @returns {Event}
-     */
-    const getEventById =(id) => { return currentState.events.find((/**@type {Event} */ event) => event.id === id)}
-
-    /**
-     * @param {string} searchField
-     * @returns {Array<Event>} 
-     */
-
-    const filterEvents = (searchField) => { return currentState.events.filter((/**@type {Event} */ event) =>
-            {
-             return event.dance.toLowerCase() === searchField ||
-              event.city.toLowerCase() === searchField || 
-              event.price.toLowerCase() === searchField ||     
-              event.name.toLowerCase().includes(searchField)    
-             }
-            )}
             
     // ACTIONS USERS //
 
- /**Create a new event
+    /// PUBLIC METHODS USERS ///
+  /**
+   * Logs in the user
    * @param {User} user
    * @param {function | undefined} [onEventDispatched]
    * @returns void
    */
-  
-    const createUser = (user, onEventDispatched) => _dispatch({ type: ACTION_TYPES.CREATE_USER, user }, onEventDispatched);
+  const login = (user, onEventDispatched) => _dispatch({ type: ACTION_TYPES.LOGIN, user }, onEventDispatched)
 
-     /** 
-    * Reads the events
-    * @param {function | undefined} [onEventDispatched]
-    * @returns void
-    */
-    const readUsers = (onEventDispatched) => _dispatch({ type: ACTION_TYPES.READ_USERS }, onEventDispatched);
-
-    /// PUBLIC METHODS USERS ///
-
+  /**
+   * Logs out the user
+   * @param {function | undefined} [onEventDispatched]
+   * @returns void
+   */
+  const logout = (onEventDispatched) => _dispatch({ type: ACTION_TYPES.LOGOUT }, onEventDispatched)
     /**
      * 
      * @param {string} id 
@@ -187,11 +136,12 @@ const ACTION_TYPES = {
               user.nickname.toLowerCase().includes(searchField)    
              }
             )}
+
     // Private methods
    
     /**
      * 
-     * @param {ActionTypeEvent | ActionTypeUser} action 
+     * @param { ActionTypeUser} action 
      * @param {function | undefined} [onEventDispatched]
 
      */
@@ -231,23 +181,17 @@ const ACTION_TYPES = {
       }, {});
     }
     
-    /*** @type {PublicMethods}*/
-    const event = {
-        create : createEvent,
-        read: readEvents,
-        getById : getEventById,
-        filter: filterEvents
-    }
+    /*** @type {PublicUser}*/
+  
 
     const user = {
-        create : createUser,
-        read : readUsers,
         getById : getUserById,
-        filter : filterUser
+        filter : filterUser,
+        login,
+        logout
     }
     return {
       getState,
-      event,
       user
     }
   }

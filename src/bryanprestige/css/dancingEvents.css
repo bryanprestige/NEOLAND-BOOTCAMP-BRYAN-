@@ -213,9 +213,9 @@ input, select {
 }
 /*=====BUTTONS=====*/
 #search-button,.buy-button, #submit-button, .login-button,.register,
-.remove-button, .button-dance-type, .button-city, .edit-button,
+.remove-button, .button-dance-type, .button-city, .edit-event-button,
 .publish-button,.fav-button, #favorite-button, .address, .name,
- .music-ratio,.edit-button-profile, .fav-button-profile {
+ .music-ratio,#edit-profile-button, #fav-button-profile {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -224,8 +224,8 @@ input, select {
 }
 .remove-button:hover, .button-dance-type:hover, .button-city:hover,
 #search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
-.publish-button:hover, .edit-button:hover,.login-button:hover, .register:hover,
-#favorite-button:hover, .edit-button-profile:hover, .fav-button-profile:hover {
+.publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
+#favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -233,10 +233,10 @@ input, select {
     padding: 5px 10px;
 }
 #search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button,
-.edit-button-profile, .fav-button-profile {
+#edit-profile-button, #fav-button-profile {
     background-color: #F7BC47;
 }
-.login-button, .register, .remove-button, .edit-button, .publish-button  {
+.login-button, .register, .remove-button, .edit-event-button, .publish-button  {
     background-color: #243D4B;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     padding: 10px 14px;
@@ -251,14 +251,14 @@ input, select {
     width: 48%;
     padding: 8px 12px;
 }
-.edit-button, .publish-button {
+.edit-event-button, .publish-button {
     font-size: 16px;
     color: #ffffff;
 }
 .button-dance-type{
     color: black;
 }
-#favorite-button, .edit-button-profile{
+#favorite-button, #edit-profile-button{
     padding: 5px 10px;
 }
 .fav-button {
@@ -412,7 +412,7 @@ input, select {
     border: none;
 }
 
-.fav-button-profile{
+#fav-button-profile{
     padding: 5px 10px;
 }
   /*=====LOG IN STYLES=====*/
@@ -420,10 +420,10 @@ input, select {
     border: none;
 }
 
-.login-container, .wrap,.register-container, .container-signin{
+#login-container, .wrap,.register-container, .container-signin{
     background-color: white;
 }
-.login-container {
+#login-container {
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
@@ -480,3 +480,83 @@ hr {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/*======BASKET======*/
+.product-detail {
+    width: 360px;
+    padding: 24px;
+    box-sizing: border-box;
+    position: absolute;
+    right: 0;
+  }
+  .my-order-container {
+    display: flex;
+  }
+  .title-container img {
+    transform: rotate(180deg);
+    margin-right: 14px;
+  }
+  .title {
+    font-size: var(--lg);
+    font-weight: bold;
+  }
+  .order {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: center;
+    background-color: var(--text-input-field);
+    margin-bottom: 24px;
+    border-radius: 8px;
+    padding: 0 24px;
+  }
+  .order p:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+  }
+  .order p span:nth-child(1) {
+    font-size: var(--md);
+    font-weight: bold;
+  }
+  .order p:nth-child(2) {
+    text-align: end;
+    font-weight: bold;
+  }
+  .shopping-cart {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+  .shopping-cart figure {
+    margin: 0;
+  }
+  .shopping-cart figure img {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    object-fit: cover;
+  }
+  .shopping-cart p:nth-child(2) {
+    color: var(--very-light-pink);
+  }
+  .shopping-cart p:nth-child(3) {
+    font-size: var(--md);
+    font-weight: bold;
+  }
+  .checkout-button {
+    background-color: var(--hospital-green);
+    border-radius: 8px;
+    border: none;
+    color: var(--white);
+    width: 100%;
+    cursor: pointer;
+    font-size: var(--md);
+    font-weight: bold;
+    height: 50px;
+  }
+  @media (max-width: 640px) {
+    .product-detail {
+      width: 100%;
+    }
+  }
