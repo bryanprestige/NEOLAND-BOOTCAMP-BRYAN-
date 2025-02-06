@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "Bachata Exchange",
-    "location": "12 Primrose Street",
+    "address": "12 Primrose Street",
     "dateTime": "27 March 2025 17:00",
     "price": "0",
     "currency": "GBP",
@@ -13,7 +13,7 @@
   {
     "id": 2,
     "name": "Jowke",
-    "location": "Mostoles",
+    "address": "Mostoles",
     "dateTime": "5 April 2026 23:00",
     "price": "20",
     "currency": "EUR",
@@ -24,7 +24,7 @@
   {
     "id": 3,
     "name": "Lokura",
-    "location": "La Ermita",
+    "address": "La Ermita",
     "dateTime": "8 May 2025 22:00",
     "price": "15",
     "currency": "EUR",
@@ -35,7 +35,7 @@
   {
     "id": 4,
     "name": "Salseritos",
-    "location": "La Grande Figa 22",
+    "address": "La Grande Figa 22",
     "dateTime": "14 May 2025 19:00",
     "price": "30",
     "currency": "EUR",
@@ -46,7 +46,7 @@
   {
     "id": 5,
     "name": "Zouk Fever",
-    "location": "Passeig de Gracia 45",
+    "address": "Passeig de Gracia 45",
     "dateTime": "2 June 2026 21:00",
     "price": "18",
     "currency": "EUR",
@@ -57,7 +57,7 @@
   {
     "id": 6,
     "name": "Salsa Nights",
-    "location": "Calle Mayor 15",
+    "address": "Calle Mayor 15",
     "dateTime": "10 June 2025 20:00",
     "price": "25",
     "currency": "EUR",
@@ -68,7 +68,7 @@
   {
     "id": 7,
     "name": "Kizomba Love",
-    "location": "Plaza Catalunya 10",
+    "address": "Plaza Catalunya 10",
     "dateTime": "5 July 2025 22:00",
     "price": "12",
     "currency": "EUR",
@@ -79,7 +79,7 @@
   {
     "id": 8,
     "name": "SBK Fusion",
-    "location": "Via Roma 33",
+    "address": "Via Roma 33",
     "dateTime": "15 August 2025 21:00",
     "price": "20",
     "currency": "EUR",
@@ -90,7 +90,7 @@
   {
     "id": 9,
     "name": "Timba Explosion",
-    "location": "Calle 8, Miami",
+    "address": "Calle 8, Miami",
     "dateTime": "30 September 2025 19:30",
     "price": "22",
     "currency": "USD",
@@ -101,7 +101,7 @@
   {
     "id": 10,
     "name": "Urban Bachata",
-    "location": "Sunset Blvd 100",
+    "address": "Sunset Blvd 100",
     "dateTime": "12 October 2025 20:00",
     "price": "18",
     "currency": "USD",
@@ -112,7 +112,7 @@
   {
     "id": 11,
     "name": "Kiz Sensation",
-    "location": "Porto Center",
+    "address": "Porto Center",
     "dateTime": "8 November 2025 22:30",
     "price": "15",
     "currency": "EUR",
@@ -123,7 +123,7 @@
   {
     "id": 12,
     "name": "Zouk Connection",
-    "location": "Copacabana Club",
+    "address": "Copacabana Club",
     "dateTime": "21 December 2025 21:00",
     "price": "19",
     "currency": "BRL",
@@ -134,7 +134,7 @@
   {
     "id": 13,
     "name": "Bachata Sunset",
-    "location": "Santorini Beach",
+    "address": "Santorini Beach",
     "dateTime": "5 May 2026 19:00",
     "price": "17",
     "currency": "EUR",
@@ -145,7 +145,7 @@
   {
     "id": 14,
     "name": "Caribbean Party",
-    "location": "Havana Club",
+    "address": "Havana Club",
     "dateTime": "10 June 2026 22:00",
     "price": "20",
     "currency": "CUP",
@@ -156,7 +156,7 @@
   {
     "id": 15,
     "name": "Tango Nights",
-    "location": "Buenos Aires Plaza",
+    "address": "Buenos Aires Plaza",
     "dateTime": "25 July 2026 21:00",
     "price": "30",
     "currency": "ARS",

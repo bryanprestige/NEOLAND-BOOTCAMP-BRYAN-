@@ -1,17 +1,14 @@
 // INFO: https://www.freecodecamp.org/espanol/news/como-crear-una-aplicacion-crud-de-linea-de-comandos-con-node-js/
-// import { read } from './crud/read.js';
-import { server } from 'typescript';
 import { create } from './crud/create.js';
-import {read} from './crud/read.js';
-import { filter }from './crud/filter.js';
-
-const EVENTS_URL = 'server/BBDD/events.json'
-//const USERS_URL = 'server/BBDD/useres.json'
+import { read } from './crud/read.js';
+import { update } from './crud/update.js';
+import { deleteById } from './crud/delete.js';
+import { filter } from './crud/filter.js';
 
 export const crud = {
-    read: (file = EVENTS_URL, callback) => create(file, callback),
-    create: (file = EVENTS_URL, data, callback) => create(file, data, callback),
-    filter: (file = EVENTS_URL, filterParams, callback) => filter(file, filterParams, callback)
+    read: (file, callback) => read(file, callback),
+    create: (file, data, callback) => create(file, data, callback),
+    update: (file , id, data, callback) => update(file, id, data, callback),
+    delete: (file, id, callback) => deleteById(file, id, callback),
+    filter: (file, filterParams, callback) => filter(file, filterParams, callback)
 }
-
-console.log(read, server)

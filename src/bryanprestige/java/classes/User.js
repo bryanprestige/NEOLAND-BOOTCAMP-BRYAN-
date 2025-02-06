@@ -20,7 +20,7 @@ export class User {
         this.id = String(timestamp.getTime())
         this.email = email
         this.nickname = nickname
-        this.nombre = name
+        this.name = name
         this.rol = rol
         this.password = password
     }

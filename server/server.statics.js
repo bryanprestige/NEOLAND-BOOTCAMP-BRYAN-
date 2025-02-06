@@ -40,7 +40,7 @@ http
     const statusCode = file.found ? 200 : 404;
     const mimeType = MIME_TYPES[file.ext] || MIME_TYPES.default;
 
-    console.log(url.pathname);
+    //console.log(url.pathname);
 
     // Set Up CORS
     response.setHeader('Access-Control-Allow-Origin', '*');
