@@ -32,13 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const editEventProfile = document.getElementById('edit-event-button')
         editEventProfile?.addEventListener('click',displayEditForm)
         */
-       const favoriteButtonProfile = document.getElementById('fav-button-profile') 
-       favoriteButtonProfile?.addEventListener('click',displayFavoriteEvents)
-       displayBasketCount() 
+       
 
         document.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', validateForm);
         })
+
+        displayProfile();
+        
     }
     else if (window.location.pathname.includes('login.html')) {
     
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
      
     else if (window.location.pathname.includes('dancingEvents.html')) {
         updateDefaultFeed()
+        
         const searchButton = document.getElementById('search-button');
         hideShowSearchButton()
         // Evento de clic para el botón de búsqueda
@@ -79,12 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
+/*TO DO: DISPLAY EVENTS BOUGHT ON THE BASKET.HTML*/
+/*TO DO: CONNECT USERS REGISTERED AND LOGED IN AND CREATE THEIR PROFILE CARD*/   
+/*TO DO: MAKE EDIT EVENT BUTTON WORK*/
+/*TO DO: MAKE PUSH EVENT BUTTON WORK*/
+/*TO DO: FINISh STYLE OF THE BASKET PAGE*/
 
+
+//====================FEED=====================//
 
 /**
  * @param {MouseEvent} event
  */
-
 async function onSearchClick(event) {
     event.preventDefault();
     
@@ -101,23 +109,6 @@ async function onSearchClick(event) {
     }
     loadBasketFromLocalStorage()  
     scrollToTop();
-}
-
-/**
- * @param {MouseEvent} e
- */
-
-function onClickSubmitButton(e) {
-    e.preventDefault()
-
-    if (validateForm() === false) {
-        alert("Please ensure all fields are correctly filled before submitting.");
-        return; 
-    }else {
-     cleanEventContainer()   
-     createNewEvent()
-     hideForm()
-    }
 }
 /**
  * @param {MouseEvent} event
@@ -148,101 +139,21 @@ async function onFilterButtonClick(e) {
     basketElement.innerText = `BASKET (${storedBasketCount})`;
     scrollToTop();   
 }
+async function updateDefaultFeed() {
+    
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/read/events?`,'GET');
+
+    const eventContainer = document.querySelector('.event-container');
+    cleanEventContainer()
+    apiData.forEach(event => {
+        createEventCardWithAnimation(event, eventContainer);
+        setLocalStorageFromState(this, 'eventStorage')
+    });
+}
+
 /**
  * @param {MouseEvent} event
  */
-
-function onClickRegisterButton (e) {
-    e.preventDefault()
-    if (validateRegister() === false) {
-        alert("Please ensure all fields are correctly filled before submitting.");
-        return; 
-    } else{
-        
-    createUser ()
-    }
-    saveUserListToLocalStorage(userList)
-    //sendToLogin()
-    alert('User registered successfully')
-    navigateTo('./login.html')
-}
-
-function navigateTo(pathname) {
-    const newLocation = {
-      ...window.location.href = pathname,
-    }
-    window.history.pushState({}, '', pathname)
-    const newLocationLinked = location.pathname.replace(/\/src/, '')
-    console.log(newLocation)
-    console.log(newLocationLinked)
-  }
-
-async function createUser () {
-        const email = document.getElementById('input-email-register')
-        const nickname = document.getElementById('input-nickname-register')
-        const name = document.getElementById('input-name-register')
-        const rol = document.getElementById('input-rol-register')
-        const password = document.getElementById('input-password-register')
-    
-    /**
-     * @type {User}
-     */
-    let user = {
-        email: getInputValue(email),
-        nickname: getInputValue(nickname),
-        name: getInputValue(name),
-        rol: getInputValue(rol),    
-        password: getInputValue(password),
-    }
-    const payload = JSON.stringify(user)
-
-    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/users?`, 'POST',payload);
-    console.log(apiData)
-
-    userList.push(user)
-}
-
-async function createNewEvent () {
-    //const flyer = document.getElementById('subtmit-flyer')
-    const name = document.getElementById('input-event-name')
-    const address = document.getElementById('input-address')
-    const dateTime = document.getElementById('input-dateTime')
-    const price = document.getElementById('input-price')
-    const currency = document.getElementById('input-currency')
-    const music = document.getElementById('input-music-ratio')
-    const city = document.getElementById('input-city')
-    const dance = document.getElementById('input-dance')
-    const eventContainer = document.querySelector('.event-container');
-    
-    /**
-     * @type {Event}
-     */
-    let event = {
-        //flyer: getInputValue(flyer),
-        name: getInputValue(name),
-        address: getInputValue(address),
-        dateTime: getInputValue(dateTime),
-        price: getInputValue(price),
-        currency: getInputValue(currency),
-        music: getInputValue(music),
-        city: getInputValue(city),
-        dance: getInputValue(dance),
-    }
-    const payload = JSON.stringify(event)
-
-    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/events?`,'POST',payload);
-    console.log(apiData)
-    
-    newEventList.push(event)
-    saveNewEventToLocalStorage(newEventList)
-    createEventCardWithAnimation(event, eventContainer)
-    hideForm()
-}
-
-//function displayboughtEvents () {
-
-
-
 function displayFavoriteEvents(event) {
     event.preventDefault(); 
     const eventContainer = document.querySelector('.event-container');
@@ -263,17 +174,7 @@ function displayFavoriteEvents(event) {
     }
 }
 
-async function updateDefaultFeed() {
-    
-    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/read/events?`,'GET');
 
-    const eventContainer = document.querySelector('.event-container');
-    cleanEventContainer()
-    apiData.forEach(event => {
-        createEventCardWithAnimation(event, eventContainer);
-        setLocalStorageFromState(this, 'eventStorage')
-    });
-}
 /**
  * @param {Event} event 
  * @param {HTMLElement} container
@@ -303,8 +204,6 @@ function createEventCardElement(event) {
 
     card.appendChild(leftColumn);
     card.appendChild(rightColumn);
-
-    createPreviewContainer()   
 
     eventList.push(card)
     return card;
@@ -346,30 +245,7 @@ function createRightColumn(event) {
     
     return rightColumn;
 }
-function createPreviewContainer() {
-    if (window.location.pathname.includes('profile.html')) {
-        let previewContainer = document.querySelector('.preview-container'); 
-        if (!previewContainer) {
-        const previewContainer = document.createElement('div')
-        previewContainer.className = 'preview-container'
-   
-        const previewTitle = document.createElement('h1');
-        previewTitle.className = 'preview-title';
-        previewTitle.innerText = 'YOUR EVENT PREVIEW'; 
 
-        const publishButton = document.createElement('button')
-        publishButton.className = 'publish-button'
-        publishButton.innerText = 'PUBLISH'
-        
-        const editButton = document.createElement('button')
-        editButton.className = 'edit-event-button'
-        editButton.innerText = 'EDIT'
-
-        previewContainer.append(previewTitle,publishButton,editButton);
-        document.body.appendChild(previewContainer);
-    }
-    return previewContainer
-}}
 /**
  * 
  * @param {string} eventName 
@@ -383,7 +259,7 @@ function createImageElement(eventName) {
 }
 /**
  * 
- * @param {object} event 
+ * @param {Event} event 
  */ 
 function createNameFavElement(event) {
     const nameFav = document.createElement('div');
@@ -490,14 +366,13 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     return removeButton;
 }
 /**
- * 
  * @param {object} event 
  */ 
 function createPriceCurrencyElement(event) {
     const priceCurrency = document.createElement('div');
     priceCurrency.className = 'price-currency';
 
-    const currency = createElementWithText('currency', 'currencly', event.currency);
+    const currency = createElementWithText('currency', 'currency', event.currency);
     currency.setAttribute('select', event.currency);
     const price = createElementWithText('h1', 'price', event.price);
 
@@ -506,10 +381,10 @@ function createPriceCurrencyElement(event) {
 }
 
 /**
- * 
  * @param {string} music
  */ 
 function createMusicRatioElement(music) {
+    
     const musicRatio = createElementWithText('h1', 'music-ratio', music);
 
     if (music.includes("100%")) {
@@ -523,8 +398,7 @@ function createMusicRatioElement(music) {
 }
 
 /**
- * 
- * @param {object} event
+ * @param {object} event    
  */
 function createTypeCityElement(event) {
     const typeCity = document.createElement('div');
@@ -597,8 +471,7 @@ function toggleFavorite(event, button) {
 /**
  * @param {object} event
  * @param {number} ticketCount
- */ 
-
+ */  
 function updateTicketCount(event, ticketCount) {
     let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
     const eventIndex = ticketList.findIndex(item => item.name === event.name);
@@ -629,7 +502,6 @@ function updateBasketCounter(basketElement) {
     if(basketCount === 0) {
      basketElement.innerText = "BASKET"
 }}
-
 function saveBasketToLocalStorage() {
     const eventCards = document.querySelectorAll('.event-card');
     const basketData = [];
@@ -645,7 +517,6 @@ function saveBasketToLocalStorage() {
 
     localStorage.setItem('basket', JSON.stringify(basketData));
 }
-
 function loadBasketFromLocalStorage() {
     const basketData = JSON.parse(localStorage.getItem('basket')) || [];
     const basketElement = document.querySelector('.basket-counter');
@@ -681,21 +552,18 @@ function loadBasketFromLocalStorage() {
     });
     updateBasketCounter(basketElement);
 }
-
 function setLocalStorageFromState(key = 'eventStorage') {
     const storeData = store.getState()
-    //delete storeData.user
+    delete storeData.user
     updateLocalStorage(storeData, key)
 }
 /**
  * @param{State} storeValue
  */
-
 function updateLocalStorage(storeValue, key = 'eventStorage') {
     localStorage.setItem(key, JSON.stringify(storeValue));
 }
 /**
- * 
  * @param {HTMLElement | null} card
  */
 function getPriceValue(card) {
@@ -704,7 +572,6 @@ function getPriceValue(card) {
     return priceValue;
 }
 /**
- * 
  * @param {HTMLElement | null} card
  */
 function sumPriceValue(card)  {
@@ -715,7 +582,6 @@ function sumPriceValue(card)  {
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
 }
 /**
- * 
  * @param {HTMLElement | null} card
  */
 
@@ -726,46 +592,13 @@ function resPricevalue(card) {
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
 }
 
-async function getAPIData(apiURL = 'api/get.events.json', method = 'GET' , data) {
-    let apiData
-  
-    try {
-        let headers = new Headers()
-
-        headers.append('Content-Type', 'application/json')
-        headers.append('Access-Control-Allow-Origin', '*')
-        if (data) {
-          headers.append('Content-Length', String(JSON.stringify(data).length))
-        }
-        apiData = await simpleFetch(apiURL, {
-          // Si la petición tarda demasiado, la abortamos
-          signal: AbortSignal.timeout(3000),
-          method: method,
-          body: data ?? undefined,
-          headers: headers
-        });
-      } catch (/** @type {any | HttpError} */err) {
-      if (err.name === 'AbortError') {
-        //console.error('Fetch abortado');
-      }
-      if (err instanceof HttpError) {
-        if (err.response.status === 404) {
-          //console.error('Not found');
-        }
-        if (err.response.status === 500) {
-          //console.error('Internal server error');
-        }
-      }
-    }
-    return apiData
-  }
-
-  function scrollToTop() {
+function scrollToTop() {
     const scrollList = document.querySelector('.event-container');
     if (scrollList) {
         scrollList.scrollTop = 0;
     }
 }
+
 function noEventFound () {
     cleanEventContainer()
     const eventContainer = document.querySelector('.event-container');
@@ -775,11 +608,211 @@ function noEventFound () {
     
     eventContainer.appendChild(errorImg);
 }
+function hideShowSearchButton() {
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('event-name');  
+    // Desactivar el botón inicialmente si el input está vacío
+    if (searchInput?.value.trim() === '') {
+          searchButton.disabled = true;
+    }
+    // Evento para habilitar/deshabilitar el botón según el contenido del input
+    searchInput?.addEventListener('input', () => {
+          const isInputValid = searchInput.value.trim() !== '';
+          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
+    });
+}
+function cleanEventContainer() {
+    const eventContainer = document.querySelector('.event-container');
+    while (eventContainer.firstChild) {
+        eventContainer.removeChild(eventContainer.firstChild);
+    }
+}
+//========================PROFILE===============================//
+
 /**
- * 
- * @param {HTMLElement | null} inputElement
+ * @param {MouseEvent} event
  */
 
+async function displayProfile() {
+    const storedData = getDataFromSessionStorage();
+    const user = storedData.user;
+    const nickname = user.nickname;
+  
+    const profileCard = createProfileCard(nickname);
+    console.log(profileCard);
+  }
+
+function createProfileCard (nickname) {
+
+    const profileCardContainer = document.getElementById('profile-card-container');
+    const cardContainer = document.createElement('div');
+    cardContainer.className = 'profile-card';
+    
+    const profilePicPlacehold = document.createElement('img');
+    profilePicPlacehold.className = 'profile-picture';
+    profilePicPlacehold.src = './imagenes/profile-pic-placeholder.png';
+    
+    const profileInfo = createProfileInfo(nickname,cardContainer);
+    console.log(profileInfo);
+    cardContainer.append(profilePicPlacehold,profileInfo);
+    profileCardContainer.appendChild(cardContainer);
+    return profileCardContainer
+}
+
+function createProfileInfo(nickname,cardContainer) {
+    const profileInfo = document.createElement('div');
+    profileInfo.className = 'profile-info';
+
+    const userNickname = createElementWithText('h1', 'nickname', nickname);
+
+    const bio = document.createElement('p');
+    bio.className = 'bio';
+    bio.innerText = 'Bio';
+
+    const company = document.createElement('p');
+    company.className = 'team-academy';
+    company.innerText = 'Team Academy';
+
+    const editFavProfile = createEditFavProfile(cardContainer);
+
+    profileInfo.append(userNickname,bio,company,editFavProfile);
+    return profileInfo
+}
+
+
+function createEditFavProfile(user) {
+    const editFavProfile = document.createElement('div');
+    editFavProfile.className = 'edit-fav-profile';
+
+    const editProfileButton = createEditProfileButton(user);
+    const favButtonProfile = createFavButtonProfile(user);
+
+    
+    editFavProfile.append(editProfileButton,favButtonProfile);
+    return editFavProfile
+}
+
+/**
+ * @param {HTMLElement | null} button
+ */ 
+
+function createEditProfileButton(){
+    const editButton = document.createElement('button');
+    editButton.id = 'edit-profile-button';
+    editButton.textContent = 'Edit Profile';
+   
+    return editButton
+}
+
+/**
+ * @param {HTMLElement | null} button
+ */ 
+
+function createFavButtonProfile() {
+    const favButtonProfile = document.createElement('button');
+    favButtonProfile.id = 'fav-button-profile';
+    favButtonProfile.textContent = 'Favorites';
+    
+    favButtonProfile?.addEventListener('click',displayFavoriteEvents)
+    displayBasketCount() 
+
+    return favButtonProfile
+}
+
+function onClickSubmitButton(event) {
+    event.preventDefault()
+
+    if (validateForm() === false) {
+        alert("Please ensure all fields are correctly filled before submitting.");
+        return; 
+    }else {
+     cleanEventContainer()   
+     createNewEvent()
+     createPreviewContainer(event)   
+    }
+}
+
+async function createNewEvent () {
+    //const flyer = document.getElementById('subtmit-flyer')
+    const name = document.getElementById('input-event-name')
+    const address = document.getElementById('input-address')
+    const dateTime = document.getElementById('input-dateTime')
+    const price = document.getElementById('input-price')
+    const currency = document.getElementById('input-currency')
+    const music = document.getElementById('input-music-ratio')
+    const city = document.getElementById('input-city')
+    const dance = document.getElementById('input-dance')
+    const eventContainer = document.querySelector('.event-container');
+    
+    /**
+     * @type {Event}
+     */
+    let event = {
+        //flyer: getInputValue(flyer),
+        name: getInputValue(name),
+        address: getInputValue(address),
+        dateTime: getInputValue(dateTime),
+        price: getInputValue(price),
+        currency: getInputValue(currency),
+        music: getInputValue(music),
+        city: getInputValue(city),
+        dance: getInputValue(dance),
+    }
+    newEventList.push(event)
+    saveNewEventToLocalStorage(newEventList)
+    createEventCardWithAnimation(event, eventContainer)
+    hideForm()
+}
+
+function createPreviewContainer(event) {
+        let previewContainer = document.querySelector('.preview-container'); 
+        if (!previewContainer) {
+        const previewContainer = document.createElement('div')
+        previewContainer.className = 'preview-container'
+
+        const previewTitle = document.createElement('h1');
+        previewTitle.className = 'preview-title';
+        previewTitle.innerText = 'YOUR EVENT PREVIEW'; 
+
+        const publishButton = createPublishButton(event)
+        const editButton = createEditButton(event)
+
+        previewContainer.append(previewTitle,publishButton,editButton);
+        document.body.appendChild(previewContainer);
+    return previewContainer
+}}
+
+ function createPublishButton() {
+
+    const publishButton = document.createElement('button')
+    publishButton.className = 'publish-button'
+    publishButton.innerText = 'PUBLISH'
+    
+    publishButton.addEventListener('click', async () => {  
+    let newEvent = JSON.parse(localStorage.getItem('newEventList')); 
+    console.log(newEvent)
+    const payload = JSON.stringify(newEvent[0])
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/events?`,'POST',payload);
+    console.log(apiData)
+    //updateDefaultFeed()
+    })
+    
+
+    return publishButton
+}
+
+function createEditButton() {
+    const editButton = document.createElement('button')
+    editButton.className = 'edit-event-button'
+    editButton.innerText = 'EDIT'
+
+    return editButton
+}
+ //TODO:
+
+/**
+ * @param {HTMLElement | null} inputElement
+ */
 function getInputValue(inputElement) {
     if (inputElement) {
       return /** @type {HTMLInputElement} */(inputElement).value
@@ -837,25 +870,74 @@ function validateForm() {
     });
     return formIsValid
 }
-function hideShowSearchButton() {
-    const searchButton = document.getElementById('search-button');
-    const searchInput = document.getElementById('event-name');  
-    // Desactivar el botón inicialmente si el input está vacío
-    if (searchInput?.value.trim() === '') {
-          searchButton.disabled = true;
-    }
-    // Evento para habilitar/deshabilitar el botón según el contenido del input
-    searchInput?.addEventListener('input', () => {
-          const isInputValid = searchInput.value.trim() !== '';
-          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
-    });
+function saveNewEventToLocalStorage (newEventList) {
+    localStorage.setItem('newEventList', JSON.stringify(newEventList));
 }
 
-function cleanEventContainer() {
-    const eventContainer = document.querySelector('.event-container');
-    while (eventContainer.firstChild) {
-        eventContainer.removeChild(eventContainer.firstChild);
+function displayBasketCount () {
+    //const basketData = JSON.parse(localStorage.getItem('basket')) || [];
+    const basketElement = document.querySelector('.basket-counter');
+    basketElement.textContent = `BASKET (${basketCount})`
+    if(basketCount === 0) {
+     basketElement.innerText = "BASKET"
     }
+    updateBasketCounter(basketElement)
+}
+
+//========================REGISTER===============================//
+
+/**
+ * @param {MouseEvent} e
+ */
+
+function onClickRegisterButton (e) {
+    e.preventDefault()
+    if (validateRegister() === false) {
+        alert("Please ensure all fields are correctly filled before submitting.");
+        return; 
+    } else{
+        
+    createUser ()
+    }
+    saveUserListToLocalStorage(userList)
+    console.log(userList)
+    alert('User registered successfully')
+    navigateTo('./login.html')
+}
+
+function navigateTo(pathname) {
+    const newLocation = {
+      ...window.location.href = pathname,
+    }
+    window.history.pushState({}, '', pathname)
+    const newLocationLinked = location.pathname.replace(/\/src/, '')
+    console.log(newLocation)
+    console.log(newLocationLinked)
+  }
+
+async function createUser () {
+        const email = document.getElementById('input-email-register')
+        const nickname = document.getElementById('input-nickname-register')
+        const name = document.getElementById('input-name-register')
+        const rol = document.getElementById('input-rol-register')
+        const password = document.getElementById('input-password-register')
+    
+    /**
+     * @type {User}
+     */
+    let user = {
+        email: getInputValue(email),
+        nickname: getInputValue(nickname),
+        name: getInputValue(name),
+        rol: getInputValue(rol),    
+        password: getInputValue(password),
+    }
+    const payload = JSON.stringify(user)
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/users?`, 'POST',payload);
+    console.log(apiData)
+    
+    userList.push(user)
+    console.log(userList)
 }
 
 function validateRegister() {
@@ -898,22 +980,38 @@ function validateRegister() {
     
     return formIsValid
 }
-function saveNewEventToLocalStorage (newEventList) {
-    localStorage.setItem('newEventList', JSON.stringify(newEventList));
+function saveUserListToLocalStorage(userList) {
+    localStorage.setItem('userList', JSON.stringify(userList));
 }
-
-function displayBasketCount () {
-    //const basketData = JSON.parse(localStorage.getItem('basket')) || [];
-    const basketElement = document.querySelector('.basket-counter');
-    basketElement.textContent = `BASKET (${basketCount})`
-    if(basketCount === 0) {
-     basketElement.innerText = "BASKET"
-    }
-    updateBasketCounter(basketElement)
+function updateSessionStorage(storeValue) {
+    sessionStorage.setItem('userList', JSON.stringify(storeValue))
 }
+/**
+ * Saves the current state of the store in local storage.
+ * Removes the user's data from the store before saving.
+ */
+function setLocalStorageFromStore() {
+    // Remove user data from store before saving
+    const storeState = store.getState()
+    delete storeState.user
+    updateLocalStorage(storeState)
+  }
+  /**
+ * Saves the current state of the store in session storage.
+ * Removes all data except the user data from the store before saving.
+ */
 
-
-async function onLoginFormSubmit(e){
+function setSessionStorageFromStore() {
+    // Remove unused data from store before saving
+    const storeState = store.getState()
+    delete storeState.articles
+    delete storeState.error
+    delete storeState.isLoading
+    delete storeState.route
+    updateSessionStorage(storeState)
+}
+//========================LOGIN===============================//
+async function onLoginFormSubmit(event){
     const emailElement = document.getElementById('email')
     const passwordElement = document.getElementById('password')
     const loginData = {
@@ -921,7 +1019,7 @@ async function onLoginFormSubmit(e){
       password: getInputValue(passwordElement)
     }
   
-    e.preventDefault()
+    event.preventDefault() 
   
     if (loginData.email !== '' && loginData.password !== '') {
       const apiData = await getAPIData(`http://${location.hostname}:${PORT}/read/users?`,'GET');
@@ -940,46 +1038,17 @@ async function onLoginFormSubmit(e){
         delete storeUserData.password
         // Login user
         store.user.login(storeUserData, setSessionStorageFromStore)
+        //CREATE ITS OWN PROFILE CARD
+        //createProfileCard(event)
         // Redirect to home
+        navigateTo('./profile.html')
       }
     }
+    
   }
-
-function saveUserListToLocalStorage(userList) {
-    localStorage.setItem('userList', JSON.stringify(userList));
-}
-
-function updateSessionStorage(storeValue) {
-    sessionStorage.setItem('userList', JSON.stringify(storeValue))
-  }
-/**
- * Saves the current state of the store in local storage.
- * Removes the user's data from the store before saving.
- */
-function setLocalStorageFromStore() {
-    // Remove user data from store before saving
-    const storeState = store.getState()
-    delete storeState.user
-    updateLocalStorage(storeState)
-  }
-
-/**
- * Saves the current state of the store in session storage.
- * Removes all data except the user data from the store before saving.
- */
-
-function setSessionStorageFromStore() {
-    // Remove unused data from store before saving
-    const storeState = store.getState()
-    delete storeState.articles
-    delete storeState.error
-    delete storeState.isLoading
-    delete storeState.route
-    updateSessionStorage(storeState)
-  }
-
+  
  /**
- * Retrieves the shopping list data from session storage.
+ * Retrieves the userList data from session storage.
  *
  * @returns {State} Saved state.
  * If no data is found, returns an empty State object.
@@ -994,10 +1063,7 @@ function getDataFromSessionStorage() {
     const defaultValue = JSON.stringify(INITIAL_STATE)
     return JSON.parse(sessionStorage.getItem('userList') || defaultValue)
   }
-
-/**
- * Check user login status
- */
+  
 function checkLoginStatus() {
     /** @type {State} */
     const storedData = getDataFromSessionStorage()
@@ -1008,6 +1074,45 @@ function checkLoginStatus() {
     }
 }
 
+//========================BACKEND================================//
+
+async function getAPIData(apiURL = 'api/get.events.json', method = 'GET' , data) {
+    let apiData
+  
+    try {
+        let headers = new Headers()
+
+        headers.append('Content-Type', 'application/json')
+        headers.append('Access-Control-Allow-Origin', '*')
+        if (data) {
+          headers.append('Content-Length', String(JSON.stringify(data).length))
+        }
+        apiData = await simpleFetch(apiURL, {
+          // Si la petición tarda demasiado, la abortamos
+          signal: AbortSignal.timeout(3000),
+          method: method,
+          body: data ?? undefined,
+          headers: headers
+        });
+      } catch (/** @type {any | HttpError} */err) {
+      if (err.name === 'AbortError') {
+        //console.error('Fetch abortado');
+      }
+      if (err instanceof HttpError) {
+        if (err.response.status === 404) {
+          //console.error('Not found');
+        }
+        if (err.response.status === 500) {
+          //console.error('Internal server error');
+        }
+      }
+    }
+    return apiData
+  }
+
+/**
+ * Check user login status
+ */
 export {
     getDataFromLocalStorage,
     setLocalStorageFromStore
