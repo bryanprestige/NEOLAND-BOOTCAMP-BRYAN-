@@ -82,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
 /*TO DO: DISPLAY EVENTS BOUGHT ON THE BASKET.HTML*/
-/*TO DO: CONNECT USERS REGISTERED AND LOGED IN AND CREATE THEIR PROFILE CARD*/   
+/*TO DO: RESTRICT PROFILE AND OPTIONS TO LOGGED IN USERS*/
+/*TO DO: */
+/*TO DO: */
 /*TO DO: MAKE EDIT EVENT BUTTON WORK*/
 /*TO DO: MAKE PUSH EVENT BUTTON WORK*/
 /*TO DO: FINISh STYLE OF THE BASKET PAGE*/
@@ -629,17 +631,23 @@ function cleanEventContainer() {
 }
 //========================PROFILE===============================//
 
-/**
- * @param {MouseEvent} event
- */
 
 async function displayProfile() {
+
     const storedData = getDataFromSessionStorage();
     const user = storedData.user;
     const nickname = user.nickname;
-  
+    
     const profileCard = createProfileCard(nickname);
     console.log(profileCard);
+    const newTitleForm = document.getElementById('main-title-form');
+    newTitleForm.innerText = 'Welcome to your own space';
+    
+    const newTitleEvent = document.getElementById('main-title-event');
+    newTitleEvent.innerText = 'Here you can see your favorite events and create your own event to promote!';
+
+    const showForm = document.getElementById('event-creator')
+    showForm.style.display = 'block';
   }
 
 function createProfileCard (nickname) {
@@ -721,6 +729,8 @@ function createFavButtonProfile() {
 
 function onClickSubmitButton(event) {
     event.preventDefault()
+    const newTitleEvent = document.getElementById('main-title-event');
+    newTitleEvent.innerText = 'Have a look at your new event, check it out befor pusblishing or edit it if you need!';
 
     if (validateForm() === false) {
         alert("Please ensure all fields are correctly filled before submitting.");
@@ -729,6 +739,7 @@ function onClickSubmitButton(event) {
      cleanEventContainer()   
      createNewEvent()
      createPreviewContainer(event)   
+
     }
 }
 
@@ -794,7 +805,7 @@ function createPreviewContainer(event) {
     const payload = JSON.stringify(newEvent[0])
     const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/events?`,'POST',payload);
     console.log(apiData)
-    //updateDefaultFeed()
+    
     })
     
 
@@ -1038,8 +1049,6 @@ async function onLoginFormSubmit(event){
         delete storeUserData.password
         // Login user
         store.user.login(storeUserData, setSessionStorageFromStore)
-        //CREATE ITS OWN PROFILE CARD
-        //createProfileCard(event)
         // Redirect to home
         navigateTo('./profile.html')
       }

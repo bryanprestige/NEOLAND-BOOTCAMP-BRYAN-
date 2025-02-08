@@ -2,7 +2,8 @@
     margin: 0;
     padding: 0;
 }
-body {    
+body {
+    max-width: 100%;    
     max-height: 100%;
     text-align: center;
 }
@@ -14,7 +15,7 @@ nav, ol, #header-container, .header-container-profile,
 .logo-log-register, #search-section, #profile-card-container {
     display: flex;
 }
-img, .app-logo, .main-title, span, form {
+img, .app-logo, #main-title-form,#main-title-event,.main-title, span, form {
     display: block;
 }
 #header-container, .header-container-profile, #profile-card-container {
@@ -23,27 +24,27 @@ img, .app-logo, .main-title, span, form {
 nav, ol {
     flex-direction: row;
 }
-nav, li, div,.main-title, form, #search-label {
+nav, li, div,#main-title-form,#main-title-event,.main-title, form, #search-label {
     font-size: 16px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
-.app-name, .main-title {
+.app-name, #main-title-form,#main-title-event,.main-title {
     font-size: 24px;
 }
-nav, ol, .app-name, .main-title, form {
+nav, ol, .app-name, #main-title-form,#main-title-event, .main-title,  form {
     font-weight: bold;
 }
 div, li, #header-container,.header-container-profile, #profile-card-container {
     background-color: #F7BC47;
 }
 
-li, :link ,div, .main-title, form, #search-section, #search-label{
+li, :link ,div, #main-title-form,#main-title-event,.main-title,  form, #search-section, #search-label{
     color: #243D4B;
 }
 li, div {
     cursor: pointer;
 }
-a, .main-title, input, select{
+a, #main-title-form,#main-title-event,.main-title,  input, select{
     border-radius: 20px;
 }
 li, div{
@@ -79,18 +80,20 @@ img {
 
 .app-name {
     flex-grow: 1;
-    margin:  auto;
+    margin: auto 0;
     padding: 22px;
-    width: 1250px;
+    width: 1280px
 }
 .logo-log-register {
     gap: 5px;
+    margin: auto;
+    justify-content: end;
 }
 .app-logo{
     width: 100px;
     margin: -20px ;
 }
-.main-title {
+#main-title-form,#main-title-event,.main-title  {
     width: 50%;
     justify-content: flex-start;
     margin: auto;
@@ -340,6 +343,10 @@ input, select {
 }
 
 /*=====PROFILE STYLES======*/
+#event-creator {
+    display: none;
+}
+
 #event-form, .preview-container, #event-fieldset {
     display: flex;
 }
@@ -369,7 +376,6 @@ input, select {
     margin: auto;
     border-radius: 20px;
 }
-
 
 .profile-card {
     margin: 0px auto;
