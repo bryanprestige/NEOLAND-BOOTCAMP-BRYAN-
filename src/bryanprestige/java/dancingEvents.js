@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const editEventProfile = document.getElementById('edit-event-button')
         editEventProfile?.addEventListener('click',displayEditForm)
         */
-       
 
         document.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', validateForm);
@@ -71,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Evento de clic para el botón de búsqueda
         searchButton?.addEventListener('click', onSearchClick);
         // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
-        const eventContainer = document.querySelector('.event-container');
-        eventContainer?.addEventListener('click', onFilterButtonClick);
+        //const eventContainer = document.querySelector('.event-container');
+        //eventContainer?.addEventListener('click', onFilterButtonClick);
 
         const favoriteButton = document.getElementById('favorite-button');
         favoriteButton?.addEventListener('click', displayFavoriteEvents);        
@@ -82,12 +81,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
 /*TO DO: DISPLAY EVENTS BOUGHT ON THE BASKET.HTML*/
-/*TO DO: RESTRICT PROFILE AND OPTIONS TO LOGGED IN USERS*/
-/*TO DO: */
-/*TO DO: */
-/*TO DO: MAKE EDIT EVENT BUTTON WORK*/
-/*TO DO: MAKE PUSH EVENT BUTTON WORK*/
 /*TO DO: FINISh STYLE OF THE BASKET PAGE*/
+
+/*TO DO: RESTRICT PROFILE AND OPTIONS TO LOGGED IN USERS*/
+/*TO DO: SHOW LOG OUT BUTTON INSTEAD OF LOG IN BUTTON WHEN USER IS LOGGED IN*/
+
+/*TO DO: FILTRADO POR FECHA, BUSQUEDA DE FECHA EXACTA Y FILTRO ENTRE DOS FECHAS*/
+/*TO DO: FIX ON SEARCH CLICK NOEVENT()*/
+/*TO DO: MAKE REMOVE EVENT IN MY EVENTS SECTION*/
+
+/*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
+/*TO DO: MAKE EDIT EVENT BUTTON WORK*/
+/*TO DO: CREATE ALL THE EVEETS ASSOCIATED TO THE USERS*/
+/*TO DO: EDIT WITH DISPLAY OF EDIT FORM AND WORKING*/
 
 
 //====================FEED=====================//
@@ -103,7 +109,7 @@ async function onSearchClick(event) {
 
     const eventContainer = document.querySelector('.event-container');
 
-    if (apiData.length === 0) { 
+    if (searchField.length === !apiData) { 
         noEventFound()
     } else {
         cleanEventContainer()
@@ -121,12 +127,13 @@ async function onFilterButtonClick(e) {
     const filterValue = target?.textContent?.toLowerCase();  
     
     const apiData = await getAPIData(`http://${location.hostname}:${PORT}/filter/events/${filterValue}`);
-    
+    /*
     if (!(target instanceof HTMLButtonElement) ||
         target.classList.contains('remove-button') ||
         target.classList.contains('favorite-button') ||
+        target.classList.contains('instagram-img') ||
         target.classList.contains('buy-button')) 
-        return;
+        return;*/
     if (!apiData) return;
     const eventContainer = document.querySelector('.event-container');
     if (!eventContainer) return;
@@ -160,7 +167,7 @@ function displayFavoriteEvents(event) {
     event.preventDefault(); 
     const eventContainer = document.querySelector('.event-container');
     let favList = JSON.parse(localStorage.getItem('favList')) || [];
-
+  
     if (favList.length === 0) {
         noEventFound()
      } else {
@@ -174,8 +181,11 @@ function displayFavoriteEvents(event) {
      if (previewContainer) {
        previewContainer.remove();
     }
+    const showForm = document.getElementById('event-creator')
+    if (showForm) {
+        showForm.style.display = 'none';
+    }
 }
-
 
 /**
  * @param {Event} event 
@@ -191,6 +201,8 @@ function createEventCardWithAnimation(event, container)     {
     
     container.appendChild(card);
     loadBasketFromLocalStorage()
+    
+    return card;
 }
 /**
  * 
@@ -220,13 +232,27 @@ function createLeftColumn(event, card) {
     leftColumn.className = 'left-column';
     
     const image = createImageElement(event.name);
+    const instagramAnchor = createInstagramAnchor(event);
     const nameFav = createNameFavElement(event);
-    const address = createElementWithText('h1', 'address', event.address);
+    const priceCurrency = createPriceCurrencyElement(event);
     const buyButton = createBuyButton(card, event);
     
-    leftColumn.append(image, nameFav, address, buyButton);
+    leftColumn.append(image,instagramAnchor, nameFav, priceCurrency,buyButton);
     
     return leftColumn;
+}
+
+function createInstagramAnchor(event) {
+    const instagramAnchor = document.createElement('a');
+    instagramAnchor.className = 'instagram-anchor';
+    instagramAnchor.href = event.url;
+    instagramAnchor.innerHTML = '<img src="./imagenes/instagram.png" alt="instagram" class="instagram-img">';
+    instagramAnchor.target = '_blank';
+
+    if (!event.url || event.url.trim() === "") {
+        instagramAnchor.style.display = 'none';
+    }
+    return instagramAnchor;
 }
 /**
  * 
@@ -238,12 +264,15 @@ function createRightColumn(event) {
     rightColumn.className = 'right-column';
     
     const reviews = createElementWithText('div', 'reviews-placeholder', 'Reviews Placeholder');
-    const priceCurrency = createPriceCurrencyElement(event);
+    const venue = createElementWithText('h1', 'venue', event.venue);
+
     const date = createElementWithText('h1', 'date-time', event.dateTime);
     const musicRatio = createMusicRatioElement(event.music);
-    const typeCity = createTypeCityElement(event);
-    
-    rightColumn.append(reviews, priceCurrency, date, musicRatio, typeCity);
+    const cityCountry = createCityCountryElement(event);
+    const dance = createButtonWithStyle('button-dance-type', event.dance, getDanceTypeColor(event.dance));
+    dance.addEventListener('click', onFilterButtonClick);
+
+    rightColumn.append(reviews,venue, date, musicRatio, cityCountry,dance);
     
     return rightColumn;
 }
@@ -299,7 +328,7 @@ function createFavButton(event) {
 function createBuyButton(card, event) {
     const buyButton = document.createElement('button');
     buyButton.className = 'buy-button';
-    buyButton.innerHTML = '<img src="./imagenes/shop.png" alt="shop" id="shop-img">';
+    buyButton.innerHTML = '<img src="./imagenes/shop.png" alt="shop" class="shop-img">';
 
 
     const basketElement = document.querySelector('.basket-counter');
@@ -402,16 +431,20 @@ function createMusicRatioElement(music) {
 /**
  * @param {object} event    
  */
-function createTypeCityElement(event) {
-    const typeCity = document.createElement('div');
-    typeCity.className = 'type-city';
-
-    const buttonType = createButtonWithStyle('button-dance-type', event.dance, getDanceTypeColor(event.dance));
+function createCityCountryElement(event) {
+    const cityCountry = document.createElement('div');
+    cityCountry.className = 'city-country';
+    
     const buttonCity = createElementWithText('button', 'button-city', event.city);
+    buttonCity.addEventListener('click', onFilterButtonClick);
 
-    typeCity.append(buttonType, buttonCity);
-    return typeCity;
+    const buttonCountry = createElementWithText('button', 'button-country', event.country);
+    buttonCountry.addEventListener('click', onFilterButtonClick);
+
+    cityCountry.append(buttonCity, buttonCountry);
+    return cityCountry;
 }
+
 /**
  * @param {string} className
  * @param {string} textContent
@@ -646,8 +679,6 @@ async function displayProfile() {
     const newTitleEvent = document.getElementById('main-title-event');
     newTitleEvent.innerText = 'Here you can see your favorite events and create your own event to promote!';
 
-    const showForm = document.getElementById('event-creator')
-    showForm.style.display = 'block';
   }
 
 function createProfileCard (nickname) {
@@ -682,8 +713,9 @@ function createProfileInfo(nickname,cardContainer) {
     company.innerText = 'Team Academy';
 
     const editFavProfile = createEditFavProfile(cardContainer);
+    const createMyEventsProfile = createCreateMyEventsButton(cardContainer);
 
-    profileInfo.append(userNickname,bio,company,editFavProfile);
+    profileInfo.append(userNickname,bio,company,editFavProfile,createMyEventsProfile);
     return profileInfo
 }
 
@@ -695,7 +727,6 @@ function createEditFavProfile(user) {
     const editProfileButton = createEditProfileButton(user);
     const favButtonProfile = createFavButtonProfile(user);
 
-    
     editFavProfile.append(editProfileButton,favButtonProfile);
     return editFavProfile
 }
@@ -727,10 +758,108 @@ function createFavButtonProfile() {
     return favButtonProfile
 }
 
+function createCreateMyEventsButton(event) {
+    const createMyEventsProfile  = document.createElement('div');
+    createMyEventsProfile.className = 'create-myEvents-profile';
+
+  
+    const createEventsButton = createCreateEventsButton(event);
+    const myEventsButton = createMyEventsButton(event);
+
+    createMyEventsProfile.append(createEventsButton,myEventsButton);
+    return createMyEventsProfile
+}
+
+function createMyEventsButton() {
+    const myEventsButton = document.createElement('button');
+    myEventsButton.id = 'my-events-button';
+    myEventsButton.textContent = 'My Events';
+    myEventsButton?.addEventListener('click',displayMyEvents)
+
+    return myEventsButton
+}
+
+async function displayMyEvents(e) {
+    e.preventDefault();
+    hideCreateEvents()
+
+    const eventContainer = document.querySelector('.event-container');
+    const getUserId = getDataFromSessionStorage();
+    const user = getUserId.user;
+    const userId = user._id;
+    console.log(userId)
+
+    const filterValue = userId;  
+    
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/filter/events/${filterValue}`);
+
+    if (!apiData) {
+        noEventFound()
+     } else {
+        cleanEventContainer() 
+         apiData.forEach(e => {
+            const myEventCard = createEventCardWithAnimation(e, eventContainer);
+            const rightColumnFind = myEventCard.querySelector('.right-column');
+            const removeEventButton = createRemoveEventButton(e);
+            console.log(removeEventButton)
+            rightColumnFind.appendChild(removeEventButton);
+            });
+        }  
+
+        const previewContainer = document.querySelector('.preview-container');
+        if (previewContainer) {
+          previewContainer.remove();
+       }    
+}
+
+function createRemoveEventButton(e) {
+
+    const removeEventButton = document.createElement('button');
+    removeEventButton.className = 'remove-event-button';
+    removeEventButton.textContent = 'Remove Event';
+    let eventId = e._id;
+    console.log(eventId)
+    
+    removeEventButton?.addEventListener('click', () => {
+        removeEvent(eventId);
+    });
+
+    return removeEventButton
+}
+
+async function removeEvent (eventId) {
+    console.log('remove event')
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/delete/event/${eventId}`,'DELETE');
+    console.log(apiData)
+    alert('Event removed successfully')
+} 
+
+function createCreateEventsButton() {
+    const createEventsButton = document.createElement('button');
+    createEventsButton.id = 'create-events-button';
+    createEventsButton.textContent = 'Create Events';
+    createEventsButton?.addEventListener('click',displayCreateEvents)
+
+    return createEventsButton
+}
+
+function hideCreateEvents () {
+    cleanEventContainer()
+    const hideForm = document.getElementById('event-creator')
+    hideForm.style.display = 'none';
+}
+
+function displayCreateEvents () {
+    cleanEventContainer()
+    const showForm = document.getElementById('event-creator')
+    showForm.style.display = 'block';
+}
+
 function onClickSubmitButton(event) {
     event.preventDefault()
+    hideCreateEvents()
     const newTitleEvent = document.getElementById('main-title-event');
-    newTitleEvent.innerText = 'Have a look at your new event, check it out befor pusblishing or edit it if you need!';
+    newTitleEvent.innerText = 'Have a look at your new event, check it out before pusblishing or edit it if you need!';
 
     if (validateForm() === false) {
         alert("Please ensure all fields are correctly filled before submitting.");
@@ -739,36 +868,46 @@ function onClickSubmitButton(event) {
      cleanEventContainer()   
      createNewEvent()
      createPreviewContainer(event)   
-
     }
 }
 
 async function createNewEvent () {
     //const flyer = document.getElementById('subtmit-flyer')
     const name = document.getElementById('input-event-name')
-    const address = document.getElementById('input-address')
+    const venue = document.getElementById('input-venue')    
     const dateTime = document.getElementById('input-dateTime')
     const price = document.getElementById('input-price')
     const currency = document.getElementById('input-currency')
     const music = document.getElementById('input-music-ratio')
+    const country = document.getElementById('input-country')
     const city = document.getElementById('input-city')
     const dance = document.getElementById('input-dance')
+    const url = document.getElementById('input-url')
     const eventContainer = document.querySelector('.event-container');
     
+    const getUserId = getDataFromSessionStorage();
+    console.log(getUserId)
+    const user = getUserId.user;
+    const userId = user._id;
+
     /**
      * @type {Event}
      */
     let event = {
         //flyer: getInputValue(flyer),
         name: getInputValue(name),
-        address: getInputValue(address),
+        venue: getInputValue(venue),
         dateTime: getInputValue(dateTime),
         price: getInputValue(price),
         currency: getInputValue(currency),
         music: getInputValue(music),
         city: getInputValue(city),
+        country: getInputValue(country),
         dance: getInputValue(dance),
+        url: getInputValue(url),
+        user_id: userId
     }
+    console.log(event)
     newEventList.push(event)
     saveNewEventToLocalStorage(newEventList)
     createEventCardWithAnimation(event, eventContainer)
@@ -794,24 +933,31 @@ function createPreviewContainer(event) {
 }}
 
  function createPublishButton() {
-
-    const publishButton = document.createElement('button')
-    publishButton.className = 'publish-button'
-    publishButton.innerText = 'PUBLISH'
-    
-    publishButton.addEventListener('click', async () => {  
+     
+     const newTitleEvent = document.getElementById('main-title-event');
+     
+     const publishButton = document.createElement('button')
+     publishButton.className = 'publish-button'
+     publishButton.innerText = 'PUBLISH'
+     
+     publishButton.addEventListener('click', async () => {  
+         cleanEventContainer()
+         hidePreviewContainer()
     let newEvent = JSON.parse(localStorage.getItem('newEventList')); 
-    console.log(newEvent)
-    const payload = JSON.stringify(newEvent[0])
-    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/events?`,'POST',payload);
-    console.log(apiData)
     
+    const payload = JSON.stringify(newEvent[0])
+    const apiData = await getAPIData(`http://${location.hostname}:${PORT}/create/event?`,'POST',payload);
+    console.log('this is the data',apiData)
+    newTitleEvent.innerText = 'Now you can go to the feed, everybody can see your event! Thanks for contributing to the dance community!';
     })
     
-
     return publishButton
 }
 
+function hidePreviewContainer () {
+    let previewContainer = document.querySelector('.preview-container'); 
+    document.body.removeChild(previewContainer);
+}
 function createEditButton() {
     const editButton = document.createElement('button')
     editButton.className = 'edit-event-button'
@@ -842,31 +988,33 @@ function hideForm () {
 function validateForm() {
     let formIsValid = false;
     const name = document.getElementById('input-event-name');
-    const address = document.getElementById('input-address');
+    const venue = document.getElementById('input-venue');
     const date = document.getElementById('input-date');
     const time = document.getElementById('input-time');
     const price = document.getElementById('input-price');
     const currency = document.getElementById('input-currency');
     const music = document.getElementById('input-music-ratio');
     const city = document.getElementById('input-city');
+    const country = document.getElementById('input-country');
     const dance = document.getElementById('input-dance');
   
     const submitButton = document.getElementById('submit-button');
 
-    const fields = [name, address, date, time, price, currency, music, city, dance];
+    const fields = [name, venue, date, time, price, currency, music, city,country, dance];
     formIsValid = fields.every(field => field?.value.trim() !== '');
 
     submitButton.disabled = !formIsValid;
 
     const fieldsEmpty = [
         'input-event-name',
-        'input-address',
+        'input-venue',
         'input-date',
         'input-time',
         'input-price',
         'input-currency',
         'input-music-ratio',
         'input-city',
+        'input-country',
         'input-dance',
     ].map(id => document.getElementById(id));
 
@@ -1012,15 +1160,6 @@ function setLocalStorageFromStore() {
  * Removes all data except the user data from the store before saving.
  */
 
-function setSessionStorageFromStore() {
-    // Remove unused data from store before saving
-    const storeState = store.getState()
-    delete storeState.articles
-    delete storeState.error
-    delete storeState.isLoading
-    delete storeState.route
-    updateSessionStorage(storeState)
-}
 //========================LOGIN===============================//
 async function onLoginFormSubmit(event){
     const emailElement = document.getElementById('email')
@@ -1033,28 +1172,30 @@ async function onLoginFormSubmit(event){
     event.preventDefault() 
   
     if (loginData.email !== '' && loginData.password !== '') {
-      const apiData = await getAPIData(`http://${location.hostname}:${PORT}/read/users?`,'GET');
+        const payload = JSON.stringify(loginData)
 
-      let userData = apiData.find((itemData) => {
-        const user = /** @type {User} */(itemData)
-  
-        return user.email === loginData.email && user.password === loginData.password
-      })
-  
-      if (!userData) {
-        // Show error
-        alert('El usuario no existe')
-      } else {
-        const storeUserData = /** @type {User} */(userData)
-        delete storeUserData.password
-        // Login user
-        store.user.login(storeUserData, setSessionStorageFromStore)
-        // Redirect to home
-        navigateTo('./profile.html')
-      }
+        const apiData = await getAPIData(`http://${location.hostname}:${PORT}/login`,'POST', payload);
+        
+        if (!apiData) {
+            //show error
+            alert('user dont exist')
+        } else {
+            if ('_id' in apiData
+                && 'email' in apiData
+                && 'nickname' in apiData
+                && 'name' in apiData
+                && 'rol' in apiData
+                && 'token' in apiData
+                ) {
+                    const userData = /** @type {User} */(apiData)
+                    updateSessionStorage({ user: userData })
+                    navigateTo('./profile.html')
+            } else {
+                alert('Invalid user data')
+            }
+        }
     }
-    
-  }
+}    
   
  /**
  * Retrieves the userList data from session storage.
@@ -1085,7 +1226,7 @@ function checkLoginStatus() {
 
 //========================BACKEND================================//
 
-async function getAPIData(apiURL = 'api/get.events.json', method = 'GET' , data) {
+async function getAPIData(apiURL, method = 'GET' , data) {
     let apiData
   
     try {
@@ -1096,6 +1237,11 @@ async function getAPIData(apiURL = 'api/get.events.json', method = 'GET' , data)
         if (data) {
           headers.append('Content-Length', String(JSON.stringify(data).length))
         }
+
+        if (isUserLoggedIn()) {
+            const userData = getDataFromSessionStorage()
+            headers.append('Authorization', `Bearer ${userData?.user?.token}`)
+          }
         apiData = await simpleFetch(apiURL, {
           // Si la petición tarda demasiado, la abortamos
           signal: AbortSignal.timeout(3000),
@@ -1117,6 +1263,11 @@ async function getAPIData(apiURL = 'api/get.events.json', method = 'GET' , data)
       }
     }
     return apiData
+  }
+
+  function isUserLoggedIn() {
+    const userData = getDataFromSessionStorage()
+    return userData?.user?.token
   }
 
 /**

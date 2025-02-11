@@ -93,11 +93,6 @@ const ACTION_TYPES = {
     let currentState = INITIAL_STATE
     let currentReducer = reducer
 
- // ACTIONS EVENTS //
-
-    
-
-    /// PUBLIC METHODS EVENTS ///
     const getState = () => { return currentState };
 
             
@@ -120,10 +115,10 @@ const ACTION_TYPES = {
   const logout = (onEventDispatched) => _dispatch({ type: ACTION_TYPES.LOGOUT }, onEventDispatched)
     /**
      * 
-     * @param {string} id 
+     * @param {string} _id 
      * @returns {User}
      */
-    const getUserById = (id) => { return currentState.users.find((/**@type {User} */ user) => user.id === id)}
+    const getUserById = (_id) => { return currentState.users.find((/**@type {User} */ user) => user._id === _id)}
    
      /**
      * @param {string} searchField
