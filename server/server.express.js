@@ -1,11 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { crud } from "./server.crud.js";
+import { db } from "./server.mongodb.js";
+import { gooogleOauth2 } from './server.oauth.js';
 
 const app = express();
 const port = process.env.port
-const EVENTS_URL = './server/BBDD/events.json'
-const USERS_URL = './server/BBDD/users.json'
 
 //let chunks = []
 //et responseData = []
@@ -17,60 +16,73 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // CRUD EVENTS
-app.post('/create/events', (req, res) => {
-    crud.create(EVENTS_URL, req.body, (data) => {
-      res.json(data)
-    });
-  })
-  app.get('/read/events', (req, res) => {
-    crud.read(EVENTS_URL, (data) => {
-      res.json(data)
-    });
-  })
-  app.put('/update/events/:id', (req, res) => {
-    crud.update(EVENTS_URL, req.params.id, req.body, (data) => {
-      res.json(data)
-    });
-  })
-  app.delete('/delete/events/:id', async (req, res) => {
-    await crud.delete(EVENTS_URL, req.params.id, (data) => {
-      res.json(data)
-    });
-  })
+app.post('/create/event', async (req, res) => {  
+res.json(await db.events.create(req.body))
+})
 
-  app.get('/filter/events/:search', (req, res) => {
-    crud.filter(EVENTS_URL,{search:req.params.search}, (data) => {
-      res.json(data)
-    });
-  })
+app.get('/read/events', async (req, res) => {
+  res.json(await db.events.get())
+})
+app.put('/update/events/:id',requireAuth, async (req, res) => {
+  res.json(await db.events.update(req.params.id, req.body))
+})
+
+app.delete('/delete/event/:id', async (req, res) => {
+    res.json(await db.events.delete(req.params.id))
+})
+
+app.get('/filter/events/:name', async (req, res) => {
+  res.json(await db.events.filter({$text: {$search: req.params.name}}))
+}) 
   
   // CRUD USERS
-app.post('/create/users', (req, res) => {
-    crud.create(USERS_URL, req.body, (data) => {
-      res.json(data)
-    });
-  })
-  app.get('/read/users', (req, res) => {
-    crud.read(USERS_URL, (data) => {
-      res.json(data)
-    });
-  })
-  app.put('/update/users/:id', (req, res) => {
-    crud.update(USERS_URL, req.params.id, req.body, (data) => {
-      res.json(data)
-    });
-  })
-  app.delete('/delete/users/:id', async (req, res) => {
-    await crud.delete(USERS_URL, req.params.id, (data) => {
-      res.json(data)
-    });
-  })
+app.post('/create/users', async (req, res) => {  
+  res.json(await db.users.create(req.body))
+})
 
-  app.get('/filter/users', (req, res) => {
-    crud.filter(USERS_URL,req.body, (data) => {
-      res.json(data)
-    });
-  })
+app.get('/read/users', async (req, res) => {
+  res.json(await db.users.get());
+    
+})
+
+app.put('/update/users/:id', async (req, res) => {
+  res.json(await db.users.update(req.params.id, req.body))
+})
+
+app.delete('/delete/user/:id', async (req, res) => {
+  res.json(await db.users.delete(req.params.id))
+}) 
+
+app.get('/filter/users/:nickname', async (req, res) => {
+  res.json(await db.events.filter({$text: {$search: req.params.nickname}}))
+})
+
+app.post('/login', async (req, res) => {
+  const user = await db.users.logIn(req.body)
+  if (user) {
+    // TODO: use OAuth2
+    // ...
+    // Simulation of authentication (OAuth2)
+    user.token = gooogleOauth2()
+    // Remove password
+    delete user.password
+    res.json(user)
+  } else {
+    // Unauthorized
+    res.status(401).send('Unauthorized')
+  }
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+function requireAuth(req, res, next) {
+  // Simulation of authentication (OAuth2)
+  if (req.headers.authorization === 'Bearer 123456') {
+    next()
+  } else {
+    // Unauthorized
+    res.status(401).send('Unauthorized')
+  }
+}

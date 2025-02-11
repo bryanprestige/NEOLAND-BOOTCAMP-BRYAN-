@@ -7,9 +7,12 @@ body {
     max-height: 100%;
     text-align: center;
 }
-body, nav, ol, .logo-log-register,#header-container, .header-container-profile,
-form {
+.header-container-profile,#header-container,nav {
     width: 100%;
+}
+body, ol, .logo-log-register,
+form {
+    width: fit-content;
 } 
 nav, ol, #header-container, .header-container-profile,
 .logo-log-register, #search-section, #profile-card-container {
@@ -80,9 +83,10 @@ img {
 
 .app-name {
     flex-grow: 1;
-    margin: auto 0;
+    margin: auto 0 ;
     padding: 22px;
-    width: 1280px
+    width: fit-content;
+
 }
 .logo-log-register {
     gap: 5px;
@@ -94,21 +98,24 @@ img {
     margin: -20px ;
 }
 #main-title-form,#main-title-event,.main-title  {
-    width: 50%;
+    width: fit-content;
     justify-content: flex-start;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
 }
+#profile-card-container, .header-container-profile {
+    border-bottom: solid 1px #243D4B;
+}
+
 form {
     justify-content: center;
     flex-direction: column;
     margin-bottom: 20px;
-    margin: auto;   
+    margin: auto   
 }
 #search-section {
-    width: 30%;
-    justify-content:center;
+    width: fit-content;
     padding: 20px;
     margin: auto;
     margin-top: 20px;
@@ -126,7 +133,7 @@ input, select {
     text-align: center;
 }
 /*======EVENTS======*/
-.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .type-city, .name-fav,
+.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .city-country, .name-fav,
 .reviews-placeholder    {
     display: flex;
 }
@@ -134,17 +141,17 @@ input, select {
  .login-button, .register, .remove-button, .name {
     width: 100%;
 }
-.event-card,#event-form,.left-column, .right-column, .fav-button, .type-city, .time-price, .name-fav  {
+.event-card,#event-form,.left-column, .right-column, .fav-button, .city-country, .time-price, .name-fav  {
     background-color: white;
 }
 .event-card,#event-form,.left-column, .right-column {
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
 }
-.event-image,.reviews-placeholder,.name, .address,.time, .currency,
-.button-dance-type, .button-city,.date, .time, .price, .event-card,#event-form{
+.event-image,.reviews-placeholder,.name, .venue,.time, .currency,
+.button-dance-type, .button-city,.button-country,.date, .time, .price, .event-card,#event-form{
     border-radius: 10px;
 }
-.left-column, .right-column, .reviews-placeholder, .time-price, .type-city, .name-fav,.fav-button{
+.left-column, .right-column, .reviews-placeholder, .time-price, .city-country, .name-fav,.fav-button{
     border: none;
 }
 .event-container,.event-card,#event-form {
@@ -189,47 +196,53 @@ input, select {
     color: #666;
 }
 
-.price-currency, .type-city, .name-fav {
+.price-currency, .city-country, .name-fav {
     justify-content: space-between;
     gap: 5px; 
 }
 .music-ratio,.music-ratio.single-style,.music-ratio.three-styles,.music-ratio.two-styles,
-.button-dance-type, .button-city, .name, .time, .price,.currency, .address,.date-time {
+.button-dance-type, .button-city,.button-country, .name, .time, .price,.currency, .venue,.date-time {
     font-family: 'Roboto', sans-serif; 
     font-size: 1rem;
     letter-spacing: 0.5px; 
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.time, .price, .date-time, .button-dance-type, .button-city, .music-ratio, .address, .name {
+.time, .price, .date-time, .button-dance-type, .button-city,.button-country, .music-ratio, .venue, .name {
     background-color:#243D4B;
     color: #F7BC47;
 }
-.time, .price, .button-dance-type, .button-city,.date {
+.time, .price, .button-dance-type, .button-city,.button-country,.date {
     flex: 1; 
     font-weight: bold;
 }
-.name, .address,.time, .price, .currency{
+.name, .venue,.time, .price, .currency{
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
 }
-.name, .address {
+.name, .venue {
     padding: 10px 15px; 
+}
+
+.name-fav {
+margin-bottom: -10px;;
 }
 /*=====BUTTONS=====*/
 #search-button,.buy-button, #submit-button, .login-button,.register,
-.remove-button, .button-dance-type, .button-city, .edit-event-button,
-.publish-button,.fav-button, #favorite-button, .address, .name,
- .music-ratio,#edit-profile-button, #fav-button-profile {
+.remove-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
+.publish-button,.fav-button, #favorite-button, .venue, .name,
+ .music-ratio,#edit-profile-button, #fav-button-profile, #my-events-button,
+ #create-events-button  {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
     border-radius: 10px;
     font-weight: bold;
 }
-.remove-button:hover, .button-dance-type:hover, .button-city:hover,
+.remove-button:hover, .button-dance-type:hover, .button-city:hover,.button-country:hover,
 #search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
 .publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
-#favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover {
+#favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover, #my-events-button:hover,
+#create-events-button:hover  {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -237,7 +250,7 @@ input, select {
     padding: 5px 10px;
 }
 #search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button,
-#edit-profile-button, #fav-button-profile {
+#edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button  {
     background-color: #F7BC47;
 }
 .login-button, .register, .remove-button, .edit-event-button, .publish-button  {
@@ -250,9 +263,9 @@ input, select {
     margin-top: 15px;
     color: #F7BC47;
 }
-.button-dance-type, .button-city {
+.button-dance-type, .button-city,.button-country {
     border: none;
-    width: 48%;
+    width: 50%;
     padding: 8px 12px;
 }
 .edit-event-button, .publish-button {
@@ -261,25 +274,31 @@ input, select {
 }
 .button-dance-type{
     color: black;
+    width: 100%;
 }
-#favorite-button, #edit-profile-button{
+#favorite-button, #edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button {
     padding: 5px 10px;
 }
 .fav-button {
     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    width: fit-content;
+}
+
+.fav-button:hover{
+    transform: scale(1.1); 
+}
+#my-events-button, #create-events-button {
+    width: fit-content;
 }
 .favorited {
     transform: scale(1.1);
     animation: pop 0.3s ease-in-out;
     background-color: rgb(230, 158, 158);
 }
-.fav-button:hover{
-    transform: scale(1.1); 
-}
-.type-city, .time-price, .name,.address, .music-ratio{
+.city-country, .time-price, .name,.venue, .music-ratio{
     padding: 10px;
 }
-.type-city, .time-price {
+.city-country, .time-price {
     margin: 0px;
 }
 .name {
@@ -288,9 +307,16 @@ input, select {
 .error-img{
     width: 600px;
 }
-#shop-img {
+.shop-img {
     width: 30px;
     margin-top: 0px;
+}
+
+.instagram-img {
+    width: 30px;     
+    margin: auto;
+    margin-bottom: -15px;
+
 }
 /*=====MUSIC RATIO STYLES======*/
 .music-ratio {
@@ -379,8 +405,8 @@ input, select {
 
 .profile-card {
     margin: 0px auto;
-    width: 30%;
-    height: 220px;
+    width: 40%;
+    height: 240px;
     display: flex;
     padding: 15px;
     background: #1D3557;
@@ -397,7 +423,7 @@ input, select {
 }
 
 .profile-info{
-    width: 100%;
+    width: fit-content;
     height: 90%;
     margin: auto;
     text-align:start;
@@ -413,9 +439,11 @@ input, select {
     border-radius: 10px;
 }
 
-.edit-fav-profile{
+.edit-fav-profile, .create-myEvents-profile{
     display: flex;
-    justify-content: space-around;
+    width: fit-content;
+    gap: 5px;
+    justify-content: space-between;
     background-color: white;
     border: none;
 }

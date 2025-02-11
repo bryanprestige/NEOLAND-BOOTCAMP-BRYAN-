@@ -65,7 +65,10 @@
         <h1 id="main-title-form">THIS COULD BE YOUR OWN SPACE</h1>
     </section>
     <section class="header-container-profile">
-        <h1 id="main-title-event">HERE YOU COULD SEE YOUR FAVORITES EVENTS</h1>
+        <h1 id="main-title-event">
+            HERE YOU COULD SEE YOUR FAVORITES EVENTS.
+            REGISTER OR LOG IN TO ENJOY THE FULL DANCING EXCHANGE EXPERIENCE!
+        </h1>
     </section>
     <section class="event-container">
     </section>
@@ -77,8 +80,10 @@
                     <label> Submit your flyer</label>
                     <input type="file" id="submit-flyer" name="filename">
                     <input type="text" name="input-event-name" id="input-event-name" placeholder="Name of the event" required>
-                    <input type="text" name="input-address" id="input-address" placeholder="Address" required>
-                    <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="2017-06-01T08:30" required>
+                    <input type="text" name="input-venue" id="input-venue" placeholder="Venue" required>
+                    <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="2025-02-10T08:30" required>
+                    <input type="url" id="input-url" placeholder="instagram-url">
+
                 </div>
                 <div class="right-column">
                     <input type="number" name="input-price" id="input-price" placeholder="Price" max="1000" required>
@@ -97,6 +102,7 @@
                     </select>
                     <input type="text" name="input-music-ratio" id="input-music-ratio" placeholder="Music Ratio" required>
                     <input type="text" name="input-city" id="input-city" placeholder="City" required>
+                    <input type="text" name="input-country" id="input-country" placeholder="country" required>
                     <input type="text" name="input-dance" id="input-dance" placeholder="Dance" required>
                     <button type="submit" name="submit-button" id="submit-button">Submit</button>
                 </div>
