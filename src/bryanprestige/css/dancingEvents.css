@@ -406,7 +406,7 @@ margin-bottom: -10px;;
 .profile-card {
     margin: 0px auto;
     width: 40%;
-    height: 240px;
+    height: max-content;
     display: flex;
     padding: 15px;
     background: #1D3557;
@@ -423,8 +423,8 @@ margin-bottom: -10px;;
 }
 
 .profile-info{
-    width: fit-content;
-    height: 90%;
+    width: max-content;
+    height: max-content;
     margin: auto;
     text-align:start;
     font-size: 1.2rem;
@@ -492,6 +492,10 @@ label {
     background-color:#243D4B;
     width: 100%;
     font-size: 16px;
+}
+
+#edit-form-container {
+    display: none;
 }
 /*=====REGISTER STYLES=====*/
 .register-container {
