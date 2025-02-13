@@ -15,7 +15,7 @@ export const db = {
         get: getUsers,
         update: updateUser,
         delete: deleteUser,
-        filter: filterUsers,
+        filterById: filterUsersById,
         count: countUsers,
         logIn: logInUser
     }
@@ -94,14 +94,17 @@ async function logInUser({email, password}) {
 /**
  * Filter the events from the database
  * 
- * @param {object} [filter]  - filter to apply to the evetns
- * @returns {Promise<Array<object>>} - the array of the event
+ * @param {string} id  - filter to apply to the users
+ * @returns {Promise<Array<object>>} - the array of the user
  */
-async function filterUsers(filter){
+async function filterUsersById(id){
     const client = new MongoClient(URI);
     const dancingEventsDB = client.db('dancingEvents');
-    const eventsCollection = dancingEventsDB.collection('users');
-    return await  eventsCollection.find(filter).toArray();
+    const usersCollection = dancingEventsDB.collection('users');
+    const returnValue = await usersCollection.findOne({ _id: new ObjectId(id) });
+    console.log('db filter user', returnValue, id)
+    return  returnValue
+
 }
 
 /*=========EVENTS=======*/
@@ -138,16 +141,16 @@ async function getEvents(filter){
 /**
  * Updates an article in the 'articles' collection in the 'shoppingList' database.
  *
- * @param {string} id - The ID of the article to be updated.
- * @param {object} updates - The fields and new values to update the article with.
+ * @param {string} id - The ID of the event to be updated.
+ * @param {object} updates - The fields and new values to update the event with.
  * @returns {Promise<UpdateResult>} The result of the update operation.
  */
 async function updateEvent(id, updates) {
     const client = new MongoClient(URI);
     const dancingEventsDB = client.db('dancingEvents');
     const eventsCollection = dancingEventsDB.collection('events');
-    const returnValue = await eventsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updates });
-    console.log('db updateArticle', returnValue, updates)
+    const returnValue = await eventsCollection.updateOne({ id: new ObjectId(id) }, { $set: updates });
+    console.log('db updateEvent', returnValue, updates)
     return returnValue
 }
 

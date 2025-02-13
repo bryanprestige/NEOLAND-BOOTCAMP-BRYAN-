@@ -6,9 +6,6 @@ import { gooogleOauth2 } from './server.oauth.js';
 const app = express();
 const port = process.env.port
 
-//let chunks = []
-//et responseData = []
-
 app.use(express.static('src/bryanprestige'))
 
 app.use(bodyParser.json())
@@ -35,7 +32,7 @@ app.get('/filter/events/:name', async (req, res) => {
   res.json(await db.events.filter({$text: {$search: req.params.name}}))
 }) 
   
-  // CRUD USERS
+/////////////////// CRUD USERS///////////////////////////////////
 app.post('/create/users', async (req, res) => {  
   res.json(await db.users.create(req.body))
 })
@@ -46,15 +43,17 @@ app.get('/read/users', async (req, res) => {
 })
 
 app.put('/update/users/:id', async (req, res) => {
+  console.log(req.params.id,req.body)
   res.json(await db.users.update(req.params.id, req.body))
+
 })
 
 app.delete('/delete/user/:id', async (req, res) => {
   res.json(await db.users.delete(req.params.id))
 }) 
 
-app.get('/filter/users/:nickname', async (req, res) => {
-  res.json(await db.events.filter({$text: {$search: req.params.nickname}}))
+app.get('/filter/users/:id', async (req, res) => {
+  res.json(await db.users.filterById( req.params.id))
 })
 
 app.post('/login', async (req, res) => {

@@ -76,7 +76,7 @@
         <form action="#" id="event-form">
             <fieldset id="event-fieldset">
                 <legend>Event Creator</legend>
-                <div class="left-column">
+               <div class="left-column">
                     <label> Submit your flyer</label>
                     <input type="file" id="submit-flyer" name="filename">
                     <input type="text" name="input-event-name" id="input-event-name" placeholder="Name of the event" required>
@@ -107,9 +107,40 @@
                     <button type="submit" name="submit-button" id="submit-button">Submit</button>
                 </div>
             </fieldset>
-        </form>
+        </form> 
     </section>
     <section class="event-container">   
+    </section>
+    <section id="edit-form-container">
+        <form action="#" id="edit-profile-form">
+            <div class="edit-form-container">
+             <!--
+                <h1>Edit your profile</h1>
+              <p>Please fill this form to update your data</p>
+              <hr>
+              <label for="input-new-email"><b>Email</b></label> 
+              <input type="text" placeholder="Enter Email" name="input-new-email" id="input-new-email" required autocomplete="on">
+          -->
+                <label for="input-new-nickname"><b>Nickname</b></label>
+                    <input type="text" placeholder="Edit Nickname" name="input-new-nickname" id="input-new-nickname" required>
+                <label for="input-team-academy"><b>Team/Academy</b></label>
+                    <input type="text" placeholder="Enter Team-Academy Name" name="input-team-academy" id="input-team-academy">
+                <label for="input-new-rol"><b>Role</b></label>
+                <select name="input-new-rol" id="input-new-rol" >
+                    <option value="Leader">Leader</option>
+                    <option value="Follower">Follower</option>
+                    <option value="Both">Both</option>
+                </select>
+                <label for="input-bio"> About you, max 140 characters</label>
+                    <textarea name="bio" id="input-bio" cols="20" rows="8" maxlength="140">
+                        
+                    </textarea>
+                <div>
+                    <button type="button" id="submit-new-user-data" >Save Changes</button>
+                    <button type="button" id="cancel-edit-profile-button" >Cancel</button>
+                </div>
+            </div>
+          </form>
     </section>
 </body>
 </html>
