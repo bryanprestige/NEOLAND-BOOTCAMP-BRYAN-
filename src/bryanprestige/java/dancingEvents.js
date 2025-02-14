@@ -101,7 +101,7 @@ async function onSearchClick(event) {
     event.preventDefault();
     
     const searchField = document.getElementById('search-field').value.trim().toLowerCase();
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/filter/events/${searchField}`);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${searchField}`);
 
     const eventContainer = document.querySelector('.event-container');
 
@@ -121,7 +121,7 @@ async function onFilterButtonClick(e) {
     const target = e.target;
     const filterValue = target?.textContent?.toLowerCase();  
     
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/filter/events/${filterValue}`);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
   
     if (!apiData) return;
     const eventContainer = document.querySelector('.event-container');
@@ -140,7 +140,7 @@ async function onFilterButtonClick(e) {
 
 async function updateDefaultFeed() {
     
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/read/events?`,'GET');
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events?`,'GET');
 
     const eventContainer = document.querySelector('.event-container');
     cleanEventContainer()
@@ -785,7 +785,7 @@ async function updateUserProfile(){
     }
     
     const payload = JSON.stringify(newUser)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/update/users/${userId}`, "PUT",payload);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userId}`, "PUT",payload);
     if (apiData.modifiedCount === 1) {
         const userData =  getDataFromSessionStorage()
         const updatedData = {
@@ -860,7 +860,7 @@ async function displayMyEvents(e) {
     const userId = getUserId()
     const filterValue = userId;  
     
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/filter/events/${filterValue}`);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
 
     if (!apiData) {
         noEventFound()
@@ -955,7 +955,7 @@ function updateMyEvent(eventId) {
         url: getInputValue(newUrl),
     }
     //const payload = JSON.stringify(updatedEvent)
-    //const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/update/events/${eventId}`, "PUT",payload);
+    //const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${eventId}`, "PUT",payload);
 
     console.log(updatedEvent)
     
@@ -975,7 +975,7 @@ function createRemoveEventButton(e) {
 }
 
 async function removeEvent (eventId) {
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/delete/event/${eventId}`,'DELETE');
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/delete/event/${eventId}`,'DELETE');
     console.log(apiData)
     alert('Event removed successfully')
 } 
@@ -1098,7 +1098,7 @@ function createPublishButton() {
         previewContainer.remove()
     }
         const payload = JSON.stringify(newEvent[0])
-        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/create/event?`,'POST',payload);
+        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/event?`,'POST',payload);
         console.log('this is the data',apiData)
         newTitleEvent.innerText = 'Now you can go to the feed, everybody can see your event! Thanks for contributing to the dance community!';
     })
@@ -1240,7 +1240,7 @@ async function createUser () {
         password: getInputValue(password),
     }
     const payload = JSON.stringify(user)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/create/users?`, 'POST',payload);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/users?`, 'POST',payload);
     console.log(apiData)
     
     userList.push(user)
@@ -1323,7 +1323,7 @@ async function onLoginFormSubmit(event){
     if (loginData.email !== '' && loginData.password !== '') {
         const payload = JSON.stringify(loginData)
 
-        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/login`,'POST', payload);
+        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/login`,'POST', payload);
         
         if (!apiData) {
             //show error
