@@ -1,4 +1,3 @@
-//const URI = 'mongodb+srv://bryanprestige:n18kskhK0YV0TQoN@cluster0.m2hrr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 import { MongoClient, ObjectId } from "mongodb";
 import express, {Router} from 'express';
