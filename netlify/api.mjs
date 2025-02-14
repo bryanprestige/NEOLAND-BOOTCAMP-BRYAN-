@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     // TODO: use OAuth2
     // ...
     // Simulation of authentication (OAuth2)
-    //user.token = gooogleOauth2()
+    user.token = '123456'
     // Remove password
     delete user.password
     res.json(user)
