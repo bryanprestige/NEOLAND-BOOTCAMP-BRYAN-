@@ -4,7 +4,6 @@ import { MongoClient, ObjectId } from "mongodb";
 import express, {Router} from 'express';
 import serverless from 'serverless-http';
 import bodyParser from 'body-parser';
-import { gooogleOauth2 } from './server.oauth.js';
 const URI = process.env.MONGO_ATLAS
 const api = express();
 const router = Router();
@@ -60,8 +59,7 @@ router.post('/login', async (req, res) => {
   if (user) {
     // TODO: use OAuth2
     // ...
-    // Simulation of authentication (OAuth2)
-    user.token = gooogleOauth2()
+    user.token = '123456'
     // Remove password
     delete user.password
     res.json(user)
