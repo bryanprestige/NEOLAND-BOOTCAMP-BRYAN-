@@ -1,4 +1,4 @@
-//const URI = 'mongodb+srv://bryanprestige:@b.prestige27@cluster0.m2hrr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+//const URI = 'mongodb+srv://bryanprestige:n18kskhK0YV0TQoN@cluster0.m2hrr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 import { MongoClient, ObjectId } from "mongodb";
 import express, {Router} from 'express';
@@ -77,7 +77,6 @@ api.use(bodyParser.json())
 api.use(bodyParser.urlencoded({ extended: true }))
 api.use('/api/', router)
 
-export const handler = serverless(api);
 
 function requireAuth(req, res, next) {
   // Simulation of authentication (OAuth2)
@@ -88,6 +87,7 @@ function requireAuth(req, res, next) {
     res.status(401).send('Unauthorized')
   }
 }
+export const handler = serverless(api);
 
 /////////////MONGODB////////////////////////
 
