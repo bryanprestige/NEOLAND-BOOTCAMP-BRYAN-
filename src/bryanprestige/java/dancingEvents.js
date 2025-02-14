@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButtonLogin?.addEventListener('click',onClickSubmitButtonLogin)
     }*/
      
-    else if (window.location.pathname.includes('dancingEvents.html')) {
-        updateDefaultFeed()
+    else if (window.location.pathname.includes('index.html')) {
+        updateDefaultFeed() 
         
         const searchButton = document.getElementById('search-button');
         hideShowSearchButton()
@@ -754,6 +754,7 @@ function createEditProfileButton(){
     console.log(displayEditForm)
     return editButton
 }
+
 
 function displayEditForm() {
     const editForm = document.getElementById('edit-form-container');

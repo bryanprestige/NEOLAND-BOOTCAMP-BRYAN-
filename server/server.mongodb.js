@@ -141,16 +141,16 @@ async function getEvents(filter){
 /**
  * Updates an article in the 'articles' collection in the 'shoppingList' database.
  *
- * @param {string} id - The ID of the event to be updated.
+ * @param {string} _id - The ID of the event to be updated.
  * @param {object} updates - The fields and new values to update the event with.
  * @returns {Promise<UpdateResult>} The result of the update operation.
  */
-async function updateEvent(id, updates) {
+async function updateEvent(_id, updates) {
     const client = new MongoClient(URI);
     const dancingEventsDB = client.db('dancingEvents');
     const eventsCollection = dancingEventsDB.collection('events');
-    const returnValue = await eventsCollection.updateOne({ id: new ObjectId(id) }, { $set: updates });
-    console.log('db updateEvent', returnValue, updates)
+    const returnValue = await eventsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: updates });
+    console.log('db updateEvent', await eventsCollection.findOne({ _id: new ObjectId(_id) }))
     return returnValue
 }
 
