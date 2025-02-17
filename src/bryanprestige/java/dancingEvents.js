@@ -851,8 +851,7 @@ function createMyEventsButton() {
     return myEventsButton
 }
 
-async function displayMyEvents(e) {
-    e.preventDefault();
+async function displayMyEvents() {
     hideCreateEvents()
     hideEditForm() 
     hidePreviewContainer()  
@@ -895,30 +894,40 @@ function displayEditMyEvents(eventId) {
     submitButton.style.display = 'none'
     const showForm = document.getElementById('event-creator')
     showForm.style.display = 'block';
-    console.log('displaymyevents',eventId)
+    
+    let saveChangesEventButton = document.querySelector('#save-changes-event-button')
+    let cancelChangesEventButton = document.querySelector('#cancel-changes-event-button')
+    
+    if (!saveChangesEventButton || !cancelChangesEventButton) {
+        const saveChangesEventButton = document.createElement('button')
+        saveChangesEventButton.id = 'save-changes-event-button'
+        saveChangesEventButton.innerText = 'Save Changes'
+        
+        const cancelChangesEventButton = document.createElement('button')
+        cancelChangesEventButton.id = 'cancel-changes-event-button'
+        cancelChangesEventButton.innerText = 'Cancel'
+        
+        showForm.append(saveChangesEventButton,cancelChangesEventButton)
+        console.log('showform',showForm)
 
-    const saveChangesEventButton = document.createElement('button')
-    saveChangesEventButton.id = 'save-changes-event-button'
-    saveChangesEventButton.innerText = 'Save Changes'
+        saveChangesEventButton?.addEventListener('click', () => {
+            updateMyEvent(eventId)
+        })
 
-    const cancelChangesEventButton = document.createElement('button')
-    cancelChangesEventButton.id = 'cancel-changes-event-button'
-    cancelChangesEventButton.innerText = 'Cancel'
+        cancelChangesEventButton?.addEventListener('click', () => {
+            displayMyEvents()
+        })
+    }
 
-    saveChangesEventButton?.addEventListener('click', () => {
-        updateMyEvent(eventId)
-    })
-
-    showForm.append(saveChangesEventButton,cancelChangesEventButton)
+   
     cleanEventContainer()
     hideEditForm()
     hidePreviewContainer()
 }
 
-function updateMyEvent(eventId) {
+async function updateMyEvent(eventId) {
 //const image = getElementsByClassName('event-image')
-    console.log(eventId)
-    /*
+    
     const eventName = document.getElementsByClassName('name')
     const currency = document.getElementsByClassName('currency')
     const price = document.getElementsByClassName('price')
@@ -929,7 +938,7 @@ function updateMyEvent(eventId) {
     const country = document.getElementsByClassName('button-country')
     const dance = document.getElementsByClassName('button-dance-type')
     const instagramAnchor = document.getElementsByClassName('instagram-anchor')
-*/
+
     const newEventName = document.getElementById('input-event-name')
     const newVenue = document.getElementById('input-venue')    
     const newDateTime = document.getElementById('input-dateTime')
@@ -954,11 +963,33 @@ function updateMyEvent(eventId) {
         dance: getInputValue(newDance),
         url: getInputValue(newUrl),
     }
-    //const payload = JSON.stringify(updatedEvent)
-    //const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${eventId}`, "PUT",payload);
+
+    console.log('updated event',updatedEvent)
+    const payload = JSON.stringify(updatedEvent)
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${eventId}`, "PUT",payload);
+    console.log('apidata',apiData)
+    
+    eventName.innerText = updatedEvent.name
+    currency.innerText = updatedEvent.currency
+    price.innerText = updatedEvent.price
+    venue.innerText = updatedEvent.venue
+    dateTime.innerText = updatedEvent.dateTime
+    music.innerText = updatedEvent.music
+    city.innerText = updatedEvent.city
+    country.innerText = updatedEvent.country
+    dance.innerText = updatedEvent.dance
+    instagramAnchor.innerText = updatedEvent.url
+    
+    if (apiData.modifiedCount === 1) {
+        alert('Event updated successfully')
+        hideCreateEvents()
+        displayMyEvents()
+    }else if (apiData.modifiedCount === 0) {
+        alert('No changes Detected')
+        return
+    }
 
     console.log(updatedEvent)
-    
 }
 
 function createRemoveEventButton(e) {
@@ -995,11 +1026,32 @@ function hideCreateEvents () {
 }
 
 function displayCreateEvents () {
-    cleanEventContainer()
-    hideEditForm()
-    const showForm = document.getElementById('event-creator')
-    showForm.style.display = 'block';
-    hidePreviewContainer()
+    cleanEventContainer();
+    hideEditForm();
+    const showForm = document.getElementById('event-creator');
+    const cancelChangesEventButton = document.querySelector('#cancel-changes-event-button');
+    const saveChangesEventButton = document.querySelector('#save-changes-event-button');
+    
+    if (showForm.style.display === 'none') {
+        showForm.style.display = 'block';
+        if (cancelChangesEventButton) {
+            cancelChangesEventButton.remove();
+        }
+        if (saveChangesEventButton) {
+            saveChangesEventButton.remove();
+        }
+        const submitButton = document.querySelector('#submit-button');
+        if (submitButton) {
+            submitButton.style.display = 'block';
+        }
+    } else {
+        showForm.style.display = 'none';
+        const submitButton = document.querySelector('#submit-button');
+        if (submitButton) {
+            submitButton.style.display = 'none';
+        }
+    }
+    hidePreviewContainer();
 }
 
 function onClickSubmitButton(event) {
