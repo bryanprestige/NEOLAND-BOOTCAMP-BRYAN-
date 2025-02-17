@@ -610,6 +610,7 @@ function sumPriceValue(card)  {
 
     totalPriceValue += parseInt(priceValue);
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+    console.log(`Total price: ${totalPriceValue}`);
 }
 /**
  * @param {HTMLElement | null} card
@@ -618,8 +619,10 @@ function sumPriceValue(card)  {
 function resPricevalue(card) {
     const priceValue = getPriceValue(card);
     totalPriceValue -= parseInt(priceValue);
-
+ 
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
+    console.log(`Total price: ${totalPriceValue}`);
+
 }
 
 function scrollToTop() {
