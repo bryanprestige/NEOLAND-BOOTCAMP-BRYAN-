@@ -180,9 +180,3 @@ async function filterEvents(filter){
     const eventsCollection = dancingEventsDB.collection('events');
     return await  eventsCollection.find(filter).toArray();
 }
-/**
- * Filter the events from the database
- * 
- * @param {object} [filter]  - filter to apply to the evetns
- * @returns {Promise<Array<object>>} - the array of the event
- */
