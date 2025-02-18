@@ -1,0 +1,16 @@
+#register-button-register {
+    background-color:#243D4B;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+#register-button-register:hover{
+    transform: scale(1,1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+

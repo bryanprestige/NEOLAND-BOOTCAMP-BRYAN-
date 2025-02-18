@@ -5,18 +5,19 @@
 import {INITIAL_STATE,store} from '../storeRedux/redux.js'
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
+//import { urlencoded } from 'express';
 /**
  * @import {Event} from './classes/Event.js'
  * @import {User}   from './classes/User.js'
  */
 
-const PORT = location.port ? `:${location.port}` : ''
+export const PORT = location.port ? `:${location.port}` : ''
 
 let basketCount = 0;    
 
 let eventList = []
 let totalPriceValue = 0;
-let userList = []
+//let userList = []
 let newEventList = []
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -39,26 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
         displayProfile();
     }
     else if (window.location.pathname.includes('login.html')) {
-    
-    const loginForm = document.getElementById('login-container')
-    loginForm?.addEventListener('submit', onLoginFormSubmit)
+        window.addEventListener('login-form-submit', onLoginComponentSubmit)
     }
     else if (window.location.pathname.includes('register.html')) {
-        const registerButton =document.getElementById('register-button-register')
-        registerButton?.addEventListener('click',onClickRegisterButton)
-
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', validateRegister);
-            })
+        window.addEventListener('create-user', onRegisterComponentSubmit)
     }
     else if (window.location.pathname.includes('basket.html')) {
         const checkoutButtonContainer = document.getElementById('checkout-button-container')
         checkoutButtonContainer.textContent = `Total: $${totalPriceValue}`
     }
-    /*else if (window.location.pathname.includes('login.htm')) {
-        const submitButtonLogin =document.getElementByClassName('submit-button-login')
-        submitButtonLogin?.addEventListener('click',onClickSubmitButtonLogin)
-    }*/
      
     else if (window.location.pathname.includes('index.html')) {
         updateDefaultFeed() 
@@ -68,8 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Evento de clic para el botón de búsqueda
         searchButton?.addEventListener('click', onSearchClick);
         // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
-        //const eventContainer = document.querySelector('.event-container');
-        //eventContainer?.addEventListener('click', onFilterButtonClick);
 
         const favoriteButton = document.getElementById('favorite-button');
         favoriteButton?.addEventListener('click', displayFavoriteEvents);        
@@ -323,8 +311,7 @@ function createPriceCurrencyElement(event) {
     const priceCurrency = document.createElement('div');
     priceCurrency.className = 'price-currency';
 
-    const currency = createElementWithText('currency', 'currency', event.currency);
-    currency.setAttribute('select', event.currency);
+    const currency = createElementWithText('h1', 'currency', event.currency);
     const price = createElementWithText('h1', 'price', event.price);
 
     priceCurrency.append(currency, price);
@@ -1180,7 +1167,7 @@ function hidePreviewContainer () {
  * @param {HTMLElement | null} inputElement
 */
 
-function getInputValue(inputElement) {
+export function getInputValue(inputElement) {
     if (inputElement instanceof HTMLInputElement) {
         return inputElement.value;
     } else if (inputElement instanceof HTMLSelectElement) {
@@ -1249,20 +1236,16 @@ function saveNewEventToLocalStorage (newEventList) {
 //========================REGISTER===============================//
 
 /**
- * @param {MouseEvent} e
+ * Handles a successful login from the login component
+ * @param {CustomEvent} customEvent - The userList returned from the API
+ * @returns void
  */
+function onRegisterComponentSubmit (customEvent) {
+    console.log(`DESDE FUERA DEL COMPONENTE:`, customEvent);
 
-function onClickRegisterButton (e) {
-    e.preventDefault()
-    if (validateRegister() === false) {
-        alert("Please ensure all fields are correctly filled before submitting.");
-        return; 
-    } else{
-        
-    createUser ()
-    }
-    saveUserListToLocalStorage(userList)
-    console.log(userList)
+    let userListData = customEvent.detail
+    saveUserListToLocalStorage(userListData)
+    console.log(userListData)
     alert('User registered successfully')
     navigateTo('./login.html')
 }
@@ -1277,71 +1260,6 @@ function navigateTo(pathname) {
     console.log(newLocationLinked)
   }
 
-async function createUser () {
-        const email = document.getElementById('input-email-register')
-        const nickname = document.getElementById('input-nickname-register')
-        const name = document.getElementById('input-name-register')
-        const rol = document.getElementById('input-rol-register')
-        const password = document.getElementById('input-password-register')
-    
-    /**
-     * @type {User}
-     */
-    let user = {
-        email: getInputValue(email),
-        nickname: getInputValue(nickname),
-        name: getInputValue(name),
-        rol: getInputValue(rol),    
-        password: getInputValue(password),
-    }
-    const payload = JSON.stringify(user)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/users?`, 'POST',payload);
-    console.log(apiData)
-    
-    userList.push(user)
-    console.log(userList)
-}
-
-function validateRegister() {
-    let formIsValid = false;
-        const email = document.getElementById('input-email-register')
-        const nickname = document.getElementById('input-nickname-register')
-        const name = document.getElementById('input-name-register')
-        const rol = document.getElementById('input-rol-register')
-        const password = document.getElementById('input-password-register')
-  
-    const registerButton = document.getElementById('register-button-register');
-
-    const fields = [email, nickname, name, rol, password];
-    formIsValid = fields.every(field => field?.value.trim() !== '');
-    if (!formIsValid) {
-        registerButton.disabled = true;
-        registerButton.style.backgroundColor = 'grey';
-    } else {
-        registerButton.disabled = false;
-        registerButton.style.backgroundColor = '#243D4B';
-    }
-    
-    const fieldsEmpty = [
-       'input-email-register',
-       'input-nickname-register',
-       'input-name-register',
-       'input-rol-register',
-       'input-password-register',
-    ].map(id => document.getElementById(id));
-
-    formIsValid = fieldsEmpty.every(fieldsEmpty => {
-        if (fieldsEmpty?.value.trim() === '') {
-            fieldsEmpty?.classList.add('invalid-field');
-            return false;
-        } else {
-            fieldsEmpty?.classList.remove('invalid-field');
-            return true;
-        }
-    });
-    
-    return formIsValid
-}
 function saveUserListToLocalStorage(userList) {
     localStorage.setItem('userList', JSON.stringify(userList));
 }
@@ -1365,43 +1283,29 @@ function setLocalStorageFromStore() {
  */
 
 //========================LOGIN===============================//
-async function onLoginFormSubmit(event){
-    const emailElement = document.getElementById('email')
-    const passwordElement = document.getElementById('password')
-    const loginData = {
-      email: getInputValue(emailElement),
-      password: getInputValue(passwordElement)
-    }
-  
-    event.preventDefault() 
-  
-    if (loginData.email !== '' && loginData.password !== '') {
-        const payload = JSON.stringify(loginData)
 
-        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/login`,'POST', payload);
-        
-        if (!apiData) {
-            //show error
-            alert('user dont exist')
-        } else {
-            if ('_id' in apiData
-                && 'email' in apiData
-                && 'nickname' in apiData
-                && 'name' in apiData
-                && 'rol' in apiData
-                && 'token' in apiData
-                ) {
-                    const userData = /** @type {User} */(apiData)
-                    updateSessionStorage({ user: userData })
-                    navigateTo('./profile.html')
-                    
-            } else {
-                alert('Invalid user data')
-            }
-        }
+/**
+ * Handles a successful login from the login component
+ * @param {CustomEvent} customEvent - The user data returned from the API
+ * @returns void
+ */
+function onLoginComponentSubmit(customEvent) {
+    const apiData = customEvent.detail
+    console.log(`DESDE FUERA DEL COMPONENTE:`, apiData);
+    if ('_id' in apiData
+      && 'email' in apiData
+      && 'nickname' in apiData
+      && 'rol' in apiData
+      && 'token' in apiData) {
+      const userData = /** @type {User} */(apiData)
+      updateSessionStorage({ user: userData })
+      // Redirect to PROFILE
+      navigateTo('./profile.html')
+    } else {
+      alert('Invalid user data')
     }
-}    
-  
+  }
+
  /**
  * Retrieves the userList data from session storage.
  *
@@ -1432,7 +1336,7 @@ function checkLoginStatus() {
 
 //========================BACKEND================================//
 
-async function getAPIData(apiURL, method = 'GET' , data) {
+export async function getAPIData(apiURL, method = 'GET' , data) {
     let apiData
   
     try {

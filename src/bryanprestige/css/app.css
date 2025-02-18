@@ -1,0 +1,91 @@
+input {
+    border: 5px solid #243D4B;
+    text-align: center; 
+    border-radius: 20px;
+}
+
+label {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+
+select {
+    border: 5px solid #243D4B;
+    text-align: center; 
+    border-radius: 20px;
+}
+
+a {
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+/*=====BUTTONS=====*/
+#search-button,.buy-button, #submit-button, .login-button,.register,
+.remove-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
+.publish-button,.fav-button, #favorite-button, .venue, .name,
+ .music-ratio,#edit-profile-button, #fav-button-profile, #my-events-button,
+ #create-events-button  {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.remove-button:hover, .button-dance-type:hover, .button-city:hover,.button-country:hover,
+#search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
+.publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
+#favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover, #my-events-button:hover,
+#create-events-button:hover  {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+#search-button, .buy-button, #submit-button {
+    padding: 5px 10px;
+}
+#search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button,
+#edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button  {
+    background-color: #F7BC47;
+}
+.login-button, .register, .remove-button, .edit-event-button, .publish-button  {
+    background-color: #243D4B;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    padding: 10px 14px;
+}
+.login-button, .register, .remove-button {
+    display: block;
+    margin-top: 15px;
+    color: #F7BC47;
+}
+.button-dance-type, .button-city,.button-country {
+    border: none;
+    width: 50%;
+    padding: 8px 12px;
+}
+.edit-event-button, .publish-button {
+    font-size: 16px;
+    color: #ffffff;
+}
+.button-dance-type{
+    color: black;
+    width: 100%;
+}
+#favorite-button, #edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button {
+    padding: 5px 10px;
+}
+.fav-button {
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    width: fit-content;
+}
+
+.fav-button:hover{
+    transform: scale(1.1); 
+}
+#my-events-button, #create-events-button {
+    width: fit-content;
+}
