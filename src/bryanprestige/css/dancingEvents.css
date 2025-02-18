@@ -47,7 +47,9 @@ li, :link ,div, #main-title-form,#main-title-event,.main-title,  form, #search-s
 li, div {
     cursor: pointer;
 }
-a, #main-title-form,#main-title-event,.main-title,  input, select{
+
+
+#main-title-form,#main-title-event,.main-title{
     border-radius: 20px;
 }
 li, div{
@@ -55,7 +57,7 @@ li, div{
     margin: 5px;
     padding: 5px;
 }
-:link, a {
+:link {
     text-decoration: none;
 }
 .app-name, .logo-log-register {
@@ -107,6 +109,10 @@ img {
 #profile-card-container, .header-container-profile {
     border-bottom: solid 1px #243D4B;
 }
+a {
+    border-radius: 20px;
+    text-decoration: none;
+}
 
 form {
     justify-content: center;
@@ -128,10 +134,7 @@ form {
     font-size: 20px;
     text-align: center;
 }
-input, select {
-    border: 5px solid #243D4B;
-    text-align: center;
-}
+
 /*======EVENTS======*/
 .event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .city-country, .name-fav,
 .reviews-placeholder    {
@@ -226,6 +229,34 @@ input, select {
 .name-fav {
 margin-bottom: -10px;;
 }
+.favorited {
+    transform: scale(1.1);
+    animation: pop 0.3s ease-in-out;
+    background-color: rgb(230, 158, 158);
+}
+.city-country, .time-price, .name,.venue, .music-ratio{
+    padding: 10px;
+}
+.city-country, .time-price {
+    margin: 0px;
+}
+.name {
+    margin: auto;
+}
+.error-img{
+    width: 600px;
+}
+.shop-img {
+    width: 30px;
+    margin-top: 0px;
+}
+
+.instagram-img {
+    width: 30px;     
+    margin: auto;
+    margin-bottom: -15px;
+
+}
 /*=====BUTTONS=====*/
 #search-button,.buy-button, #submit-button, .login-button,.register,
 .remove-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
@@ -290,34 +321,7 @@ margin-bottom: -10px;;
 #my-events-button, #create-events-button {
     width: fit-content;
 }
-.favorited {
-    transform: scale(1.1);
-    animation: pop 0.3s ease-in-out;
-    background-color: rgb(230, 158, 158);
-}
-.city-country, .time-price, .name,.venue, .music-ratio{
-    padding: 10px;
-}
-.city-country, .time-price {
-    margin: 0px;
-}
-.name {
-    margin: auto;
-}
-.error-img{
-    width: 600px;
-}
-.shop-img {
-    width: 30px;
-    margin-top: 0px;
-}
 
-.instagram-img {
-    width: 30px;     
-    margin: auto;
-    margin-bottom: -15px;
-
-}
 /*=====MUSIC RATIO STYLES======*/
 .music-ratio {
     margin-top: 10px;
@@ -452,11 +456,11 @@ margin-bottom: -10px;;
     padding: 5px 10px;
 }
   /*=====LOG IN STYLES=====*/
-  .wrap, #submit-button-login, .register-button,#register-button-register, .container-signin{
+.register-button,.container-signin{
     border: none;
 }
 
-#login-container, .wrap,.register-container, .container-signin{
+#login-container,.register-container, .container-signin {
     background-color: white;
 }
 #login-container {
@@ -464,34 +468,8 @@ margin-bottom: -10px;;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
     width: 500px;
-    text-align: center;
     margin: auto;
     margin-top: 10px;
-}
-label {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    text-align: left;
-    color: #555;
-    font-weight: bold;
-}
-.wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#submit-button-login {
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    color: white;
-    cursor: pointer;
-    background-color:#243D4B;
-    width: 100%;
-    font-size: 16px;
 }
 
 #edit-form-container {
@@ -500,24 +478,13 @@ label {
 /*=====REGISTER STYLES=====*/
 .register-container {
     padding: 16px;
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
 }
-
 hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
-}
- #register-button-register {
-    background-color:#243D4B;
-    color: white;
-    padding: 16px 20px;
-    margin: 8px 0;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
-}
-#register-button-register:hover{
-    transform: scale(1,1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /*======BASKET======*/

@@ -1,0 +1,159 @@
+/*======EVENTS======*/
+.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .city-country, .name-fav,
+.reviews-placeholder    {
+    display: flex;
+}
+.event-container, .event-image, .remove-button, .register,
+ .login-button, .register, .remove-button, .name {
+    width: 100%;
+}
+.event-card,#event-form,.left-column, .right-column, .fav-button, .city-country, .time-price, .name-fav  {
+    background-color: white;
+}
+.event-card,#event-form,.left-column, .right-column {
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+}
+.event-image,.reviews-placeholder,.name, .venue,.time, .currency,
+.button-dance-type, .button-city,.button-country,.date, .time, .price, .event-card,#event-form{
+    border-radius: 10px;
+}
+.left-column, .right-column, .reviews-placeholder, .time-price, .city-country, .name-fav,.fav-button{
+    border: none;
+}
+.event-container,.event-card,#event-form {
+    gap: 20px; 
+}
+.left-column, .right-column,.image-and-details{
+    gap: 10px;
+}
+.event-container {
+    flex-wrap: wrap; 
+    overflow-y: auto; 
+    max-height: 80vh; 
+    justify-content: center; 
+    font-family: 'Montserrat', sans-serif; 
+    font-size: 1rem;
+    font-style: italic;
+}
+.event-card,#event-form {
+    flex-direction: row; 
+    padding: 15px;
+    border: 1px solid #ddd;
+    width: calc(50% - 20px); 
+} 
+.left-column, .right-column {
+    flex-direction: column;
+    flex: 1; 
+}
+.image-and-details {
+    flex-direction: column;
+}
+.event-image {
+    height: 200px;
+    object-fit: cover;
+}
+.reviews-placeholder {
+    background-color: #e0e0e0;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    height: 190px;
+    font-weight: bold;
+    color: #666;
+}
+
+.price-currency, .city-country, .name-fav {
+    justify-content: space-between;
+    gap: 5px; 
+}
+.music-ratio,.music-ratio.single-style,.music-ratio.three-styles,.music-ratio.two-styles,
+.button-dance-type, .button-city,.button-country, .name, .time, .price,.currency, .venue,.date-time {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 1rem;
+    letter-spacing: 0.5px; 
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.time, .price, .date-time, .button-dance-type, .button-city,.button-country, .music-ratio, .venue, .name {
+    background-color:#243D4B;
+    color: #F7BC47;
+}
+.time, .price, .button-dance-type, .button-city,.button-country,.date {
+    flex: 1; 
+    font-weight: bold;
+}
+.name, .venue,.time, .price, .currency{
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
+}
+.name, .venue {
+    padding: 10px 15px; 
+}
+
+.name-fav {
+margin-bottom: -10px;;
+}
+
+.favorited {
+    transform: scale(1.1);
+    animation: pop 0.3s ease-in-out;
+    background-color: rgb(230, 158, 158);
+}
+.city-country, .time-price, .name,.venue, .music-ratio{
+    padding: 10px;
+}
+.city-country, .time-price {
+    margin: 0px;
+}
+.name {
+    margin: auto;
+}
+.error-img{
+    width: 600px;
+}
+.shop-img {
+    width: 30px;
+    margin-top: 0px;
+}
+
+.instagram-img {
+    width: 30px;     
+    margin: auto;
+    margin-bottom: -15px;
+}
+
+/*=====MUSIC RATIO STYLES======*/
+.music-ratio {
+    margin-top: 10px;
+    font-size: 14px;
+}
+.music-ratio.single-style {
+    background-color:#243D4B;
+}
+.music-ratio.two-styles {
+    background: linear-gradient(90deg, #F7BC47 50%, #243D4B 50%);
+    color: white;
+}
+.music-ratio.three-styles {
+    background: linear-gradient(90deg, #F7BC47 33.33%, #243D4B 33.33%, #F7BC47 33.33%);
+    color: white;
+}
+/* Animación de "pop" cuando se marca como favorito */
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.1); }
+}
+/* ZOOM ANIMATION */
+@keyframes zoomIn {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+}
+.zoom-in {
+    animation: zoomIn 0.5s ease-in-out;
+}
