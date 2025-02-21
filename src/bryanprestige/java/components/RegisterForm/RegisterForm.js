@@ -8,7 +8,7 @@ const TEMPLATE = {
     url: './java/components/RegisterForm/RegisterForm.html'
 }
 
-  // Wait for template to load
+// Wait for template to load
 await importTemplate(TEMPLATE.url);
 
 let userList = []
@@ -40,9 +40,7 @@ export class RegisterForm extends HTMLElement {
         this._setUpContent()
         
         // Add event listeners to form elements
-        this.shadowRoot.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', this._validateRegister);
-            })
+        
         const form = this.shadowRoot.getElementById("registerForm");
         form.addEventListener("submit", this._onRegisterFormSubmit.bind(this));
     }
@@ -57,21 +55,27 @@ export class RegisterForm extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         console.log(`Attribute ${name} has changed.`,oldValue,newValue);
     }
-    ///////////PRIVATE METHODS
+    //==========PRIVATE METHODS============//
     _setUpContent() {
         if (this.shadowRoot && this.template) {
             // Replace previous content
             this.shadowRoot.innerHTML = '';
             this.shadowRoot.appendChild(this.template.content.cloneNode(true));
-      }
+            
+            this.shadowRoot.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', this._validateRegister);
+            })
+        }
     }
 
-    _onRegisterFormSubmit () {
+    _onRegisterFormSubmit (e) {
+        e.preventDefault()
         if (this._validateRegister() === false) {
+            console.log("Paso por aqui");
             alert("Please ensure all fields are correctly filled before submitting.");
             return; 
         } else{
-        this._createUser ()
+            this._createUser()
         }
     }
     _validateRegister() {
@@ -145,10 +149,9 @@ export class RegisterForm extends HTMLElement {
               bubbles: true,
               detail: null
             })
-          }
+        }
           this.dispatchEvent(onFormCreateUser);
     }
 }
-console.log('por aqui he pasado')
 
 customElements.define ('register-form', RegisterForm)

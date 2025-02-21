@@ -5,7 +5,6 @@
 import {INITIAL_STATE,store} from '../storeRedux/redux.js'
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
-//import { urlencoded } from 'express';
 /**
  * @import {Event} from './classes/Event.js'
  * @import {User}   from './classes/User.js'
@@ -17,26 +16,11 @@ let basketCount = 0;
 
 let eventList = []
 let totalPriceValue = 0;
-//let userList = []
-let newEventList = []
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
     if (window.location.pathname.includes('profile.html')) {
-        
-        const submitButton = document.getElementById('submit-button')
-        submitButton?.addEventListener('click',onClickSubmitButton)   
-
-        document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', validateForm);
-        })
-        
-        const saveChangesProfile = document.getElementById('submit-new-user-data')
-        saveChangesProfile?.addEventListener('click',updateUserProfile)
-
-        const cancelChangesProfile = document.getElementById('cancel-edit-profile-button')
-        cancelChangesProfile?.addEventListener('click',hideEditForm)
-
         displayProfile();
     }
     else if (window.location.pathname.includes('login.html')) {
@@ -46,8 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('create-user', onRegisterComponentSubmit)
     }
     else if (window.location.pathname.includes('basket.html')) {
-        const checkoutButtonContainer = document.getElementById('checkout-button-container')
-        checkoutButtonContainer.textContent = `Total: $${totalPriceValue}`
+        let currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
+        const basketPrice = document.getElementById('basket-price')
+        basketPrice.textContent = `total price: ${currentTotalPrice}$`
     }
      
     else if (window.location.pathname.includes('index.html')) {
@@ -55,9 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const searchButton = document.getElementById('search-button');
         hideShowSearchButton()
-        // Evento de clic para el botón de búsqueda
         searchButton?.addEventListener('click', onSearchClick);
-        // Delegación de eventos para botones dinámicos (tipo de baile y ciudad)
 
         const favoriteButton = document.getElementById('favorite-button');
         favoriteButton?.addEventListener('click', displayFavoriteEvents);        
@@ -76,11 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
 /*TO DO: FIX ON SEARCH CLICK NOEVENT()*/
 /*TO DO: FIX MY EVENTS NOEVENT()*/
 
+/*TO DO: FIX EDIT BUTTON IN MY EVENTS */
 /*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
 /*TO DO: MAKE EDIT MYEVENT BUTTON WORK WITH APIDATA*/
+/*TO DO: EXPORT DISPLAYMYBASKETCOUNT TO MY FAVOURITE EVENTS COMPONENT*/
 
 
 //====================FEED=====================//
+
+
 
 /**
  * @param {MouseEvent} event
@@ -104,7 +91,7 @@ async function onSearchClick(event) {
 /**
  * @param {MouseEvent} event
  */
-async function onFilterButtonClick(e) {
+export async function onFilterButtonClick(e) {
     e.preventDefault();
     const target = e.target;
     const filterValue = target?.textContent?.toLowerCase();  
@@ -127,11 +114,9 @@ async function onFilterButtonClick(e) {
 }
 
 async function updateDefaultFeed() {
-    
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events?`,'GET');
 
     const eventContainer = document.querySelector('.event-container');
-    cleanEventContainer()
     apiData.forEach(event => {
         createEventCardWithAnimation(event, eventContainer);
         setLocalStorageFromState(this, 'eventStorage')
@@ -141,9 +126,10 @@ async function updateDefaultFeed() {
 /**
  * @param {MouseEvent} event
  */
-function displayFavoriteEvents(event) {
+export function displayFavoriteEvents(event) {
     event.preventDefault(); 
     const eventContainer = document.querySelector('.event-container');
+    hideCreateEvents()
     const userId = getUserId()
     const storageUser = `favList_${userId}`;
 
@@ -157,19 +143,17 @@ function displayFavoriteEvents(event) {
              createEventCardWithAnimation(event, eventContainer);
          });
      }
-    hideEditForm()
+    hideEditProfileForm()
     hidePreviewContainer()
-    hideForm()
 }
 
 /**
  * @param {Event} event 
  * @param {HTMLElement} container
  */ 
-function createEventCardWithAnimation(event, container){
+export function createEventCardWithAnimation(event, container){
     const card = createEventCardElement(event); 
     card.classList.add('zoom-in'); 
-    
     card.addEventListener('animationend', () => {
         card.classList.remove('zoom-in');
     });
@@ -283,8 +267,7 @@ function createFavButton(event) {
  * @param {HTMLElement | null} button
  */ 
 
-function toggleFavorite(event, button) {
-   
+export function toggleFavorite(event, button) { 
     const userId = getUserId()
     const storageUser = `favList_${userId}`;
     let userFavList = JSON.parse(localStorage.getItem(storageUser)) || []; // Obtener la lista de favoritos
@@ -337,7 +320,7 @@ function createBuyButton(card, event) {
  * @param {object} event
  * @param {HTMLElement | null} basketElement
  */ 
-function handleBuyButtonClick(card, event, basketElement) {
+export function handleBuyButtonClick(card, event, basketElement) {
     sumPriceValue(card)    
 
     card.ticketCount++;
@@ -484,7 +467,6 @@ function createElementWithText(tag, className, textContent) {
     element.textContent = textContent;
     return element;
 }
-
 /**
  * @param {object} event
  * @param {number} ticketCount
@@ -505,7 +487,7 @@ function updateTicketCount(event, ticketCount) {
  * Actualiza el contador de tickets en el elemento de la cesta.
  * @param {HTMLElement | null} basketElement 
  */
-    function updateBasketCounter(basketElement) {
+function updateBasketCounter(basketElement) {
     basketCount = 0; 
     const events = document.querySelectorAll('.event-card')
     //UPDATE TICKET COUNT
@@ -542,7 +524,7 @@ function loadBasketFromLocalStorage() {
         const eventCards = document.querySelectorAll('.event-card');
 
         eventCards.forEach(card => {
-            const eventName = card.querySelector('.name').textContent;
+            const eventName = card.querySelectorAll('.name').textContent;
 
             if (eventName === savedEvent.name) {
                 card.ticketCount = savedEvent.ticketCount;
@@ -569,7 +551,7 @@ function loadBasketFromLocalStorage() {
     });
     updateBasketCounter(basketElement);
 }
-function setLocalStorageFromState(key = 'eventStorage') {
+export function setLocalStorageFromState(key = 'eventStorage') {
     const storeData = store.getState()
     delete storeData.user
     updateLocalStorage(storeData, key)
@@ -592,10 +574,12 @@ function getPriceValue(card) {
  * @param {HTMLElement | null} card
  */
 function sumPriceValue(card)  {
+    const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
+    console.log(`current total price: ${currentTotalPrice}`); 
     const priceValue = getPriceValue(card);
     console.log(`Event price: ${priceValue}`);
 
-    totalPriceValue += parseInt(priceValue);
+    totalPriceValue += parseInt(currentTotalPrice, priceValue);
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
     console.log(`Total price: ${totalPriceValue}`);
 }
@@ -604,8 +588,10 @@ function sumPriceValue(card)  {
  */
 
 function resPricevalue(card) {
+    const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
+    console.log(`current total price: ${currentTotalPrice}`);
     const priceValue = getPriceValue(card);
-    totalPriceValue -= parseInt(priceValue);
+    totalPriceValue  = parseInt( priceValue);
  
     localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
     console.log(`Total price: ${totalPriceValue}`);
@@ -647,8 +633,8 @@ function cleanEventContainer() {
         eventContainer.removeChild(eventContainer.firstChild);
     }
 }
-function displayBasketCount () {
-    //const basketData = JSON.parse(localStorage.getItem('basket')) || [];
+
+export function displayBasketCount () {
     const basketElement = document.querySelector('.basket-counter');
     basketElement.textContent = `BASKET (${basketCount})`
     if(basketCount === 0) {
@@ -659,8 +645,6 @@ function displayBasketCount () {
 //========================PROFILE===============================//
 
 async function displayProfile() {
-    const profileCard = createProfileCard();
-    console.log(profileCard);
     const newTitleForm = document.getElementById('main-title-form');
     newTitleForm.innerText = 'Welcome to your own space';
     
@@ -668,141 +652,15 @@ async function displayProfile() {
     newTitleEvent.innerText = 'Here you can see your favorite events and create your own event to promote!';
 }
 
-function createProfileCard () {
-    const profileCardContainer = document.getElementById('profile-card-container');
-    const cardContainer = document.createElement('div');
-    cardContainer.className = 'profile-card';
-    
-    const profilePicPlacehold = document.createElement('img');
-    profilePicPlacehold.className = 'profile-picture';
-    profilePicPlacehold.src = './imagenes/profile-pic-placeholder.png';
-    
-    const profileInfo = createProfileInfo(cardContainer);
-    cardContainer.append(profilePicPlacehold,profileInfo);
-    profileCardContainer.appendChild(cardContainer);
-    return profileCardContainer
-}
-
-function createProfileInfo(cardContainer) {
-    const getUser = getDataFromSessionStorage();
-    const user = getUser.user;
-    const nickname = user.nickname;
-    const rol = user.rol
-    const userTeamAcademy = user.teamAcademy
-    const userBio = user.bio
-
-    const profileInfo = document.createElement('div');
-    profileInfo.className = 'profile-info';
-
-    const userNickname = createElementWithText('h1', 'nickname', nickname);
-
-    const bio = document.createElement('p');
-    bio.className = 'bio'; 
-
-    if (!userBio) {
-        bio.innerText = `Describe yourself, role: ${rol}`;
-    }else{
-        bio.innerText = `${userBio}.
-        role: ${rol}`;
-    }
-    const teamAcademy = document.createElement('p');
-    teamAcademy.className = 'team-academy';
-
-    if (!userTeamAcademy) {
-        teamAcademy.innerText = 'Show support to your team/academy';
-    }else{
-        teamAcademy.innerText = userTeamAcademy;
-    }    
-
-    const editFavProfile = createEditFavProfile(cardContainer);
-    const createMyEventsProfile = createCreateMyEventsButton(cardContainer);
-
-    profileInfo.append(userNickname,bio,teamAcademy,editFavProfile,createMyEventsProfile);
-    return profileInfo
-}
-function createEditFavProfile(user) {
-    const editFavProfile = document.createElement('div');
-    editFavProfile.className = 'edit-fav-profile';
-
-    const editProfileButton = createEditProfileButton(user);
-    const favButtonProfile = createFavButtonProfile(user);
-
-    editFavProfile.append(editProfileButton,favButtonProfile);
-    return editFavProfile
-}
-
-/**
- * @param {HTMLElement | null} button
- */ 
-
-function createEditProfileButton(){
-    const editButton = document.createElement('button');
-    editButton.id = 'edit-profile-button';
-    editButton.textContent = 'Edit Profile';
-    editButton.addEventListener('click',displayEditForm)
-
-    console.log(displayEditForm)
-    return editButton
-}
-
-
-function displayEditForm() {
-    const editForm = document.getElementById('edit-form-container');
+export function displayEditForm() {
+    const editForm = document.getElementById('edit-profile-form-container');
     editForm.style.display = 'block';
-    hideCreateEvents()
-    hideForm()
+    cleanEventContainer()
     hidePreviewContainer()
 }
 
-async function updateUserProfile(){
-    
-    const userId = getUserId()   
-    const nickname = document.getElementsByClassName('nickname')
-    const rol = document.getElementsByClassName('rol')
-    const teamAcademy = document.getElementsByClassName('team-academy')
-    const bio = document.getElementsByClassName('bio')
-    
-    const newNickname = document.getElementById('input-new-nickname')
-    const newRol = document.getElementById('input-new-rol')
-    const newTeamAcademy = document.getElementById('input-team-academy')
-    const newBio = document.getElementById('input-bio').value.trim()
-    
-    let newUser = {
-        nickname: getInputValue(newNickname),
-        rol: getInputValue(newRol),
-        teamAcademy: getInputValue(newTeamAcademy),
-        bio: newBio
-    }
-    
-    const payload = JSON.stringify(newUser)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userId}`, "PUT",payload);
-    if (apiData.modifiedCount === 1) {
-        const userData =  getDataFromSessionStorage()
-        const updatedData = {
-            user:
-            {...userData.user,
-            nickname: newUser.nickname,
-            rol: newUser.rol,
-            teamAcademy: newUser.teamAcademy,
-            bio: newUser.bio
-            }
-        }
-        updateSessionStorage(updatedData)        
-    }
-    nickname.innerText = newUser.nickname
-    rol.innerText = newUser.rol    
-    teamAcademy.innerText = newUser.teamAcademy
-    bio.innerText = newUser.bio
-
-    const profileCardContainer = document.getElementById('profile-card-container');
-    profileCardContainer.innerHTML = ''
-
-    hideEditForm()
-    createProfileCard(newUser.nickname,newUser.rol,newUser.teamAcademy,newUser.bio);
-}
-
-function hideEditForm() {
-    const editForm = document.getElementById('edit-form-container');
+export function hideEditProfileForm() {
+    const editForm = document.getElementById('edit-profile-form-container');
     editForm.style.display = 'none';
 }
 
@@ -810,45 +668,13 @@ function hideEditForm() {
  * @param {HTMLElement | null} button
  */ 
 
-function createFavButtonProfile() {
-    const favButtonProfile = document.createElement('button');
-    favButtonProfile.id = 'fav-button-profile';
-    favButtonProfile.textContent = 'Favorites';
-    
-    favButtonProfile?.addEventListener('click',displayFavoriteEvents)
-    displayBasketCount() 
-    return favButtonProfile
-}
-
-function createCreateMyEventsButton(event) {
-    const createMyEventsProfile  = document.createElement('div');
-    createMyEventsProfile.className = 'create-myEvents-profile';
-
-  
-    const createEventsButton = createCreateEventsButton(event);
-    const myEventsButton = createMyEventsButton(event);
-
-    createMyEventsProfile.append(createEventsButton,myEventsButton);
-    return createMyEventsProfile
-}
-
-function createMyEventsButton() {
-    const myEventsButton = document.createElement('button');
-    myEventsButton.id = 'my-events-button';
-    myEventsButton.textContent = 'My Events';
-    myEventsButton?.addEventListener('click',displayMyEvents)
-
-    return myEventsButton
-}
-
-async function displayMyEvents() {
+export async function displayMyEvents() {
     hideCreateEvents()
-    hideEditForm() 
+    hideEditProfileForm() 
     hidePreviewContainer()  
     const eventContainer = document.querySelector('.event-container');
     const userId = getUserId()
     const filterValue = userId;  
-    
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
 
     if (!apiData) {
@@ -877,13 +703,13 @@ function createEditMyEventButton(e) {
     });
     
     return editButton
-}
+}       
 
-function displayEditMyEvents(eventId) {
-    const submitButton = document.getElementById('submit-button')
-    submitButton.style.display = 'none'
+function displayEditMyEvents(eventId) { 
     const showForm = document.getElementById('event-creator')
     showForm.style.display = 'block';
+    const submitButton = document.getElementById('submit-button')
+    submitButton.style.display = 'none'
     
     let saveChangesEventButton = document.querySelector('#save-changes-event-button')
     let cancelChangesEventButton = document.querySelector('#cancel-changes-event-button')
@@ -898,7 +724,6 @@ function displayEditMyEvents(eventId) {
         cancelChangesEventButton.innerText = 'Cancel'
         
         showForm.append(saveChangesEventButton,cancelChangesEventButton)
-        console.log('showform',showForm)
 
         saveChangesEventButton?.addEventListener('click', () => {
             updateMyEvent(eventId)
@@ -907,11 +732,9 @@ function displayEditMyEvents(eventId) {
         cancelChangesEventButton?.addEventListener('click', () => {
             displayMyEvents()
         })
-    }
-
-   
+    }   
     cleanEventContainer()
-    hideEditForm()
+    hideEditProfileForm()
     hidePreviewContainer()
 }
 
@@ -954,10 +777,8 @@ async function updateMyEvent(eventId) {
         url: getInputValue(newUrl),
     }
 
-    console.log('updated event',updatedEvent)
     const payload = JSON.stringify(updatedEvent)
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${eventId}`, "PUT",payload);
-    console.log('apidata',apiData)
     
     eventName.innerText = updatedEvent.name
     currency.innerText = updatedEvent.currency
@@ -978,8 +799,6 @@ async function updateMyEvent(eventId) {
         alert('No changes Detected')
         return
     }
-
-    console.log(updatedEvent)
 }
 
 function createRemoveEventButton(e) {
@@ -1001,29 +820,22 @@ async function removeEvent (eventId) {
     alert('Event removed successfully')
 } 
 
-function createCreateEventsButton() {
-    const createEventsButton = document.createElement('button');
-    createEventsButton.id = 'create-events-button';
-    createEventsButton.textContent = 'Create Events';
-    createEventsButton?.addEventListener('click',displayCreateEvents)
-    return createEventsButton
+export function hideCreateEvents () {
+    const eventCreatorForm = document.getElementById('event-creator')
+    if (eventCreatorForm) {
+        eventCreatorForm.style.display = 'none';
+    }
 }
 
-function hideCreateEvents () {
-    cleanEventContainer()
-    const hideForm = document.getElementById('event-creator')
-    hideForm.style.display = 'none';
-}
-
-function displayCreateEvents () {
+export function displayCreateEvents () {
     cleanEventContainer();
-    hideEditForm();
-    const showForm = document.getElementById('event-creator');
+    hideEditProfileForm();
+    const eventCreator = document.getElementById('event-creator');
     const cancelChangesEventButton = document.querySelector('#cancel-changes-event-button');
     const saveChangesEventButton = document.querySelector('#save-changes-event-button');
     
-    if (showForm.style.display === 'none') {
-        showForm.style.display = 'block';
+    if (eventCreator.style.display === 'none') {
+        eventCreator.style.display = 'block';
         if (cancelChangesEventButton) {
             cancelChangesEventButton.remove();
         }
@@ -1035,7 +847,7 @@ function displayCreateEvents () {
             submitButton.style.display = 'block';
         }
     } else {
-        showForm.style.display = 'none';
+        eventCreator.style.display = 'none';
         const submitButton = document.querySelector('#submit-button');
         if (submitButton) {
             submitButton.style.display = 'none';
@@ -1044,66 +856,7 @@ function displayCreateEvents () {
     hidePreviewContainer();
 }
 
-function onClickSubmitButton(event) {
-    event.preventDefault()
-    hideCreateEvents()
-    const newTitleEvent = document.getElementById('main-title-event');
-    newTitleEvent.innerText = 'Have a look at your new event, check it out before pusblishing or edit it if you need!';
-
-    if (validateForm() === false) {
-        alert("Please ensure all fields are correctly filled before submitting.");
-        return; 
-    }else {
-     cleanEventContainer()   
-     createNewEvent()  
-    }
-}
-
-async function createNewEvent () {
-    const timestamp = new Date()
-    //const flyer = document.getElementById('subtmit-flyer')
-    const name = document.getElementById('input-event-name')
-    const venue = document.getElementById('input-venue')    
-    const dateTime = document.getElementById('input-dateTime')
-    const price = document.getElementById('input-price')
-    const currency = document.getElementById('input-currency')
-    const music = document.getElementById('input-music-ratio')
-    const country = document.getElementById('input-country')
-    const city = document.getElementById('input-city')
-    const dance = document.getElementById('input-dance')
-    const url = document.getElementById('input-url')
-    const eventContainer = document.querySelector('.event-container');
-    const userId = getUserId()
-    const event_id = String(timestamp.getTime())
-
-    /**
-     * @type {Event}
-     */
-    let event = {
-        //flyer: getInputValue(flyer),
-        name: getInputValue(name),
-        venue: getInputValue(venue),
-        dateTime: getInputValue(dateTime),
-        price: getInputValue(price),
-        currency: getInputValue(currency),
-        music: getInputValue(music),
-        city: getInputValue(city),
-        country: getInputValue(country),
-        dance: getInputValue(dance),
-        url: getInputValue(url),
-        user_id: userId,
-        event_id: event_id
-    }
-    let eventId = event.event_id
-    console.log(eventId)
-    newEventList.push(event)
-    saveNewEventToLocalStorage(newEventList)
-    createEventCardWithAnimation(event, eventContainer)
-    createPreviewContainer() 
-    hideForm()
-}
-
-function createPreviewContainer() {
+export function createPreviewContainer() {
     
         let previewContainer = document.querySelector('.preview-container'); 
         if (!previewContainer) {
@@ -1123,26 +876,21 @@ function createPreviewContainer() {
 }}
 
 function createPublishButton() {
-     
     const newTitleEvent = document.getElementById('main-title-event');
-     
     const publishButton = document.createElement('button')
     publishButton.className = 'publish-button'
     publishButton.innerText = 'PUBLISH'
      
     publishButton.addEventListener('click', async () => {  
-         cleanEventContainer()
-        // hidePreviewContainer()
+        cleanEventContainer()
         let newEvent = JSON.parse(localStorage.getItem('newEventList')); 
         console.log('this is new event',newEvent)
-        let previewContainer = document.querySelector('.preview-container'); 
-        if (previewContainer) {
-        previewContainer.remove()
-    }
+        
         const payload = JSON.stringify(newEvent[0])
         const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/event?`,'POST',payload);
         console.log('this is the data',apiData)
         newTitleEvent.innerText = 'Now you can go to the feed, everybody can see your event! Thanks for contributing to the dance community!';
+        hidePreviewContainer()
     })
     return publishButton
 }
@@ -1178,65 +926,12 @@ export function getInputValue(inputElement) {
     return '';
 }
 
-function hideForm () {
-    const hideForm = document.getElementById('event-creator')
-    if (hideForm) {
-        hideForm.style.display = 'none';
-    }
-}
-
-function validateForm() {
-    let formIsValid = false;
-    const name = document.getElementById('input-event-name');
-    const venue = document.getElementById('input-venue');
-    const date = document.getElementById('input-date');
-    const time = document.getElementById('input-time');
-    const price = document.getElementById('input-price');
-    const currency = document.getElementById('input-currency');
-    const music = document.getElementById('input-music-ratio');
-    const city = document.getElementById('input-city');
-    const country = document.getElementById('input-country');
-    const dance = document.getElementById('input-dance');
-  
-    const submitButton = document.getElementById('submit-button');
-
-    const fields = [name, venue, date, time, price, currency, music, city,country, dance];
-    formIsValid = fields.every(field => field?.value.trim() !== '');
-
-    submitButton.disabled = !formIsValid;
-
-    const fieldsEmpty = [
-        'input-event-name',
-        'input-venue',
-        'input-date',
-        'input-time',
-        'input-price',
-        'input-currency',
-        'input-music-ratio',
-        'input-city',
-        'input-country',
-        'input-dance',
-    ].map(id => document.getElementById(id));
-
-    formIsValid = fieldsEmpty.every(fieldsEmpty => {
-        if (fieldsEmpty?.value.trim() === '') {
-            fieldsEmpty?.classList.add('invalid-field');
-            return false;
-        } else {
-            fieldsEmpty?.classList.remove('invalid-field');
-            return true;
-        }
-    });
-    return formIsValid
-}
-function saveNewEventToLocalStorage (newEventList) {
-    localStorage.setItem('newEventList', JSON.stringify(newEventList));
-}
+//========================BASKET===============================//
 
 //========================REGISTER===============================//
 
 /**
- * Handles a successful login from the login component
+ * Handles a successful register from the register component
  * @param {CustomEvent} customEvent - The userList returned from the API
  * @returns void
  */
@@ -1244,13 +939,13 @@ function onRegisterComponentSubmit (customEvent) {
     console.log(`DESDE FUERA DEL COMPONENTE:`, customEvent);
 
     let userListData = customEvent.detail
-    saveUserListToLocalStorage(userListData)
     console.log(userListData)
+    saveUserListToLocalStorage(userListData)
     alert('User registered successfully')
     navigateTo('./login.html')
 }
 
-function navigateTo(pathname) {
+export function navigateTo(pathname) {
     const newLocation = {
       ...window.location.href = pathname,
     }
@@ -1263,9 +958,9 @@ function navigateTo(pathname) {
 function saveUserListToLocalStorage(userList) {
     localStorage.setItem('userList', JSON.stringify(userList));
 }
-function updateSessionStorage(storeValue) {
+export function updateSessionStorage(storeValue) {
     sessionStorage.setItem('userList', JSON.stringify(storeValue))
-    console.log('this is storevalue',storeValue)
+    console.log('this is storevalue',storeValue)    
 }
 /**
  * Saves the current state of the store in local storage.
@@ -1318,7 +1013,7 @@ function getDataFromLocalStorage() {
     return JSON.parse(localStorage.getItem('userList') || defaultValue)
   }
 
-function getDataFromSessionStorage() {
+export function getDataFromSessionStorage() {
     const defaultValue = JSON.stringify({user:[]})
     return JSON.parse(sessionStorage.getItem('userList') || defaultValue)
 }
@@ -1330,7 +1025,6 @@ function checkLoginStatus() {
       const storeUserData = /** @type {User} */(storedData?.user)
       delete storeUserData.password
       store.user.login(storeUserData)
-      console.log(storeUserData)
     }
 }
 
@@ -1379,15 +1073,11 @@ function isUserLoggedIn() {
     const userData = getDataFromSessionStorage()
     return userData?.user?.token
   }
-function getUserId() {
+export function getUserId() {
     const userData = getDataFromSessionStorage();
-    console.log(userData)
     return userData.user._id;
 }
 
-/**
- * Check user login status
- */
 export {
     getDataFromLocalStorage,
     setLocalStorageFromStore
