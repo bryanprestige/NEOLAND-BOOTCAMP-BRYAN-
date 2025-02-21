@@ -1,5 +1,6 @@
 /*======EVENTS======*/
-.event-container, .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .city-country, .name-fav,
+
+ .event-card,#event-form, .left-column, .right-column, .image-and-details, .time-price, .city-country, .name-fav,
 .reviews-placeholder    {
     display: flex;
 }
@@ -7,7 +8,7 @@
  .login-button, .register, .remove-button, .name {
     width: 100%;
 }
-.event-card,#event-form,.left-column, .right-column, .fav-button, .city-country, .time-price, .name-fav  {
+.event-card,#event-form, .fav-button, .city-country, .time-price, .name-fav  {
     background-color: white;
 }
 .event-card,#event-form,.left-column, .right-column {
@@ -17,34 +18,29 @@
 .button-dance-type, .button-city,.button-country,.date, .time, .price, .event-card,#event-form{
     border-radius: 10px;
 }
-.left-column, .right-column, .reviews-placeholder, .time-price, .city-country, .name-fav,.fav-button{
+.reviews-placeholder, .time-price, .city-country, .name-fav,.fav-button{
     border: none;
 }
 .event-container,.event-card,#event-form {
     gap: 20px; 
 }
-.left-column, .right-column,.image-and-details{
+.image-and-details{
     gap: 10px;
 }
-.event-container {
-    flex-wrap: wrap; 
-    overflow-y: auto; 
+.event-container { 
     max-height: 80vh; 
     justify-content: center; 
     font-family: 'Montserrat', sans-serif; 
     font-size: 1rem;
     font-style: italic;
 }
+
 .event-card,#event-form {
-    flex-direction: row; 
     padding: 15px;
     border: 1px solid #ddd;
     width: calc(50% - 20px); 
 } 
-.left-column, .right-column {
-    flex-direction: column;
-    flex: 1; 
-}
+
 .image-and-details {
     flex-direction: column;
 }

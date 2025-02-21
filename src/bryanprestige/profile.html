@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dancing Events USER</title>
     <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/dancingEvents.css">
     <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./java/components/CreateProfileCardLit/CreateProfileCardLitCSS.css">
+    <link rel="stylesheet" href="./css/dancingEvents.css">
+    <script type="module" src="./java/components/bundle.js" defer></script>
     <script type="module" src="./java/dancingEvents.js"></script>
 </head>
 <body>
@@ -64,6 +66,7 @@
     </nav>
     <section id="profile-card-container">
         <h1 id="main-title-form">THIS COULD BE YOUR OWN SPACE</h1>
+        <create-profile-card></create-profile-card>
     </section>
     <section class="header-container-profile">
         <h1 id="main-title-event">
@@ -71,77 +74,13 @@
             REGISTER OR LOG IN TO ENJOY THE FULL DANCING EXCHANGE EXPERIENCE!
         </h1>
     </section>
-    <section class="event-container">
-    </section>
     <section id =event-creator>
-        <form action="#" id="event-form">
-            <fieldset id="event-fieldset">
-                <legend>Event Creator</legend>
-               <div class="left-column">
-                    <label> Submit your flyer</label>
-                    <input type="file" id="submit-flyer" name="filename">
-                    <input type="text" name="input-event-name" id="input-event-name" placeholder="Name of the event" required>
-                    <input type="text" name="input-venue" id="input-venue" placeholder="Venue" required>
-                    <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="2025-02-10T08:30" required>
-                    <input type="url" id="input-url" placeholder="instagram-url">
-
-                </div>
-                <div class="right-column">
-                    <input type="number" name="input-price" id="input-price" placeholder="Price" max="1000" required>
-                    <select class="form-select" id="input-currency" name="input-currency" required>
-                        <option>select currency</option>
-                        <option value="BTC">Bitcoin</option>
-                        <option value="ETH">Ethereum</option>
-                        <option value="CAD">Canadian Dollar</option>
-                        <option value="EUR">Euro</option>
-                        <option value="GBP">Pound Sterling</option>
-                        <option value="JPY">Japanese Yen</option>
-                        <option value="MXN">Mexican Peso</option>
-                        <option value="RUB">Russian Ruble</option>
-                        <option value="CHF">Swiss Franc</option>
-                        <option value="USD">US Dollar</option>   
-                    </select>
-                    <input type="text" name="input-music-ratio" id="input-music-ratio" placeholder="Music Ratio" required>
-                    <input type="text" name="input-city" id="input-city" placeholder="City" required>
-                    <input type="text" name="input-country" id="input-country" placeholder="country" required>
-                    <input type="text" name="input-dance" id="input-dance" placeholder="Dance" required>
-                    <button type="submit" name="submit-button" id="submit-button">Submit</button>
-                </div>
-            </fieldset>
-        </form> 
+        <create-event-form></create-event-form>
     </section>
-    <section class="event-container">   
+    <section id="edit-profile-form-container">
+        <edit-profile-form></edit-profile-form>
     </section>
-    <section id="edit-form-container">
-        <form action="#" id="edit-profile-form">
-            <div class="edit-form-container">
-             <!--
-                <h1>Edit your profile</h1>
-              <p>Please fill this form to update your data</p>
-              <hr>
-              <label for="input-new-email"><b>Email</b></label> 
-              <input type="text" placeholder="Enter Email" name="input-new-email" id="input-new-email" required autocomplete="on">
-          -->
-                <label for="input-new-nickname"><b>Nickname</b></label>
-                    <input type="text" placeholder="Edit Nickname" name="input-new-nickname" id="input-new-nickname" required>
-                <label for="input-team-academy"><b>Team/Academy</b></label>
-                    <input type="text" placeholder="Enter Team-Academy Name" name="input-team-academy" id="input-team-academy">
-                <label for="input-new-rol"><b>Role</b></label>
-                <select name="input-new-rol" id="input-new-rol" >
-                    <option value="Leader">Leader</option>
-                    <option value="Follower">Follower</option>
-                    <option value="Both">Both</option>
-                </select>
-                <label for="input-bio"> About you, max 140 characters</label>
-                    <textarea name="bio" id="input-bio" cols="20" rows="8" maxlength="140">
-                        
-                    </textarea>
-                <div>
-                    <button type="button" id="submit-new-user-data" >Save Changes</button>
-                    <button type="button" id="cancel-edit-profile-button" >Cancel</button>
-                </div>
-            </div>
-          </form>
+    <section class="event-container">
     </section>
 </body>
 </html>
