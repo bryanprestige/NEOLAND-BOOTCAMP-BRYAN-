@@ -1,4 +1,5 @@
 
+
 /*
 // @ts-check
 */
@@ -37,10 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
      
     else if (window.location.pathname.includes('index.html')) {
         updateDefaultFeed() 
-        
-        const searchButton = document.getElementById('search-button');
-        hideShowSearchButton()
-        searchButton?.addEventListener('click', onSearchClick);
 
         const favoriteButton = document.getElementById('favorite-button');
         favoriteButton?.addEventListener('click', displayFavoriteEvents);        
@@ -51,43 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
 /*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
 /*TO DO: DISPLAY EVENTS BOUGHT ON THE BASKET.HTML*/
 /*TO DO: FINISh STYLE OF THE BASKET PAGE*/
+/*TO DO: MAKE A FOLLOW AND UNFOLLOW BUTTON */
+
+/*MAKE A CHAT BETWEEN USERS*/
 
 /*TO DO: RESTRICT PROFILE AND OPTIONS TO LOGGED IN USERS*/
 /*TO DO: SHOW LOG OUT BUTTON INSTEAD OF LOG IN BUTTON WHEN USER IS LOGGED IN*/
-
 /*TO DO: FILTRADO POR FECHA, BUSQUEDA DE FECHA EXACTA Y FILTRO ENTRE DOS FECHAS*/
-/*TO DO: FIX ON SEARCH CLICK NOEVENT()*/
-/*TO DO: FIX MY EVENTS NOEVENT()*/
-
-/*TO DO: FIX EDIT BUTTON IN MY EVENTS */
+/*TO DO: DISPLAY USERNAME INSTEAD OF "PROFILE" WHEN USER IS LOGGED IN */
 /*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
-/*TO DO: MAKE EDIT MYEVENT BUTTON WORK WITH APIDATA*/
 /*TO DO: EXPORT DISPLAYMYBASKETCOUNT TO MY FAVOURITE EVENTS COMPONENT*/
-
 
 //====================FEED=====================//
 
-
-
-/**
- * @param {MouseEvent} event
- */
-async function onSearchClick(event) {
-    event.preventDefault();
-    
-    const searchField = document.getElementById('search-field').value.trim().toLowerCase();
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${searchField}`);
-
-    const eventContainer = document.querySelector('.event-container');
-
-    if (searchField.length === !apiData) { 
-        noEventFound()
-    } else {
-        cleanEventContainer()
-        apiData.forEach(event => createEventCardWithAnimation(event,eventContainer));
-    }
-    scrollToTop();
-}
 /**
  * @param {MouseEvent} event
  */
@@ -126,6 +99,7 @@ async function updateDefaultFeed() {
 /**
  * @param {MouseEvent} event
  */
+
 export function displayFavoriteEvents(event) {
     event.preventDefault(); 
     const eventContainer = document.querySelector('.event-container');
@@ -145,6 +119,7 @@ export function displayFavoriteEvents(event) {
      }
     hideEditProfileForm()
     hidePreviewContainer()
+    displayBasketCount()
 }
 
 /**
@@ -598,14 +573,14 @@ function resPricevalue(card) {
 
 }
 
-function scrollToTop() {
+export function scrollToTop() {
     const scrollList = document.querySelector('.event-container');
     if (scrollList) {
         scrollList.scrollTop = 0;
     }
 }
 
-function noEventFound () {
+export function noEventFound () {
     cleanEventContainer()
     const eventContainer = document.querySelector('.event-container');
     const errorImg = document.createElement('img');
@@ -614,20 +589,7 @@ function noEventFound () {
     
     eventContainer.appendChild(errorImg);
 }
-function hideShowSearchButton() {
-    const searchButton = document.getElementById('search-button');
-    const searchInput = document.getElementById('event-name');  
-    // Desactivar el botón inicialmente si el input está vacío
-    if (searchInput?.value.trim() === '') {
-          searchButton.disabled = true;
-    }
-    // Evento para habilitar/deshabilitar el botón según el contenido del input
-    searchInput?.addEventListener('input', () => {
-          const isInputValid = searchInput.value.trim() !== '';
-          searchButton.disabled = !isInputValid; // Habilitar o deshabilitar el botón
-    });
-}
-function cleanEventContainer() {
+export function cleanEventContainer() {
     const eventContainer = document.querySelector('.event-container');
     while (eventContainer.firstChild) {
         eventContainer.removeChild(eventContainer.firstChild);
@@ -657,6 +619,7 @@ export function displayEditForm() {
     editForm.style.display = 'block';
     cleanEventContainer()
     hidePreviewContainer()
+    hideCreateEvents()
 }
 
 export function hideEditProfileForm() {
@@ -677,7 +640,7 @@ export async function displayMyEvents() {
     const filterValue = userId;  
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
 
-    if (!apiData) {
+    if (apiData.length === 0) {
         noEventFound()
      } else {
         cleanEventContainer() 
@@ -705,100 +668,18 @@ function createEditMyEventButton(e) {
     return editButton
 }       
 
-function displayEditMyEvents(eventId) { 
-    const showForm = document.getElementById('event-creator')
-    showForm.style.display = 'block';
-    const submitButton = document.getElementById('submit-button')
-    submitButton.style.display = 'none'
-    
-    let saveChangesEventButton = document.querySelector('#save-changes-event-button')
-    let cancelChangesEventButton = document.querySelector('#cancel-changes-event-button')
-    
-    if (!saveChangesEventButton || !cancelChangesEventButton) {
-        const saveChangesEventButton = document.createElement('button')
-        saveChangesEventButton.id = 'save-changes-event-button'
-        saveChangesEventButton.innerText = 'Save Changes'
-        
-        const cancelChangesEventButton = document.createElement('button')
-        cancelChangesEventButton.id = 'cancel-changes-event-button'
-        cancelChangesEventButton.innerText = 'Cancel'
-        
-        showForm.append(saveChangesEventButton,cancelChangesEventButton)
-
-        saveChangesEventButton?.addEventListener('click', () => {
-            updateMyEvent(eventId)
-        })
-
-        cancelChangesEventButton?.addEventListener('click', () => {
-            displayMyEvents()
-        })
-    }   
+function displayEditMyEvents(event_id) { 
+    console.log(event_id)
     cleanEventContainer()
     hideEditProfileForm()
     hidePreviewContainer()
-}
 
-async function updateMyEvent(eventId) {
-//const image = getElementsByClassName('event-image')
+    const eventEditorContainer = document.getElementById('edit-event-form-container')
+    eventEditorContainer.style.display = 'block'
+    const eventEditor = document.getElementById('event-editor')
+    eventEditor.setAttribute('eventId', event_id)
+    console.log(eventEditor)
     
-    const eventName = document.getElementsByClassName('name')
-    const currency = document.getElementsByClassName('currency')
-    const price = document.getElementsByClassName('price')
-    const venue = document.getElementsByClassName('venue')
-    const dateTime = document.getElementsByClassName('date-time')
-    const music = document.getElementsByClassName('music-ratio')
-    const city = document.getElementsByClassName('button-city')
-    const country = document.getElementsByClassName('button-country')
-    const dance = document.getElementsByClassName('button-dance-type')
-    const instagramAnchor = document.getElementsByClassName('instagram-anchor')
-
-    const newEventName = document.getElementById('input-event-name')
-    const newVenue = document.getElementById('input-venue')    
-    const newDateTime = document.getElementById('input-dateTime')
-    const newPrice = document.getElementById('input-price')
-    const newCurrency = document.getElementById('input-currency')
-    const newMusic = document.getElementById('input-music-ratio')
-    const newCity = document.getElementById('input-city')
-    const newCountry = document.getElementById('input-country')
-    const newDance = document.getElementById('input-dance')
-    const newUrl = document.getElementById('input-url')
-    
-    let updatedEvent = {
-        //flyer: getInputValue(flyer),
-        name: getInputValue(newEventName),
-        venue: getInputValue(newVenue),
-        dateTime: getInputValue(newDateTime),
-        price: getInputValue(newPrice),
-        currency: getInputValue(newCurrency),
-        music: getInputValue(newMusic),
-        city: getInputValue(newCity) ,
-        country: getInputValue(newCountry),
-        dance: getInputValue(newDance),
-        url: getInputValue(newUrl),
-    }
-
-    const payload = JSON.stringify(updatedEvent)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${eventId}`, "PUT",payload);
-    
-    eventName.innerText = updatedEvent.name
-    currency.innerText = updatedEvent.currency
-    price.innerText = updatedEvent.price
-    venue.innerText = updatedEvent.venue
-    dateTime.innerText = updatedEvent.dateTime
-    music.innerText = updatedEvent.music
-    city.innerText = updatedEvent.city
-    country.innerText = updatedEvent.country
-    dance.innerText = updatedEvent.dance
-    instagramAnchor.innerText = updatedEvent.url
-    
-    if (apiData.modifiedCount === 1) {
-        alert('Event updated successfully')
-        hideCreateEvents()
-        displayMyEvents()
-    }else if (apiData.modifiedCount === 0) {
-        alert('No changes Detected')
-        return
-    }
 }
 
 function createRemoveEventButton(e) {
@@ -806,7 +687,6 @@ function createRemoveEventButton(e) {
     removeEventButton.className = 'remove-event-button';
     removeEventButton.textContent = 'Remove Event';
     let eventId = e._id;
-    console.log(eventId)
     
     removeEventButton?.addEventListener('click', () => {
         removeEvent(eventId);
@@ -818,7 +698,7 @@ async function removeEvent (eventId) {
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/delete/event/${eventId}`,'DELETE');
     console.log(apiData)
     alert('Event removed successfully')
-} 
+}  
 
 export function hideCreateEvents () {
     const eventCreatorForm = document.getElementById('event-creator')

@@ -176,6 +176,10 @@ img {
     display: none;
     
 }
+#edit-event-form-container {
+    display: none;
+    
+}
   /*=====LOG IN STYLES=====*/
 .register-button,.container-signin{
     border: none;

@@ -14,6 +14,7 @@ let newEventList = []
 export class CreateEventForm extends LitElement {
     
     static styles = [ css,reset,appCss];
+    
     static properties = { 
         prueba: {type: String},
     };
@@ -157,24 +158,12 @@ export class CreateEventForm extends LitElement {
                 user_id: userId,
                 event_id: event_id
             }
-            //let onFormCreateEvent 
             console.log('new event list',newEventList)  
             
             newEventList.push(event)
             this._saveNewEventToLocalStorage(newEventList)
             console.log('neweventlist',newEventList)
-           /*  if (event) {
-                onFormCreateEvent = new CustomEvent("create-event", {
-                    bubbles: true,
-                    detail: event
-                })
-            }else {
-                onFormCreateEvent = new CustomEvent("create-event", {
-                  bubbles: true,
-                  detail: null
-                })
-            } */
-            //this.dispatchEvent(onFormCreateEvent);
+           
             createEventCardWithAnimation(event, eventContainer)
             createPreviewContainer()
         }
