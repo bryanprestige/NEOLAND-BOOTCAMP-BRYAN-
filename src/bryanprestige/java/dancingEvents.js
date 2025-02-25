@@ -1,5 +1,3 @@
-
-
 /*
 // @ts-check
 */
@@ -20,7 +18,7 @@ let totalPriceValue = 0;
 
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    getEventId()
     if (window.location.pathname.includes('profile.html')) {
         displayProfile();
     }
@@ -31,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('create-user', onRegisterComponentSubmit)
     }
     else if (window.location.pathname.includes('basket.html')) {
-        let currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
+        /* let currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
         const basketPrice = document.getElementById('basket-price')
-        basketPrice.textContent = `total price: ${currentTotalPrice}$`
+        basketPrice.textContent = `total price: ${currentTotalPrice}$` */
+
+        displayBoughtItems ()
     }
      
     else if (window.location.pathname.includes('index.html')) {
@@ -48,7 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
 /*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
 /*TO DO: DISPLAY EVENTS BOUGHT ON THE BASKET.HTML*/
 /*TO DO: FINISh STYLE OF THE BASKET PAGE*/
+/*TO DO: 
+EVENT IN FEED WILL DISPLAY WITHOUT THE BUY BUTTON LIKE BEFORE,
+IT WILL DISPLAY A "BUY TICKET" OPTION THAT WILL TAKE THEM TO ANOTHER PAGE WITH JUST THE EVENT DISPLAYED 
+AND WITH THE BASKET BUTTON ACTIVE TO GET TICKETS, ALSO A CHECKOUT BUTTON THAT WILL TAKE THEM TO A CHECKOOUT PAGE
+*/
+/*TO DO: CREATE A PAGE JUST FOR WHEN THE EVENTS ARE CLICKED AND JUST DISPLAYIN THAT EVENT*/
 /*TO DO: MAKE A FOLLOW AND UNFOLLOW BUTTON */
+/*TO DO: DISPLAY FOLLOWERS ON USERS PROFILE */
+/*TO DO: ABLE TO FIND USERS IN THE FIND PAGE */
 
 /*MAKE A CHAT BETWEEN USERS*/
 
@@ -69,10 +77,10 @@ export async function onFilterButtonClick(e) {
     const target = e.target;
     const filterValue = target?.textContent?.toLowerCase();  
     
+    const eventContainer = document.querySelector('.event-container');
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
   
     if (!apiData) return;
-    const eventContainer = document.querySelector('.event-container');
     if (!eventContainer) return;
     cleanEventContainer();
 
@@ -102,8 +110,9 @@ async function updateDefaultFeed() {
 
 export function displayFavoriteEvents(event) {
     event.preventDefault(); 
-    const eventContainer = document.querySelector('.event-container');
     hideCreateEvents()
+    hideEditEvents()
+    const eventContainer = document.querySelector('.event-container');
     const userId = getUserId()
     const storageUser = `favList_${userId}`;
 
@@ -137,10 +146,19 @@ export function createEventCardWithAnimation(event, container){
     loadBasketFromLocalStorage()
     return card;
 }
+
+function displayBoughtItems () {
+    const basketData = JSON.parse(localStorage.getItem('basket')) || [];
+
+    const insideBasketData = basketData[0]
+    console.log(insideBasketData)
+}
+
 /**
  * 
  * @param {Event} event 
  */ 
+
 function createEventCardElement(event) {
     const card = document.createElement('div');
     card.className = 'event-card';
@@ -319,7 +337,7 @@ export function handleBuyButtonClick(card, event, basketElement) {
     } 
     updateTicketCount(event, card.ticketCount);
     updateBasketCounter(basketElement);
-    saveBasketToLocalStorage(); // Guardar cambios
+    saveBasketToLocalStorage(event); // Guardar cambios
 }
 /**
  * @param {object} card
@@ -345,7 +363,7 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
 
         updateTicketCount(event, card.ticketCount);
         updateBasketCounter(basketElement);
-        saveBasketToLocalStorage(); // Guardar cambios
+        saveBasketToLocalStorage(e); // Guardar cambios
     });
     return removeButton;
 }
@@ -449,13 +467,11 @@ function createElementWithText(tag, className, textContent) {
 function updateTicketCount(event, ticketCount) {
     let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
     const eventIndex = ticketList.findIndex(item => item.name === event.name);
-    //UPDATE TICKET COUNT
     if (eventIndex === -1) {
         ticketList.push({ name: event.name, count: ticketCount });
     } else {
         ticketList[eventIndex].count = ticketCount;
     }
-    //ADD TICKETS TO LOCALSTORAGE
     localStorage.setItem('ticketList', JSON.stringify(ticketList));
 }
 /**
@@ -476,16 +492,19 @@ function updateBasketCounter(basketElement) {
     if(basketCount === 0) {
      basketElement.innerText = "BASKET"
 }}
-function saveBasketToLocalStorage() {
+function saveBasketToLocalStorage(event) {
     const eventCards = document.querySelectorAll('.event-card');
+    let eventId = event._id;
+    console.log(eventId,'este es el event id del basket storage')
     const basketData = [];
 
     eventCards.forEach(card => {
-        const eventName = card.querySelector('.name').textContent;
+        //const eventName = card.querySelector('.name').textContent;
         const ticketCount = card.ticketCount || 0;
 
         if (ticketCount > 0) {
-            basketData.push({ name: eventName, ticketCount });
+            basketData.push(event);
+            console.log('event in basketdata',basketData)
         }
     });
 
@@ -620,6 +639,7 @@ export function displayEditForm() {
     cleanEventContainer()
     hidePreviewContainer()
     hideCreateEvents()
+    hideEditEvents()
 }
 
 export function hideEditProfileForm() {
@@ -634,7 +654,8 @@ export function hideEditProfileForm() {
 export async function displayMyEvents() {
     hideCreateEvents()
     hideEditProfileForm() 
-    hidePreviewContainer()  
+    hidePreviewContainer() 
+    hideEditEvents() 
     const eventContainer = document.querySelector('.event-container');
     const userId = getUserId()
     const filterValue = userId;  
@@ -681,6 +702,12 @@ function displayEditMyEvents(event_id) {
     console.log(eventEditor)
     
 }
+ export function hideEditEvents(){
+    const eventEditor = document.getElementById('edit-event-form-container')
+    if (eventEditor) {
+        eventEditor.style.display = 'none';
+    }
+}
 
 function createRemoveEventButton(e) {
     const removeEventButton = document.createElement('button');
@@ -710,6 +737,7 @@ export function hideCreateEvents () {
 export function displayCreateEvents () {
     cleanEventContainer();
     hideEditProfileForm();
+    hideEditEvents()
     const eventCreator = document.getElementById('event-creator');
     const cancelChangesEventButton = document.querySelector('#cancel-changes-event-button');
     const saveChangesEventButton = document.querySelector('#save-changes-event-button');
@@ -888,14 +916,20 @@ function onLoginComponentSubmit(customEvent) {
  * If no data is found, returns an empty State object.
  */
 
-function getDataFromLocalStorage() {
+function   getDataFromLocalStorage() {
     const defaultValue = JSON.stringify(INITIAL_STATE)
     return JSON.parse(localStorage.getItem('userList') || defaultValue)
   }
 
 export function getDataFromSessionStorage() {
-    const defaultValue = JSON.stringify({user:[]})
-    return JSON.parse(sessionStorage.getItem('userList') || defaultValue)
+    const sessionDefaultValue = JSON.stringify({user:[]})
+    return JSON.parse(sessionStorage.getItem('userList') || sessionDefaultValue)
+}
+
+function getBasketFromLocalStorage() {
+    const localBasketDefaultValue = JSON.stringify({0:[]})
+    return JSON.parse(localStorage.getItem('basket') || localBasketDefaultValue)
+
 }
   
 function checkLoginStatus() {
@@ -958,6 +992,13 @@ export function getUserId() {
     return userData.user._id;
 }
 
+function getEventId() {
+    const eventData = getBasketFromLocalStorage()
+    const eventId = eventData[0]._id
+    console.log('this is eventID beggining',eventId)
+    return eventId
+    
+}
 export {
     getDataFromLocalStorage,
     setLocalStorageFromStore

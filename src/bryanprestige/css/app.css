@@ -49,7 +49,8 @@ a {
 .remove-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
 .publish-button,.fav-button, #favorite-button, .venue, .name,
  .music-ratio,#edit-profile-button, #fav-button-profile, #my-events-button,
- #create-events-button,#submit-new-user-data, #cancel-edit-profile-button  {
+ #create-events-button,#submit-new-user-data, #cancel-edit-profile-button,
+ .remove-event-button, .edit--my-event-button,#save-changes-button,#cancel-changes-button  {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -60,7 +61,8 @@ a {
 #search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
 .publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
 #favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover, #my-events-button:hover,
-#create-events-button:hover,#submit-new-user-data:hover,  #cancel-edit-profile-button:hover  {
+#create-events-button:hover,#submit-new-user-data:hover,  #cancel-edit-profile-button:hover,
+.remove-event-button:hover, .edit--my-event-button:hover,#save-changes-button:hover, #cancel-changes-button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -96,7 +98,7 @@ a {
 }
 #favorite-button, #edit-profile-button, #fav-button-profile,
  #my-events-button, #create-events-button,#submit-new-user-data,
- #cancel-edit-profile-button {
+ #cancel-edit-profile-button, .remove-event-button, .edit--my-event-button {
     padding: 5px 10px;
 }
 .fav-button {
@@ -110,11 +112,16 @@ a {
 #my-events-button, #create-events-button {
     width: fit-content;
 }
-#cancel-edit-profile-button{
+#cancel-edit-profile-button, .remove-event-buttonm,#cancel-changes-button {
     background-color: rgb(230, 66, 66);
+    color: white;
 }
-#submit-new-user-data{
+#submit-new-user-data,#save-changes-button{
     background-color: lightgreen;
+}
+
+.edit--my-event-button{
+    background-color: #ffaa00;
 }
 /************IMG***********/
 .error-img{

@@ -6,6 +6,7 @@ import { CreateProfileCard } from "./CreateProfileCardLit/CreateProfileCardLit.j
 import { EditProfileForm } from "./EditProfileFormLit/EditProfileFormLit.js";
 import { EditEventForm } from "./EditEventForm/EditEventFormLit.js";
 import { SearchEventsForm } from "./SearchEventsForm/SearchEventsForm.js";
+import { CheckoutForm } from "./CheckoutFormLit/CheckoutFormLit.js";
 
 
 export {LoginForm};
@@ -16,3 +17,4 @@ export {CreateProfileCard};
 export {EditProfileForm};
 export {EditEventForm};
 export {SearchEventsForm};
+export {CheckoutForm};
