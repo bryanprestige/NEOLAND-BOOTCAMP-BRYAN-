@@ -52,8 +52,8 @@ app.delete('/api/delete/user/:id', async (req, res) => {
   res.json(await db.users.delete(req.params.id))
 }) 
 
-app.get('/api/filter/users/:id', async (req, res) => {
-  res.json(await db.users.filterById( req.params.id))
+app.get('/api/filter/users/:nickname', async (req, res) => {
+  res.json(await db.users.filter( {$text: {$search: req.params.nickname}}))
 })
 
 app.post('/api/login', async (req, res) => {

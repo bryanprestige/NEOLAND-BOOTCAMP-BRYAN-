@@ -50,7 +50,8 @@ a {
 .publish-button,.fav-button, #favorite-button, .venue, .name,
  .music-ratio,#edit-profile-button, #fav-button-profile, #my-events-button,
  #create-events-button,#submit-new-user-data, #cancel-edit-profile-button,
- .remove-event-button, .edit--my-event-button,#save-changes-button,#cancel-changes-button  {
+ .remove-event-button, .edit--my-event-button,#save-changes-button,#cancel-changes-button,
+ .follow-button,.rate-button  {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -62,7 +63,8 @@ a {
 .publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
 #favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover, #my-events-button:hover,
 #create-events-button:hover,#submit-new-user-data:hover,  #cancel-edit-profile-button:hover,
-.remove-event-button:hover, .edit--my-event-button:hover,#save-changes-button:hover, #cancel-changes-button:hover {
+.remove-event-button:hover, .edit--my-event-button:hover,#save-changes-button:hover, 
+#cancel-changes-button:hover, .follow-button:hover,.rate-button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -98,7 +100,8 @@ a {
 }
 #favorite-button, #edit-profile-button, #fav-button-profile,
  #my-events-button, #create-events-button,#submit-new-user-data,
- #cancel-edit-profile-button, .remove-event-button, .edit--my-event-button {
+ #cancel-edit-profile-button, .remove-event-button,
+.edit--my-event-button, .follow-button,.rate-button {
     padding: 5px 10px;
 }
 .fav-button {
@@ -122,6 +125,19 @@ a {
 
 .edit--my-event-button{
     background-color: #ffaa00;
+}
+
+.follow-button{
+    transition: all .5s ease-in;
+}
+
+.rate-button{
+    background-color: #141633;
+    color: white;
+}
+.unfollow {
+    background-color: black;
+    color: white;
 }
 /************IMG***********/
 .error-img{

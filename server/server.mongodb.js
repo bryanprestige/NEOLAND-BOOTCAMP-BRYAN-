@@ -15,9 +15,10 @@ export const db = {
         get: getUsers,
         update: updateUser,
         delete: deleteUser,
-        filterById: filterUsersById,
+        filter: filterUsers,
         count: countUsers,
         logIn: logInUser
+
     }
 }
 
@@ -77,6 +78,9 @@ async function deleteUser(id) {
     return id
 }
 
+
+
+
 /**
  * Finds a user in the 'users' collection in the 'shoppingList' database given
  * an email and password.
@@ -94,17 +98,14 @@ async function logInUser({email, password}) {
 /**
  * Filter the events from the database
  * 
- * @param {string} id  - filter to apply to the users
- * @returns {Promise<Array<object>>} - the array of the user
+ * @param {object} [filter]  - filter to apply to the evetns
+ * @returns {Promise<Array<object>>} - the array of the event
  */
-async function filterUsersById(id){
+async function filterUsers(filter){
     const client = new MongoClient(URI);
     const dancingEventsDB = client.db('dancingEvents');
     const usersCollection = dancingEventsDB.collection('users');
-    const returnValue = await usersCollection.findOne({ _id: new ObjectId(id) });
-    console.log('db filter user', returnValue, id)
-    return  returnValue
-
+    return await  usersCollection.find(filter).toArray();
 }
 
 /*=========EVENTS=======*/
