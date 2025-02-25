@@ -2,7 +2,7 @@ import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit
 import reset from '../../../css/reset.css' with { type: 'css' }
 import appCss from '../../../css/app.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
-import {getAPIData,PORT,setLocalStorageFromState, onFilterButtonClick,handleBuyButtonClick,toggleFavorite} from "../../dancingEvents.js"
+import {getAPIData,PORT, onFilterButtonClick,toggleFavorite, onBuyTicketClick} from "../../dancingEvents.js"
 
 
 /**
@@ -21,9 +21,17 @@ export class EventCard extends LitElement {
         super();
     }
   
-    render() {
+    async _showFeed() {
+        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events?`,'GET');
+        console.log(apiData)
+        //const eventContainer = document.querySelector('.event-container');
+            apiData.forEach(event => {
+                this.render(event);
+                //setLocalStorageFromState(this, 'eventStorage')
+            });
+    }
 
-        
+    render() {    
     return html`
         <div class="event-card-component">
             <div class="left-column">
@@ -39,7 +47,7 @@ export class EventCard extends LitElement {
                     <h1 class="currency">GBP</h1>
                     <h1 class="price">23</h1>
                 </div>
-                <button class="buy-button" @click=${handleBuyButtonClick}><img src="../../../imagenes/shop.png" alt="shop" class="shop-img"></button>
+                <button class="buy-button" @click=${onBuyTicketClick}>Buy Ticket</button>
             </div>
             <div class="right-column">
                 <div class="reviews-placeholder">Reviews Placeholder
@@ -57,15 +65,6 @@ export class EventCard extends LitElement {
         `
     }   
    /*=========PRIVATE METHODS============*/
-    async _showFeed() {
-        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events?`,'GET');
-        console.log(apiData)
-        const eventContainer = document.querySelector('.event-container');
-            apiData.forEach(event => {
-                this.render(event, eventContainer);
-                setLocalStorageFromState(this, 'eventStorage')
-            });
-    }
 
 }
 

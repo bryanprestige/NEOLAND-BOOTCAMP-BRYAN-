@@ -14,11 +14,10 @@ export const PORT = location.port ? `:${location.port}` : ''
 let basketCount = 0;    
 
 let eventList = []
+
 let totalPriceValue = 0;
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    getEventId()
     if (window.location.pathname.includes('profile.html')) {
         displayProfile();
     }
@@ -29,11 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('create-user', onRegisterComponentSubmit)
     }
     else if (window.location.pathname.includes('basket.html')) {
-        /* let currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
-        const basketPrice = document.getElementById('basket-price')
-        basketPrice.textContent = `total price: ${currentTotalPrice}$` */
-
-        displayBoughtItems ()
+        displayEventToBuy ()
     }
      
     else if (window.location.pathname.includes('index.html')) {
@@ -45,9 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     checkLoginStatus()
 });
 
-/*TO DO: MAKE BASKET COUNT APPEAR IN EVERY PAGE*/   
-/*TO DO: DISPLAY EVENTS BOUGHT ON THE BASKET.HTML*/
-/*TO DO: FINISh STYLE OF THE BASKET PAGE*/
 /*TO DO: 
 EVENT IN FEED WILL DISPLAY WITHOUT THE BUY BUTTON LIKE BEFORE,
 IT WILL DISPLAY A "BUY TICKET" OPTION THAT WILL TAKE THEM TO ANOTHER PAGE WITH JUST THE EVENT DISPLAYED 
@@ -65,7 +57,7 @@ AND WITH THE BASKET BUTTON ACTIVE TO GET TICKETS, ALSO A CHECKOUT BUTTON THAT WI
 /*TO DO: FILTRADO POR FECHA, BUSQUEDA DE FECHA EXACTA Y FILTRO ENTRE DOS FECHAS*/
 /*TO DO: DISPLAY USERNAME INSTEAD OF "PROFILE" WHEN USER IS LOGGED IN */
 /*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
-/*TO DO: EXPORT DISPLAYMYBASKETCOUNT TO MY FAVOURITE EVENTS COMPONENT*/
+/*TO DO: FINISH FIND.HTMLL STYLE AND FUNCTIONALITIES*/
 
 //====================FEED=====================//
 
@@ -147,13 +139,6 @@ export function createEventCardWithAnimation(event, container){
     return card;
 }
 
-function displayBoughtItems () {
-    const basketData = JSON.parse(localStorage.getItem('basket')) || [];
-
-    const insideBasketData = basketData[0]
-    console.log(insideBasketData)
-}
-
 /**
  * 
  * @param {Event} event 
@@ -166,9 +151,7 @@ function createEventCardElement(event) {
 
     const leftColumn = createLeftColumn(event, card);
     const rightColumn = createRightColumn(event);
-
-    card.appendChild(leftColumn);
-    card.appendChild(rightColumn);
+    card.append(leftColumn,rightColumn);
 
     eventList.push(card)
     return card;
@@ -260,7 +243,7 @@ function createFavButton(event) {
  * @param {HTMLElement | null} button
  */ 
 
-export function toggleFavorite(event, button) { 
+export function toggleFavorite(event, favButton) { 
     const userId = getUserId()
     const storageUser = `favList_${userId}`;
     let userFavList = JSON.parse(localStorage.getItem(storageUser)) || []; // Obtener la lista de favoritos
@@ -269,11 +252,11 @@ export function toggleFavorite(event, button) {
     //VERIFY IF THE EVENT IS ALREADY IN FAVORITES
     if (index === -1) {
         userFavList.push(event);
-        button.classList.add('favorited'); 
+        favButton.classList.add('favorited'); 
 
     } else {
         userFavList.splice(index, 1);
-        button.classList.remove('favorited');
+        favButton.classList.remove('favorited');
     }
 
     // SAVE THE UPDATED FAVORITE LIST TO LOCAL STORAGE
@@ -301,10 +284,9 @@ function createPriceCurrencyElement(event) {
 function createBuyButton(card, event) {
     const buyButton = document.createElement('button');
     buyButton.className = 'buy-button';
-    buyButton.innerHTML = '<img src="./imagenes/shop.png" alt="shop" class="shop-img">';
+    buyButton.innerText = 'Buy Tickets'
 
-    const basketElement = document.querySelector('.basket-counter');
-    buyButton.addEventListener('click', () => handleBuyButtonClick(card, event, basketElement));
+    buyButton.addEventListener('click', () => onBuyTicketClick(card, event));
     return buyButton;
 }
 
@@ -313,59 +295,11 @@ function createBuyButton(card, event) {
  * @param {object} event
  * @param {HTMLElement | null} basketElement
  */ 
-export function handleBuyButtonClick(card, event, basketElement) {
-    sumPriceValue(card)    
-
-    card.ticketCount++;
-    let ticketCountSpan = card.querySelector('.ticket-count');
-
-    if (!ticketCountSpan) {
-        ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
-        const leftColumn = card.querySelector('.left-column');
-        leftColumn.appendChild(ticketCountSpan);
-    } else {
-        ticketCountSpan.textContent = `(${card.ticketCount})`;
-    }
-
-    ticketCountSpan.style.display = 'inline';
- 
-    let removeButton = card.querySelector('.remove-button'); 
-    if (!removeButton) {
-        removeButton = createRemoveButton(card, event, basketElement, ticketCountSpan);
-        const leftColumn = card.querySelector('.left-column');
-        leftColumn.appendChild(removeButton);
-    } 
-    updateTicketCount(event, card.ticketCount);
-    updateBasketCounter(basketElement);
-    saveBasketToLocalStorage(event); // Guardar cambios
-}
-/**
- * @param {object} card
- * @param {object} event
- * @param {HTMLElement | null} basketElement
- * @param {HTMLElement | null} ticketCountSpan 
- */ 
-function createRemoveButton(card, event, basketElement, ticketCountSpan) {
-    const removeButton = document.createElement('button');
-    removeButton.className = 'remove-button';
-    removeButton.textContent = 'Remove';
-
-    removeButton.addEventListener('click', (e) => {
-        resPricevalue(card)
-        e.stopPropagation();
-        card.ticketCount--;
-
-        ticketCountSpan.textContent = `(${card.ticketCount})`;
-        if (card.ticketCount === 0) {
-            ticketCountSpan.style.display = 'none';
-            removeButton.remove();
-        }
-
-        updateTicketCount(event, card.ticketCount);
-        updateBasketCounter(basketElement);
-        saveBasketToLocalStorage(e); // Guardar cambios
-    });
-    return removeButton;
+export function onBuyTicketClick(card, event) {
+    card.ticketCount++;    
+    
+    saveBasketToLocalStorage(event); 
+    navigateTo('./basket.html')
 }
 
 /**
@@ -460,42 +394,10 @@ function createElementWithText(tag, className, textContent) {
     element.textContent = textContent;
     return element;
 }
-/**
- * @param {object} event
- * @param {number} ticketCount
- */  
-function updateTicketCount(event, ticketCount) {
-    let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
-    const eventIndex = ticketList.findIndex(item => item.name === event.name);
-    if (eventIndex === -1) {
-        ticketList.push({ name: event.name, count: ticketCount });
-    } else {
-        ticketList[eventIndex].count = ticketCount;
-    }
-    localStorage.setItem('ticketList', JSON.stringify(ticketList));
-}
-/**
- * Actualiza el contador de tickets en el elemento de la cesta.
- * @param {HTMLElement | null} basketElement 
- */
-function updateBasketCounter(basketElement) {
-    basketCount = 0; 
-    const events = document.querySelectorAll('.event-card')
-    //UPDATE TICKET COUNT
-    events.forEach((event) => {
-    basketCount += event.ticketCount    
-    localStorage.setItem('basketCount', basketCount)        
-    })
-    
-    //BASKET COUNTER
-    basketElement.textContent = `BASKET (${basketCount})`
-    if(basketCount === 0) {
-     basketElement.innerText = "BASKET"
-}}
+
+
 function saveBasketToLocalStorage(event) {
     const eventCards = document.querySelectorAll('.event-card');
-    let eventId = event._id;
-    console.log(eventId,'este es el event id del basket storage')
     const basketData = [];
 
     eventCards.forEach(card => {
@@ -555,41 +457,6 @@ export function setLocalStorageFromState(key = 'eventStorage') {
  */
 function updateLocalStorage(storeValue, key = 'eventStorage') {
     localStorage.setItem(key, JSON.stringify(storeValue));
-}
-/**
- * @param {HTMLElement | null} card
- */
-function getPriceValue(card) {
-    const priceElement = card.querySelector('.price');
-    const priceValue = priceElement.textContent.replace('$', '');
-    return priceValue;
-}
-/**
- * @param {HTMLElement | null} card
- */
-function sumPriceValue(card)  {
-    const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
-    console.log(`current total price: ${currentTotalPrice}`); 
-    const priceValue = getPriceValue(card);
-    console.log(`Event price: ${priceValue}`);
-
-    totalPriceValue += parseInt(currentTotalPrice, priceValue);
-    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
-    console.log(`Total price: ${totalPriceValue}`);
-}
-/**
- * @param {HTMLElement | null} card
- */
-
-function resPricevalue(card) {
-    const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
-    console.log(`current total price: ${currentTotalPrice}`);
-    const priceValue = getPriceValue(card);
-    totalPriceValue  = parseInt( priceValue);
- 
-    localStorage.setItem('totalPriceValue', JSON.stringify(totalPriceValue));
-    console.log(`Total price: ${totalPriceValue}`);
-
 }
 
 export function scrollToTop() {
@@ -836,6 +703,149 @@ export function getInputValue(inputElement) {
 
 //========================BASKET===============================//
 
+function displayEventToBuy () {
+    const event = getEventFromBasketStorage()
+    const eventContainer = document.querySelector('.event-container-basket');
+
+    createEventCardWithAnimation(event,eventContainer)
+    const leftColumnFind = document.querySelector('.left-column');
+    const findBuyButton = document.querySelector('.buy-button');
+    findBuyButton.remove()
+
+    const buyTicketButton = createBuyTicketButton(event);
+
+    leftColumnFind.append(buyTicketButton);
+    console.log(leftColumnFind) 
+}
+
+function createBuyTicketButton(event) {
+    const buyTicketButton = document.createElement('button');
+    buyTicketButton.className = 'buy-button';
+    buyTicketButton.innerHTML = '<img src="./imagenes/shop.png" alt="shop" class="shop-img">';
+
+    buyTicketButton.addEventListener('click', () => onBuyTicketBasketClick(event))
+    return buyTicketButton
+
+}
+function onBuyTicketBasketClick (event) {
+    const card = document.querySelector('.event-card')
+    let ticketCountSpan = card.querySelector('.ticket-count');
+    const basketElement = document.getElementsByClassName('basket-counter')
+    sumPriceValue(card)   
+    card.ticketCount++;
+
+    if (!ticketCountSpan) {
+        ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
+        const leftColumn = card.querySelector('.left-column');
+        leftColumn.appendChild(ticketCountSpan);
+    } else {
+        ticketCountSpan.textContent = `(${card.ticketCount})`;
+    }
+
+    ticketCountSpan.style.display = 'inline';
+
+    let removeButton = card.querySelector('.remove-button'); 
+    if (!removeButton) {
+        removeButton = createRemoveButton(card, event, basketElement, ticketCountSpan);
+        const leftColumn = card.querySelector('.left-column');
+        leftColumn.appendChild(removeButton);
+    } 
+    updateTicketCount(event, card.ticketCount);
+    updateBasketCounter(basketElement);
+}
+
+/**
+ * @param {object} card
+ * @param {object} event
+ * @param {HTMLElement | null} basketElement
+ * @param {HTMLElement | null} ticketCountSpan 
+ */ 
+function createRemoveButton(card, event, basketElement, ticketCountSpan) {
+    const removeButton = document.createElement('button');
+    removeButton.className = 'remove-button';
+    removeButton.textContent = 'Remove';
+    removeButton.addEventListener('click', (e) => {
+        resPricevalue(card)
+        e.stopPropagation();
+        card.ticketCount--;
+        ticketCountSpan.textContent = `(${card.ticketCount})`;
+        if (card.ticketCount === 0) {
+            ticketCountSpan.style.display = 'none';
+            removeButton.remove();
+        }
+        updateTicketCount(event, card.ticketCount);
+        updateBasketCounter(basketElement);
+    });
+    return removeButton;
+}
+/**
+ * @param {object} event
+ * @param {number} ticketCount
+ */  
+function updateTicketCount(event, ticketCount) {
+    let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
+    const eventIndex = ticketList.findIndex(item => item.name === event.name);
+    if (eventIndex === -1) {
+        ticketList.push({ name: event.name, count: ticketCount });
+    } else {
+        ticketList[eventIndex].count = ticketCount;
+    }
+    localStorage.setItem('ticketList', JSON.stringify(ticketList));
+}
+/**
+ * Actualiza el contador de tickets en el elemento de la cesta.
+ * @param {HTMLElement | null} basketElement 
+ */
+function updateBasketCounter(basketElement) {
+    basketCount = 0; 
+    const events = document.querySelectorAll('.event-card')
+    events.forEach((event) => {
+    basketCount += event.ticketCount    
+    localStorage.setItem('basketCount', basketCount)        
+    })
+
+    basketElement.textContent = `BASKET (${basketCount})`
+    if(basketCount === 0) {
+     basketElement.innerText = "BASKET"
+}}
+/**
+ * @param {HTMLElement | null} card
+ */
+function getPriceValue(card) {
+    const priceElement = card.querySelector('.price');
+    const priceValue = priceElement.textContent.replace('$', '');
+
+    return priceValue;
+}
+
+/**
+ * @param {HTMLElement | null} card
+ */
+function sumPriceValue(card)  {
+    const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || 0;
+    const priceValue = getPriceValue(card);
+    console.log(`Event price: ${priceValue}`);
+
+    totalPriceValue = currentTotalPrice + parseInt(priceValue); // Changed to add priceValue to currentTotalPrice
+    localStorage.setItem('totalPriceValue', totalPriceValue); // Removed JSON.stringify
+    console.log(`Total price: ${totalPriceValue}`);
+}
+/**
+ * @param {HTMLElement | null} card
+ */
+
+function resPricevalue(card) {
+    const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
+    console.log(`current total price: ${currentTotalPrice}`);
+    const priceValue = getPriceValue(card);
+    totalPriceValue  = currentTotalPrice - parseInt(priceValue)
+ 
+    localStorage.setItem('totalPriceValue', totalPriceValue); // Removed JSON.stringify
+    console.log(`Total price: ${totalPriceValue}`);
+
+}
+
+
 //========================REGISTER===============================//
 
 /**
@@ -941,6 +951,159 @@ function checkLoginStatus() {
       store.user.login(storeUserData)
     }
 }
+//========================CONNECT================================//
+
+/**
+ * @param {User} user
+ */ 
+export function createUserCardWithAnimation(user){
+    console.log('user dentro de creatin process',user)
+    const userCard = createUserCardElement(user); 
+    userCard.classList.add('zoom-in');  
+    const userContainer = document.querySelector('.user-card-container')
+    userCard.addEventListener('animationend', () => {
+        userCard.classList.remove('zoom-in');
+    });
+    userContainer.appendChild(userCard);
+    return userCard;
+}
+
+/**
+ * 
+ * @param {User} user
+ */ 
+
+function createUserCardElement(user) {
+    const userCard = document.createElement('div');
+    userCard.className = 'profile-card';
+
+    const imagePlaceholder = document.createElement('img')
+    imagePlaceholder.className = 'profile-picture'
+    imagePlaceholder.src = './imagenes/profile-pic-placeholder.png'
+
+    const profileInfo = createProfileInfo(user);
+
+    userCard.appendChild(imagePlaceholder);
+    userCard.appendChild(profileInfo);
+
+    return userCard;
+}
+
+/**
+ * 
+ * @param {User} user
+ */ 
+
+function createProfileInfo(user){
+    const profileInfo = document.createElement('div')
+    profileInfo.className ='profile-info'
+
+    const nickname = createElementWithText('h1', 'nickname', user.nickname);
+    const bio = createBio(user)
+    const teamAcademy = createElementWithText('p', 'team-academy', user.teamAcademy);
+    
+    const followRate = createFollowRateButtons(user)
+    profileInfo.append(nickname,bio,teamAcademy,followRate)
+
+    return profileInfo
+}
+
+function createBio(user) {
+    const bioContainer = document.createElement('p')
+    bioContainer.className = 'bio'
+    const bio = user.bio
+    const rol = user.rol
+    bioContainer.innerText = `${bio}. Role: ${rol}`
+    return bioContainer
+}
+
+function createFollowRateButtons(user) {
+    const followRate = document.createElement('div')
+    
+    const followButton = createFollowButton(user)   
+    const rateButton = createRateButton() 
+
+    followRate.append(followButton,rateButton)
+    
+    return followRate
+}
+
+function createFollowButton(user) {
+    const userFollowedId = user._id
+    console.log('userfollowedID',userFollowedId)
+    const currentUserId= getUserId()
+    console.log('currentuserID',currentUserId)
+    const userFollowedBy = user.followedBy
+    
+    const followButton = document.createElement('button')
+    followButton.className = 'follow-button'
+    
+    if (!userFollowedBy) {
+        followButton.innerText = 'Follow'
+        followButton.className = 'follow-button'
+    } else {
+        followButton.classList.add('unfollow');
+        followButton.innerText = 'Unfollow'
+
+    }
+    followButton.addEventListener('click',() => onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton))
+    return followButton
+}
+
+function onFollowButtonClick(userFollowedId,currentUserId,followButton,userFollowedBy) {   
+    console.log('userfollowedby',userFollowedBy)
+
+    if(!userFollowedBy){
+        updateFollowing(userFollowedId,currentUserId)
+    } else {
+        updateUNfollowing(userFollowedId,currentUserId,userFollowedBy)
+    }
+   
+    toggleFollowButton(followButton,userFollowedId,currentUserId) 
+}
+
+async function updateFollowing(userFollowedId,currentUserId){
+    let userNewFollower = {
+        followedBy: currentUserId
+    }
+    const payload = JSON.stringify(userNewFollower)
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
+    console.log(apiData)
+}
+
+async function updateUNfollowing(userFollowedId,currentUserId,userFollowedBy){
+    if(userFollowedBy === currentUserId) {
+        userFollowedBy = ''
+    }   
+    let userNewFollower = {
+        followedBy: ''
+    } 
+    const payload = JSON.stringify(userNewFollower)
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
+    console.log(apiData)
+
+}
+
+
+function toggleFollowButton(followButton,userFollowedId,currentUserId) {
+    
+    if (followButton.classList === 'unfollow') {
+        followButton.classList.remove('unfollow');
+        followButton.innerText = 'Follow';
+    } else {
+        followButton.classList.add('unfollow');
+        followButton.innerText = 'Unfollow';
+    }
+}
+
+function createRateButton(user) {
+    const rateButton = document.createElement('button')
+    rateButton.className = 'rate-button'
+    rateButton.innerText = 'Rate'
+
+    return rateButton
+}
+
 
 //========================BACKEND================================//
 
@@ -992,11 +1155,11 @@ export function getUserId() {
     return userData.user._id;
 }
 
-function getEventId() {
+function getEventFromBasketStorage() {
     const eventData = getBasketFromLocalStorage()
-    const eventId = eventData[0]._id
-    console.log('this is eventID beggining',eventId)
-    return eventId
+    const eventToget = eventData[0]
+    console.log('this is eventdata beggining',eventToget)
+    return eventToget
     
 }
 export {
