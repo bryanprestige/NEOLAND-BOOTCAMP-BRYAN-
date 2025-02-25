@@ -23,6 +23,7 @@ export class EventCard extends LitElement {
   
     render() {
 
+        
     return html`
         <div class="event-card-component">
             <div class="left-column">

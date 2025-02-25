@@ -3,7 +3,7 @@ import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import appCss from '../../../css/app.css' with { type: 'css' }
 
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
-import { displayMyEvents,getAPIData, PORT,getInputValue } from "../../dancingEvents.js"
+import { displayMyEvents,getAPIData, PORT,getInputValue,hideEditEvents } from "../../dancingEvents.js"
 /**
  * Edit Event Form  Web Component
  * @class EditEventForm
@@ -13,7 +13,6 @@ import { displayMyEvents,getAPIData, PORT,getInputValue } from "../../dancingEve
 export class EditEventForm extends LitElement {
     
     static styles = [ css,reset,appCss];
-    
     
     static properties = { 
         prueba: {type: String},
@@ -56,7 +55,7 @@ export class EditEventForm extends LitElement {
                             <input type="text" name="input-country" id="input-country" placeholder="country" required>
                             <input type="text" name="input-dance" id="input-dance" placeholder="Dance" required>
                             <button type="submit" name="save-changes-button" id="save-changes-button" @click="${this._onSaveChanges}">Save Changes</button>
-                            <button type="button" name="cancel-changes-button" id="cancel-changes-button" @click="${displayMyEvents}">Cancel</button>
+                            <button type="button" name="cancel-changes-button" id="cancel-changes-button" @click="${this._oncancelChanges}">Cancel</button>
                         </div>
                 </fieldset>
             </form> 
@@ -69,7 +68,6 @@ export class EditEventForm extends LitElement {
         e.preventDefault();
         
         console.log('this eventId',this.eventId);
-        
         
              const newEventName = this.renderRoot.getElementById('input-event-name')
             const newVenue = this.renderRoot.getElementById('input-venue')    
@@ -99,10 +97,9 @@ export class EditEventForm extends LitElement {
             const payload = JSON.stringify(updatedEvent)
             const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${this.eventId}`, "PUT",payload);
             
-            
             if (apiData.modifiedCount === 1) {
                 alert('Event updated successfully')
-                this._hideEditEvents()
+                hideEditEvents()
                 displayMyEvents()
             }else if (apiData.modifiedCount === 0) {
                 alert('No changes Detected')
@@ -110,11 +107,9 @@ export class EditEventForm extends LitElement {
             }
     }    
 
-    _hideEditEvents () {
-        const eventEditorForm = document.getElementById('event-editor')
-        if (eventEditorForm) {
-            eventEditorForm.style.display = 'none';
-        }
+    _oncancelChanges () {
+        hideEditEvents()
+        displayMyEvents()
     }
 
 }
