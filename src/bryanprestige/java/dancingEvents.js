@@ -18,8 +18,15 @@ let eventList = []
 let totalPriceValue = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    displayUserNickname()
+    showLogoutButton()
+    const logOutButton = document.getElementsByClassName('log-out');
+    logOutButton[0]?.addEventListener('click', onLogoutClick);
+
     if (window.location.pathname.includes('profile.html')) {
         displayProfile();
+        displayMyEventsPurchased();
     }
     else if (window.location.pathname.includes('login.html')) {
         window.addEventListener('login-form-submit', onLoginComponentSubmit)
@@ -29,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (window.location.pathname.includes('basket.html')) {
         displayEventToBuy ()
+        continueToCheckout()
     }
      
     else if (window.location.pathname.includes('index.html')) {
@@ -40,24 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
     checkLoginStatus()
 });
 
-/*TO DO: 
-EVENT IN FEED WILL DISPLAY WITHOUT THE BUY BUTTON LIKE BEFORE,
-IT WILL DISPLAY A "BUY TICKET" OPTION THAT WILL TAKE THEM TO ANOTHER PAGE WITH JUST THE EVENT DISPLAYED 
-AND WITH THE BASKET BUTTON ACTIVE TO GET TICKETS, ALSO A CHECKOUT BUTTON THAT WILL TAKE THEM TO A CHECKOOUT PAGE
-*/
+
 /*TO DO: CREATE A PAGE JUST FOR WHEN THE EVENTS ARE CLICKED AND JUST DISPLAYIN THAT EVENT*/
-/*TO DO: MAKE A FOLLOW AND UNFOLLOW BUTTON */
+/*TO DO: MAKE FOLLOWING BUTTON*/
 /*TO DO: DISPLAY FOLLOWERS ON USERS PROFILE */
-/*TO DO: ABLE TO FIND USERS IN THE FIND PAGE */
-
 /*MAKE A CHAT BETWEEN USERS*/
-
+/*EVENT NAME NEEDS TO APPEAR ON THE CHECKOUT FORM*/
+/*MY ORDERS SECTION DISPLAYED ON PROFILE COMPONENT*/
 /*TO DO: RESTRICT PROFILE AND OPTIONS TO LOGGED IN USERS*/
-/*TO DO: SHOW LOG OUT BUTTON INSTEAD OF LOG IN BUTTON WHEN USER IS LOGGED IN*/
 /*TO DO: FILTRADO POR FECHA, BUSQUEDA DE FECHA EXACTA Y FILTRO ENTRE DOS FECHAS*/
 /*TO DO: DISPLAY USERNAME INSTEAD OF "PROFILE" WHEN USER IS LOGGED IN */
 /*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
 /*TO DO: FINISH FIND.HTMLL STYLE AND FUNCTIONALITIES*/
+/*TO DO: MAKE FILTER THAT GIVES ME THE EVENTS BOUGHT BY THE USER*/
 
 //====================FEED=====================//
 
@@ -88,7 +91,6 @@ export async function onFilterButtonClick(e) {
 
 async function updateDefaultFeed() {
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events?`,'GET');
-
     const eventContainer = document.querySelector('.event-container');
     apiData.forEach(event => {
         createEventCardWithAnimation(event, eventContainer);
@@ -137,6 +139,32 @@ export function createEventCardWithAnimation(event, container){
     container.appendChild(card);
     loadBasketFromLocalStorage()
     return card;
+}
+
+function displayUserNickname() {
+    let profileUsername = document.querySelector('.profile-username')
+    if (!isUserLoggedIn()) {
+        profileUsername.innerText = `PROFILE`
+        return
+    } else if(isUserLoggedIn){
+        const userNickname = getUserNickname()
+        profileUsername.innerText = `${userNickname.toUpperCase()}`
+    }
+    console.log('paso por el displayUserNickname')
+}
+
+function showLogoutButton() {
+    let loginButton = document.querySelector('.login-button')
+    let registerButton = document.querySelector('.register')
+    let logoutButton = document.querySelector('.log-out')
+    if (!isUserLoggedIn()) {
+        return
+    } else if(isUserLoggedIn){
+        loginButton.style.display = 'none'
+        registerButton.style.display = 'none'
+        logoutButton.style.display = 'block'
+    }
+    console.log('paso por el displayUserNickname')
 }
 
 /**
@@ -492,12 +520,33 @@ export function displayBasketCount () {
 }
 //========================PROFILE===============================//
 
+
 async function displayProfile() {
     const newTitleForm = document.getElementById('main-title-form');
     newTitleForm.innerText = 'Welcome to your own space';
     
     const newTitleEvent = document.getElementById('main-title-event');
     newTitleEvent.innerText = 'Here you can see your favorite events and create your own event to promote!';
+}
+
+async function displayMyEventsPurchased() {
+    const myOrdersContainer = document.getElementsByClassName('my-orders');
+    const noOrders = document.getElementsByClassName('no-orders');
+    const userId = getUserId()
+    const filterValue = userId;  
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
+    console.log('apidata displaymyeventsbought',apiData)
+    if (!apiData) {
+        return
+    } else{
+        noOrders[0].style.display = 'none';
+        apiData.forEach(event => {
+            const eventName = event.name;
+            const newElement = document.createElement('h1');
+            newElement.textContent = `${eventName}`;
+            myOrdersContainer[0].appendChild(newElement);
+          });
+    }
 }
 
 export function displayEditForm() {
@@ -561,13 +610,12 @@ function displayEditMyEvents(event_id) {
     cleanEventContainer()
     hideEditProfileForm()
     hidePreviewContainer()
-
+    
     const eventEditorContainer = document.getElementById('edit-event-form-container')
     eventEditorContainer.style.display = 'block'
     const eventEditor = document.getElementById('event-editor')
     eventEditor.setAttribute('eventId', event_id)
     console.log(eventEditor)
-    
 }
  export function hideEditEvents(){
     const eventEditor = document.getElementById('edit-event-form-container')
@@ -778,6 +826,32 @@ function createRemoveButton(card, event, basketElement, ticketCountSpan) {
     });
     return removeButton;
 }
+
+function continueToCheckout() {
+    
+    let containerSignIn = document.querySelector('.container-signin')
+    if (!isUserLoggedIn()) {
+        return
+    } else if(isUserLoggedIn){
+        containerSignIn.innerHTML = '<h1> Continue to<button class="checkout-button">checkout</button>.</h1>'  
+        const checkoutButton = document.querySelector('.checkout-button')
+        checkoutButton.addEventListener('click', () => displayCheckoutForm(containerSignIn))      
+    }
+}
+
+function displayCheckoutForm(containerSignIn) {
+    const event = getEventFromBasketStorage()
+    const eventContainer = document.querySelector('.event-container-basket');
+    const checkoutContainer = document.getElementById('checkout-form');
+    checkoutContainer.style.display = 'block';
+    eventContainer.style.display = 'none';
+    containerSignIn.style.display = 'none';
+    let event_id=event._id
+    checkoutContainer.setAttribute('eventId', event_id)
+    console.log('checkoutcontainer',checkoutContainer)
+}
+
+
 /**
  * @param {object} event
  * @param {number} ticketCount
@@ -1044,8 +1118,7 @@ function createFollowButton(user) {
     } else {
         followButton.classList.add('unfollow');
         followButton.innerText = 'Unfollow'
-
-    }
+    }   
     followButton.addEventListener('click',() => onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton))
     return followButton
 }
@@ -1056,7 +1129,7 @@ function onFollowButtonClick(userFollowedId,currentUserId,followButton,userFollo
     if(!userFollowedBy){
         updateFollowing(userFollowedId,currentUserId)
     } else {
-        updateUNfollowing(userFollowedId,currentUserId,userFollowedBy)
+        updateUnFollowing(userFollowedId,currentUserId,userFollowedBy)
     }
    
     toggleFollowButton(followButton,userFollowedId,currentUserId) 
@@ -1071,19 +1144,14 @@ async function updateFollowing(userFollowedId,currentUserId){
     console.log(apiData)
 }
 
-async function updateUNfollowing(userFollowedId,currentUserId,userFollowedBy){
-    if(userFollowedBy === currentUserId) {
-        userFollowedBy = ''
-    }   
+async function updateUnFollowing(userFollowedId,currentUserId,userFollowedBy){
     let userNewFollower = {
         followedBy: ''
     } 
     const payload = JSON.stringify(userNewFollower)
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
     console.log(apiData)
-
 }
-
 
 function toggleFollowButton(followButton,userFollowedId,currentUserId) {
     
@@ -1103,7 +1171,6 @@ function createRateButton(user) {
 
     return rateButton
 }
-
 
 //========================BACKEND================================//
 
@@ -1146,7 +1213,7 @@ export async function getAPIData(apiURL, method = 'GET' , data) {
     return apiData
   }
 
-function isUserLoggedIn() {
+export function isUserLoggedIn() {
     const userData = getDataFromSessionStorage()
     return userData?.user?.token
   }
@@ -1155,6 +1222,12 @@ export function getUserId() {
     return userData.user._id;
 }
 
+function getUserNickname() {
+    const userData = getDataFromSessionStorage();
+    return userData.user.nickname
+}
+
+
 function getEventFromBasketStorage() {
     const eventData = getBasketFromLocalStorage()
     const eventToget = eventData[0]
@@ -1162,6 +1235,20 @@ function getEventFromBasketStorage() {
     return eventToget
     
 }
+
+
+/**
+ * Logs out the user
+ * @returns void
+ */
+async function onLogoutClick() {
+    const userData = getDataFromSessionStorage()
+    await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/logout/${userData.user._id}`, 'GET')
+  
+    updateSessionStorage({ user: {} })
+
+    navigateTo('/index.html')
+  }
 export {
     getDataFromLocalStorage,
     setLocalStorageFromStore

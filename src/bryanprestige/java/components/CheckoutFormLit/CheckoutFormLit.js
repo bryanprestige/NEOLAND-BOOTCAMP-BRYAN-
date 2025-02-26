@@ -1,12 +1,11 @@
 import CheckoutFormCss from './CheckoutFormCss.css' with { type: 'css' }
-
-
+import {getUserId, isUserLoggedIn,navigateTo,getAPIData, PORT} from "../../dancingEvents.js"
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 
 /**
  * Checkout Form  Web Component
  * @class CheckoutForm
- * @emits 'Checkout-form'
+ * @emits 'checkout-form'
  */
 
 export class CheckoutForm extends LitElement {
@@ -14,6 +13,7 @@ export class CheckoutForm extends LitElement {
 
     static properties = { 
         prueba: {type: String},
+        eventId: {type: String},
     };
 
     get _totalPrice() {
@@ -30,7 +30,7 @@ export class CheckoutForm extends LitElement {
         <div class="checkout-container">
             <div class="col-75">
                 <div class="container">
-                    <form action="/action_page.php">
+                    <form action="#">
                         <div class="row">
                             <div class="col-50">
                                 <h3>Billing Address</h3>
@@ -72,6 +72,7 @@ export class CheckoutForm extends LitElement {
                         <div class="col-25">
                             <div class="container-price">
                                 <h4>Cart</h4>
+                                <p><a href="#">Product 1</a> <span class="price">$15</span></p>
                                 <hr>
                                 <p>Total <span class="price" style="color:black"><b>${this._totalPrice}</b></span></p>
                             </div>
@@ -79,18 +80,38 @@ export class CheckoutForm extends LitElement {
                             <label>
                                 <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
                             </label>
-                            <input type="submit" value="Continue to checkout" class="btn">
+                            <button type="click"  class="btn" @click= ${this._onCheckoutFormClick}> Confirm Payment</button>
                     </form>
                 </div>
-            </div>
-           
+            </div> 
         </div>
         `
     }
 
     /*=========PRIVATE METHODS============*/
 
+    _onCheckoutFormClick(e) {
+        e.preventDefault();
+        if (!isUserLoggedIn()) {
+            alert('Thanks for the purchase!, your order has been sent to your email, enjoy dancing');
+            return
+        } else if(isUserLoggedIn){
+            this._updateEventToPurchased(this.eventId) 
+            alert('Thanks for the purchase!, you can see your order in your profile, enjoy dancing!');
+            navigateTo('./profile.html')
+        }
+    }
 
+    async _updateEventToPurchased() {
+        console.log('eventID dentro de checkout component', this.eventId);
+        const userId = getUserId()
+        let eventBought = {
+            boughtBy: userId,
+        }        
+        const payload = JSON.stringify(eventBought)
+        const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/updateBought/events/${this.eventId}`, "PUT",payload);
+        console.log(apiData)
+    }
 }
 
 customElements.define('checkout-form', CheckoutForm)
