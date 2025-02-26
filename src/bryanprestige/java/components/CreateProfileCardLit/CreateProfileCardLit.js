@@ -67,6 +67,7 @@ export class CreateProfileCard extends LitElement {
             <div class="create-myEvents-profile">
               <button id="create-events-button" @click=${displayCreateEvents}>Create Events</button>
               <button id="my-events-button" @click=${displayMyEvents}>My Events</button>
+            </div>
         </div>
       </div>
     `

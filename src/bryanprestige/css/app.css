@@ -45,7 +45,7 @@ a {
 }
 
 /*=====BUTTONS=====*/
-#search-button,.buy-button, #submit-button, .login-button,.register,
+#search-button,.buy-button, #submit-button, .login-button,.log-out,.register,
 .remove-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
 .publish-button,.fav-button, #favorite-button, .venue, .name,
  .music-ratio,#edit-profile-button, #fav-button-profile, #my-events-button,
@@ -59,7 +59,7 @@ a {
     font-weight: bold;
 }
 .remove-button:hover, .button-dance-type:hover, .button-city:hover,.button-country:hover,
-#search-button:hover, .buy-button:hover, #log-in:hover, #submit-button:hover,
+#search-button:hover, .buy-button:hover, #log-in:hover,.log-out:hover, #submit-button:hover,
 .publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
 #favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover, #my-events-button:hover,
 #create-events-button:hover,#submit-new-user-data:hover,  #cancel-edit-profile-button:hover,
@@ -75,12 +75,14 @@ a {
 #edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button  {
     background-color: #F7BC47;
 }
-.login-button, .register, .remove-button, .edit-event-button, .publish-button  {
+.login-button, .register, .remove-button, .edit-event-button, .publish-button,
+.log-out  {
     background-color: #243D4B;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     padding: 10px 14px;
 }
-.login-button, .register, .remove-button {
+.login-button, .register, .remove-button,
+.log-out {
     display: block;
     margin-top: 15px;
     color: #F7BC47;
@@ -116,7 +118,7 @@ a {
     width: fit-content;
 }
 #cancel-edit-profile-button, .remove-event-buttonm,#cancel-changes-button {
-    background-color: rgb(230, 66, 66);
+    background-color: #e64242;
     color: white;
 }
 #submit-new-user-data,#save-changes-button{
@@ -138,6 +140,11 @@ a {
 .unfollow {
     background-color: black;
     color: white;
+}
+
+.log-out{
+    background-color: #e64242;
+    display: none;
 }
 /************IMG***********/
 .error-img{

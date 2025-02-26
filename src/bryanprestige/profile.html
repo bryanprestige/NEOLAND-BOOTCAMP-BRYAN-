@@ -6,7 +6,6 @@
     <title>Dancing Events USER</title>
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/app.css">
-    <link rel="stylesheet" href="./java/components/CreateProfileCardLit/CreateProfileCardLitCSS.css">
     <link rel="stylesheet" href="./css/dancingEvents.css">
     <script type="module" src="./java/components/bundle.js" defer></script>
     <script type="module" src="./java/dancingEvents.js"></script>
@@ -41,7 +40,7 @@
             <li>
                 <a href="./profile.html">
                     <img src="./imagenes/profile.png">
-                    <h1>PROFILE</h1>
+                    <h1 class="profile-username">PROFILE</h1>
                 </a>
                 </li>
             <li>
@@ -62,11 +61,22 @@
             <a href="./register.html">
                 <button class="register">REGISTER</button>
             </a>
+            <a>
+                <button class="log-out">LOG-OUT</button>
+            </a>
         </div>
     </nav>
     <section id="profile-card-container">
         <h1 id="main-title-form">THIS COULD BE YOUR OWN SPACE</h1>
-        <create-profile-card></create-profile-card>
+        <div class="profile-card-my-orders">
+            <create-profile-card></create-profile-card> 
+            <div class="my-orders-container">
+                <h1>MY ORDERS</h1>
+                <div class="my-orders">
+                    <h1 class="no-orders">No events purchased yet</h1>
+                </div>
+            </div>
+        </div>
     </section>
     <section class="header-container-profile">
         <h1 id="main-title-event">

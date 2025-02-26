@@ -6,7 +6,8 @@ export const db = {
     events: {
         create: createEvent,
         get: getEvents,
-        update : updateEvent,
+        updateBought : updateBoughtEvent,
+        update: updateEvent,
         delete: deleteEvent,
         filter: filterEvents,
     },
@@ -17,8 +18,8 @@ export const db = {
         delete: deleteUser,
         filter: filterUsers,
         count: countUsers,
-        logIn: logInUser
-
+        logIn: logInUser,
+        logOut: logoutUser
     }
 }
 
@@ -79,8 +80,6 @@ async function deleteUser(id) {
 }
 
 
-
-
 /**
  * Finds a user in the 'users' collection in the 'shoppingList' database given
  * an email and password.
@@ -93,6 +92,20 @@ async function logInUser({email, password}) {
     const dancingEventsDB = client.db('dancingEvents');
     const usersCollection = dancingEventsDB.collection('users');
     return await usersCollection.findOne({ email, password })
+  }
+
+/**
+ * Logs out a user by setting the 'token' field to null in the 'users' collection
+ * in the 'shoppingList' database.
+ *
+ * @param {{id: string}} data - The data to query the user.
+ * @returns {Promise<UpdateResult>} The result of the update operation.
+ */
+async function logoutUser({id}) {
+    const client = new MongoClient(URI);
+    const shoppinglistDB = client.db('shoppingList');
+    const usersCollection = shoppinglistDB.collection('users');
+    return await usersCollection.updateOne({ _id: new ObjectId(id) }, { $set: { token: null } })
   }
 
 /**
@@ -144,8 +157,43 @@ async function getEvents(filter){
  *
  * @param {string} _id - The ID of the event to be updated.
  * @param {object} updates - The fields and new values to update the event with.
+ * @param {object} [options] - The options for the update operation.
  * @returns {Promise<UpdateResult>} The result of the update operation.
  */
+
+async function updateBoughtEvent(_id, updates, options = {}) {
+    const client = new MongoClient(URI);
+    const dancingEventsDB = client.db('dancingEvents');
+    const eventsCollection = dancingEventsDB.collection('events');
+  
+    if (Object.keys(updates).length === 1 && updates.boughtBy) {
+      // update a single field with a value
+      const updateOperator = options.operator || '$addToSet';
+      let update = { [updateOperator]: { boughtBy: updates.boughtBy } };
+  
+      const eventDoc = await eventsCollection.findOne({ _id: new ObjectId(_id) });
+      if (!eventDoc.boughtBy || !Array.isArray(eventDoc.boughtBy)) {
+        await eventsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: { boughtBy: [] } });
+      }
+  
+      const returnValue = await eventsCollection.updateOne({ _id: new ObjectId(_id) }, update);
+      return returnValue;
+    } else {
+      // update multiple fields with a payload
+      let update = { $set: updates };
+      const returnValue = await eventsCollection.updateOne({ _id: new ObjectId(_id) }, update);
+      return returnValue;
+    }
+  }
+
+  /**
+ * Updates an article in the 'articles' collection in the 'shoppingList' database.
+ *
+ * @param {string} _id - The ID of the event to be updated.
+ * @param {object} updates - The fields and new values to update the event with.
+ * @returns {Promise<UpdateResult>} The result of the update operation.
+ */
+
 async function updateEvent(_id, updates) {
     const client = new MongoClient(URI);
     const dancingEventsDB = client.db('dancingEvents');

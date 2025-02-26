@@ -96,8 +96,8 @@ export class EditEventForm extends LitElement {
         
             const payload = JSON.stringify(updatedEvent)
             const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${this.eventId}`, "PUT",payload);
-            
-            if (apiData.modifiedCount === 1) {
+            console.log(apiData)
+            if (apiData.matchedCount === 1) {
                 alert('Event updated successfully')
                 hideEditEvents()
                 displayMyEvents()

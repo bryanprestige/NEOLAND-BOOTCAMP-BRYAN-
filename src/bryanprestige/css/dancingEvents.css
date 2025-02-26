@@ -149,7 +149,7 @@ img {
 
 .profile-card {
     margin: 0px auto;
-    width: 40%;
+    width: 100%;
     height: max-content;
     display: flex;
     padding: 15px;
@@ -161,13 +161,8 @@ img {
     gap: 20px;
 }
 
-@keyframes fade {
-    from {background-color: #F7BC47;}
- to {background-color: #1D3557;}
-}
-
 .profile-info{
-    width: max-content;
+    width: 100%;
     height: max-content;
     margin: auto;
     text-align:start;
@@ -177,6 +172,10 @@ img {
     padding: 5px;
 }
 
+@keyframes fade {
+    from {background-color: #F7BC47;}
+ to {background-color: #1D3557;}
+}
 
 .edit-fav-profile, .create-myEvents-profile{
     display: flex;
@@ -238,6 +237,21 @@ img {
     display: none;
     
 }
+
+.profile-card-my-orders{
+    display: flex;
+}
+
+.my-orders-container{
+    display: block;
+    width: fit-content; 
+    margin: 0px auto;
+    border: none;
+}
+
+.my-orders {
+    border: none;
+}
   /*=====LOG IN STYLES=====*/
 .register-button,.container-signin{
     border: none;
@@ -276,10 +290,9 @@ hr {
 }
 
 #checkout-form{
-    display: flex;
-    justify-content: center;
+    display: none;
+    margin: auto;
     margin-top: 20px;
-    
 }
 
 /*======CONNECT======*/

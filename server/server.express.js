@@ -20,10 +20,24 @@ res.json(await db.events.create(req.body))
 app.get('/api/read/events', async (req, res) => {
   res.json(await db.events.get())
 })
-app.put('/api/update/events/:id',requireAuth, async (req, res) => {
+app.put('/api/updateBought/events/:id', requireAuth, async (req, res) => {
+  const userId = req.body.boughtBy;
+  const updates = { boughtBy: userId };
+  const options = { operator: '$addToSet' };
+  try {
+    const result = await db.events.updateBought(req.params.id, updates, options);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Error updating event' });
+  }
+});
+
+ app.put('/api/update/events/:id',requireAuth, async (req, res) => {
+
   res.json(await db.events.update(req.params.id, req.body))
 })
-
+ 
 app.delete('/api/delete/event/:id', async (req, res) => {
     res.json(await db.events.delete(req.params.id))
 })
@@ -70,6 +84,12 @@ app.post('/api/login', async (req, res) => {
     // Unauthorized
     res.status(401).send('Unauthorized')
   }
+})
+
+app.get('/api/logout/:id', async (req, res) => {
+  const response = await db.users.logOut(req.params.id)
+  console.log('logOut', response)
+  res.status(200).send('Logout')
 })
 
 app.listen(port, () => {
