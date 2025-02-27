@@ -15,13 +15,16 @@ export const db = {
         create: createUser,
         get: getUsers,
         update: updateUser,
+        followedBy : updateFollowers,
         delete: deleteUser,
         filter: filterUsers,
+        filterById: filterUserById,
         count: countUsers,
         logIn: logInUser,
         logOut: logoutUser
     }
 }
+
 
 /*=======USERS=======*/
 
@@ -64,6 +67,40 @@ async function updateUser(id, updates) {
     console.log('db updateUser', returnValue, updates)
     return returnValue
 }
+
+/**
+ * Updates an article in the 'articles' collection in the 'shoppingList' database.
+ *
+ * @param {string} _id - The ID of the event to be updated.
+ * @param {object} updates - The fields and new values to update the event with.
+ * @param {object} [options] - The options for the update operation.
+ * @returns {Promise<UpdateResult>} The result of the update operation.
+ */
+
+async function updateFollowers(_id, updates, options = {}) {
+    const client = new MongoClient(URI);
+    const dancingEventsDB = client.db('dancingEvents');
+    const usersCollection = dancingEventsDB.collection('users');
+  
+    if (Object.keys(updates).length === 1 && updates.followedBy) {
+      // update a single field with a value
+      const updateOperator = options.operator || '$addToSet';
+      let update = { [updateOperator]: { followedBy: updates.followedBy } };
+  
+      const userDoc = await usersCollection.findOne({ _id: new ObjectId(_id) });
+      if (!userDoc.followedBy || !Array.isArray(userDoc.followedBy)) {
+        await usersCollection.updateOne({ _id: new ObjectId(_id) }, { $set: { followedBy: [] } });
+      }
+  
+      const returnValue = await usersCollection.updateOne({ _id: new ObjectId(_id) }, update);
+      return returnValue;
+    } else {
+      // update multiple fields with a payload
+      let update = { $set:updates };
+      const returnValue = await usersCollection.updateOne({ _id: new ObjectId(_id) }, update);
+      return returnValue;
+    }
+  }
 
 /**
  * @param {string} id -the id of the event to be deleted
@@ -119,6 +156,21 @@ async function filterUsers(filter){
     const dancingEventsDB = client.db('dancingEvents');
     const usersCollection = dancingEventsDB.collection('users');
     return await  usersCollection.find(filter).toArray();
+}
+
+/**
+ * Updates an article in the 'articles' collection in the 'shoppingList' database.
+ *
+ * @param {string} id - The ID of the article to be updated.
+ * @returns {Promise<UpdateResult>} The result of the update operation.
+ */
+async function filterUserById(id) {
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const usersCollection = dancingEventsDB.collection('users');
+  const returnValue = await usersCollection.findOne({ _id: new ObjectId(id) });
+  console.log('db filterUserById', returnValue)
+  return returnValue
 }
 
 /*=========EVENTS=======*/

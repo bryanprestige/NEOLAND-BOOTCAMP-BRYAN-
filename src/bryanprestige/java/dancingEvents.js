@@ -4,6 +4,7 @@
 import {INITIAL_STATE,store} from '../storeRedux/redux.js'
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
+//import { isConstructorDeclaration } from 'typescript';
 /**
  * @import {Event} from './classes/Event.js'
  * @import {User}   from './classes/User.js'
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /*TO DO: DISPLAY USERNAME INSTEAD OF "PROFILE" WHEN USER IS LOGGED IN */
 /*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
 /*TO DO: FINISH FIND.HTMLL STYLE AND FUNCTIONALITIES*/
-/*TO DO: MAKE FILTER THAT GIVES ME THE EVENTS BOUGHT BY THE USER*/
+/*TO DO: MAKE EVERY CLICK ON MY EVENT ORDEREDTO GET TOU A RAMDON QR CODE AS A MOCH OF A TICKET TO THE EVENT*/
 
 //====================FEED=====================//
 
@@ -1107,60 +1108,77 @@ function createFollowButton(user) {
     console.log('userfollowedID',userFollowedId)
     const currentUserId= getUserId()
     console.log('currentuserID',currentUserId)
+
     const userFollowedBy = user.followedBy
-    
+
     const followButton = document.createElement('button')
     followButton.className = 'follow-button'
+    followButton.innerText = 'Follow'
     
-    if (!userFollowedBy) {
-        followButton.innerText = 'Follow'
-        followButton.className = 'follow-button'
-    } else {
+    if (userFollowedBy && userFollowedBy.includes(currentUserId)) {
         followButton.classList.add('unfollow');
         followButton.innerText = 'Unfollow'
-    }   
+    } else {
+         followButton.innerText = 'Follow'
+    }    
     followButton.addEventListener('click',() => onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton))
     return followButton
 }
 
-function onFollowButtonClick(userFollowedId,currentUserId,followButton,userFollowedBy) {   
-    console.log('userfollowedby',userFollowedBy)
+function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton) { 
+    console.log('user inside onFollowButtonClick',userFollowedBy)
 
-    if(!userFollowedBy){
-        updateFollowing(userFollowedId,currentUserId)
+    addFollower(userFollowedId,currentUserId)
+    if(userFollowedBy && userFollowedBy.includes(currentUserId)){
+    removeFollower(userFollowedId,currentUserId,userFollowedBy)
     } else {
-        updateUnFollowing(userFollowedId,currentUserId,userFollowedBy)
-    }
+    addFollower(userFollowedId,currentUserId)
+    } 
    
-    toggleFollowButton(followButton,userFollowedId,currentUserId) 
+    toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) 
 }
 
-async function updateFollowing(userFollowedId,currentUserId){
+async function addFollower(userFollowedId,currentUserId){
+    console.log('userFollowedID inside onFollowButtonClick',userFollowedId)
+    console.log('currentuserID inside onFollowButtonClick',currentUserId)
     let userNewFollower = {
         followedBy: currentUserId
     }
+
     const payload = JSON.stringify(userNewFollower)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
-    console.log(apiData)
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/followedBy/users/${userFollowedId}`, "PUT",payload);
+    console.log('apiData',apiData)
 }
 
-async function updateUnFollowing(userFollowedId,currentUserId,userFollowedBy){
-    let userNewFollower = {
-        followedBy: ''
-    } 
-    const payload = JSON.stringify(userNewFollower)
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
-    console.log(apiData)
-}
+async function removeFollower(userFollowedId, currentUserId) {
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
+    console.log('apiData user to removefollower', apiData)
+    const userFollowedBy = apiData.followedBy;
+    console.log('userFolowedbY',userFollowedBy)
 
-function toggleFollowButton(followButton,userFollowedId,currentUserId) {
+    console.log('userFollowedBy before splice:', userFollowedBy);
+    const index = userFollowedBy.indexOf(currentUserId);
+    if (index !== -1) {
+        userFollowedBy.splice(index, 1);
+    }
+    console.log('userFollowedBy after splice:', userFollowedBy);
+
+    const payload = JSON.stringify(userFollowedBy);
     
-    if (followButton.classList === 'unfollow') {
-        followButton.classList.remove('unfollow');
-        followButton.innerText = 'Follow';
-    } else {
+    const response = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/followedBy/users/${userFollowedId}`, "PUT", payload);
+    console.log('response', response)
+}
+
+function toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) {
+    
+    if (followButton.className === 'follow-button') {
         followButton.classList.add('unfollow');
-        followButton.innerText = 'Unfollow';
+        followButton.innerText = 'Unfollow'
+
+    } else {
+        followButton.className='follow-button';
+        followButton.innerText = 'Follow'
+
     }
 }
 
