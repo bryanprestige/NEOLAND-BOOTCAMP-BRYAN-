@@ -62,6 +62,21 @@ app.put('/api/update/users/:id', async (req, res) => {
 
 })
 
+
+app.put('/api/followedBy/users/:id', requireAuth, async (req, res) => {
+  const userId = req.body.followedBy;
+  const updates = { followedBy: userId };
+  const options = { operator: '$addToSet' };
+  try {
+    const result = await db.users.followedBy(req.params.id, updates, options);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Error following user' });
+  }
+});
+
+
 app.delete('/api/delete/user/:id', async (req, res) => {
   res.json(await db.users.delete(req.params.id))
 }) 
@@ -69,6 +84,10 @@ app.delete('/api/delete/user/:id', async (req, res) => {
 app.get('/api/filter/users/:nickname', async (req, res) => {
   res.json(await db.users.filter( {$text: {$search: req.params.nickname}}))
 })
+
+app.get('/api/filter/user/:id', async (req, res) => {
+  res.json(await db.users.filterById(req.params.id))
+}) 
 
 app.post('/api/login', async (req, res) => {
   const user = await db.users.logIn(req.body)

@@ -25,6 +25,8 @@ export class CheckoutForm extends LitElement {
         super();
     }
 
+    
+
     render() {
         return html`
         <div class="checkout-container">
