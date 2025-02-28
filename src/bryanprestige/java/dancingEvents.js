@@ -1,6 +1,6 @@
-/*
-// @ts-check
-*/
+
+/* // @ts-check
+ */
 import {INITIAL_STATE,store} from '../storeRedux/redux.js'
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
@@ -66,12 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
 //====================FEED=====================//
 
 /**
- * @param {MouseEvent} event
+ * @param {MouseEvent} e
  */
 export async function onFilterButtonClick(e) {
     e.preventDefault();
     const target = e.target;
-    const filterValue = target?.textContent?.toLowerCase();  
+    const filterValue = target.textContent.toLowerCase();  
     
     const eventContainer = document.querySelector('.event-container');
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
@@ -79,16 +79,22 @@ export async function onFilterButtonClick(e) {
     if (!apiData) return;
     if (!eventContainer) return;
     cleanEventContainer();
-
+  
     apiData.forEach(e => {
         createEventCardWithAnimation(e, eventContainer);
     })
    
-    const basketElement = document.querySelector('.basket-counter');
+   /*  const basketElement = document.querySelector('.basket-counter');
     const storedBasketCount = localStorage.getItem('basketCount') || 0;
-    basketElement.innerText = `BASKET (${storedBasketCount})`;
+    basketElement.innerText = `BASKET (${storedBasketCount})`; */
     scrollToTop();   
 }
+
+/**
+ * Updates the default feed by fetching event data from the server and rendering
+ * event cards with animation in the event container. Also updates the local storage
+ * with the fetched event data.
+ */
 
 async function updateDefaultFeed() {
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events?`,'GET');
@@ -99,7 +105,7 @@ async function updateDefaultFeed() {
     });
 }
 
-/**
+/**`
  * @param {MouseEvent} event
  */
 
@@ -147,11 +153,10 @@ function displayUserNickname() {
     if (!isUserLoggedIn()) {
         profileUsername.innerText = `PROFILE`
         return
-    } else if(isUserLoggedIn){
+    } else {
         const userNickname = getUserNickname()
         profileUsername.innerText = `${userNickname.toUpperCase()}`
     }
-    console.log('paso por el displayUserNickname')
 }
 
 function showLogoutButton() {
@@ -160,7 +165,7 @@ function showLogoutButton() {
     let logoutButton = document.querySelector('.log-out')
     if (!isUserLoggedIn()) {
         return
-    } else if(isUserLoggedIn){
+    } else {
         loginButton.style.display = 'none'
         registerButton.style.display = 'none'
         logoutButton.style.display = 'block'
@@ -187,7 +192,7 @@ function createEventCardElement(event) {
 }
 /**
  * 
- * @param {MouseEvent} event 
+ * @param {Event} event 
  * @param {HTMLElement} card
  */ 
 function createLeftColumn(event, card) {
@@ -217,6 +222,11 @@ function createImageElement(eventName) {
     return image;
 }
 
+/**
+ * 
+ * @param {Event} event
+ */ 
+
 function createInstagramAnchor(event) {
     const instagramAnchor = document.createElement('a');
     instagramAnchor.className = 'instagram-anchor';
@@ -245,7 +255,7 @@ function createNameFavElement(event) {
 } 
 /**
  * 
- * @param {object} event 
+ * @param {Event} event 
  */ 
 
 function createFavButton(event) {
@@ -262,20 +272,19 @@ function createFavButton(event) {
     if (userFavList.some(favEvent => favEvent.name === event.name)) {
         favButton.classList.add('favorited');
     }
-
     favButton.addEventListener('click', () => toggleFavorite(event, favButton));
     return favButton;
 }
 
 /**
  * @param {object} event
- * @param {HTMLElement | null} button
+ * @param {HTMLElement} favButton
  */ 
 
 export function toggleFavorite(event, favButton) { 
     const userId = getUserId()
     const storageUser = `favList_${userId}`;
-    let userFavList = JSON.parse(localStorage.getItem(storageUser)) || []; // Obtener la lista de favoritos
+    let userFavList = JSON.parse(localStorage.getItem(storageUser)) || []
     
     const index = userFavList.findIndex(favEvent => favEvent.name === event.name);
     //VERIFY IF THE EVENT IS ALREADY IN FAVORITES
@@ -293,7 +302,7 @@ export function toggleFavorite(event, favButton) {
 }
 
 /**
- * @param {object} event 
+ * @param {Event} event 
  */ 
 function createPriceCurrencyElement(event) {
     const priceCurrency = document.createElement('div');
@@ -308,7 +317,7 @@ function createPriceCurrencyElement(event) {
 /**
  * 
  * @param {object} card
- * @param {object} event 
+ * @param {Event} event 
  */ 
 function createBuyButton(card, event) {
     const buyButton = document.createElement('button');
@@ -321,8 +330,7 @@ function createBuyButton(card, event) {
 
 /**
  * @param {object} card
- * @param {object} event
- * @param {HTMLElement | null} basketElement
+ * @param {Event} event
  */ 
 export function onBuyTicketClick(card, event) {
     card.ticketCount++;    
@@ -333,7 +341,7 @@ export function onBuyTicketClick(card, event) {
 
 /**
  * 
- * @param {MouseEvent} event 
+ * @param {Event} event 
  */ 
 
 function createRightColumn(event) {
@@ -369,7 +377,7 @@ function createMusicRatioElement(music) {
 }
 
 /**
- * @param {object} event    
+ * @param {Event} event    
  */
 function createCityCountryElement(event) {
     const cityCountry = document.createElement('div');
@@ -423,24 +431,25 @@ function createElementWithText(tag, className, textContent) {
     element.textContent = textContent;
     return element;
 }
-
-
+/**
+ * @param {Event} event
+ */ 
 function saveBasketToLocalStorage(event) {
     const eventCards = document.querySelectorAll('.event-card');
     const basketData = [];
 
     eventCards.forEach(card => {
-        //const eventName = card.querySelector('.name').textContent;
         const ticketCount = card.ticketCount || 0;
 
         if (ticketCount > 0) {
             basketData.push(event);
-            console.log('event in basketdata',basketData)
         }
     });
 
     localStorage.setItem('basket', JSON.stringify(basketData));
 }
+
+
 function loadBasketFromLocalStorage() {
     const basketData = JSON.parse(localStorage.getItem('basket')) || [];
     const basketElement = document.querySelector('.basket-counter');
@@ -458,7 +467,7 @@ function loadBasketFromLocalStorage() {
                 if (!ticketCountSpan) {
                     ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
                     const leftColumn = card.querySelector('.left-column');
-                    leftColumn.appendChild(ticketCountSpan);
+                    leftColumn?.appendChild(ticketCountSpan);
                 } else {
                     ticketCountSpan.textContent = `(${card.ticketCount})`;
                 }
@@ -469,7 +478,7 @@ function loadBasketFromLocalStorage() {
                 if (!removeButton) {
                     removeButton = createRemoveButton(card, { name: eventName }, basketElement, ticketCountSpan);
                     const leftColumn = card.querySelector('.left-column');
-                    leftColumn.appendChild(removeButton);
+                    leftColumn?.appendChild(removeButton);
                 } 
             }
         });
@@ -481,8 +490,9 @@ export function setLocalStorageFromState(key = 'eventStorage') {
     delete storeData.user
     updateLocalStorage(storeData, key)
 }
+
 /**
- * @param{State} storeValue
+ * @param {String} storeValue
  */
 function updateLocalStorage(storeValue, key = 'eventStorage') {
     localStorage.setItem(key, JSON.stringify(storeValue));
@@ -495,6 +505,10 @@ export function scrollToTop() {
     }
 }
 
+/**
+ * Cleans the event container and adds a 'no event found' image
+ */
+
 export function noEventFound () {
     cleanEventContainer()
     const eventContainer = document.querySelector('.event-container');
@@ -502,11 +516,12 @@ export function noEventFound () {
     errorImg.className = 'error-img';
     errorImg.src = './imagenes/noEvent.png';
     
-    eventContainer.appendChild(errorImg);
+    eventContainer?.appendChild(errorImg);
 }
+
 export function cleanEventContainer() {
     const eventContainer = document.querySelector('.event-container');
-    while (eventContainer.firstChild) {
+    while (eventContainer?.firstChild) {
         eventContainer.removeChild(eventContainer.firstChild);
     }
 }
@@ -540,13 +555,14 @@ async function displayMyEventsPurchased() {
     if (!apiData) {
         return
     } else{
+        
         noOrders[0].style.display = 'none';
         apiData.forEach(event => {
             const eventName = event.name;
             const newElement = document.createElement('h1');
             newElement.textContent = `${eventName}`;
             myOrdersContainer[0].appendChild(newElement);
-          });
+        });
     }
 }
 
@@ -564,9 +580,6 @@ export function hideEditProfileForm() {
     editForm.style.display = 'none';
 }
 
-/**
- * @param {HTMLElement | null} button
- */ 
 
 export async function displayMyEvents() {
     hideCreateEvents()
@@ -581,6 +594,7 @@ export async function displayMyEvents() {
     if (apiData.length === 0) {
         noEventFound()
      } else {
+        
         cleanEventContainer() 
          apiData.forEach(e => {
             const myEventCard = createEventCardWithAnimation(e, eventContainer);
@@ -594,6 +608,10 @@ export async function displayMyEvents() {
     }
 }
 
+/**
+ * @param {Event} e
+ */
+
 function createEditMyEventButton(e) {
     const editButton = document.createElement('button')
     editButton.className = 'edit--my-event-button'
@@ -605,6 +623,10 @@ function createEditMyEventButton(e) {
     
     return editButton
 }       
+
+/**
+ * @param {String} event_id
+ */
 
 function displayEditMyEvents(event_id) { 
     console.log(event_id)
@@ -625,6 +647,10 @@ function displayEditMyEvents(event_id) {
     }
 }
 
+/**
+ * @param {Event} e
+ */
+
 function createRemoveEventButton(e) {
     const removeEventButton = document.createElement('button');
     removeEventButton.className = 'remove-event-button';
@@ -637,6 +663,9 @@ function createRemoveEventButton(e) {
     return removeEventButton
 }
 
+/**
+ * @param {String} eventId
+ */
 async function removeEvent (eventId) {
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/delete/event/${eventId}`,'DELETE');
     console.log(apiData)
@@ -658,7 +687,7 @@ export function displayCreateEvents () {
     const cancelChangesEventButton = document.querySelector('#cancel-changes-event-button');
     const saveChangesEventButton = document.querySelector('#save-changes-event-button');
     
-    if (eventCreator.style.display === 'none') {
+    if (eventCreator?.style.display === 'none') {
         eventCreator.style.display = 'block';
         if (cancelChangesEventButton) {
             cancelChangesEventButton.remove();
@@ -666,7 +695,7 @@ export function displayCreateEvents () {
         if (saveChangesEventButton) {
             saveChangesEventButton.remove();
         }
-        const submitButton = document.querySelector('#submit-button');
+        const submitButton = document.querySelector('#submit-button') 
         if (submitButton) {
             submitButton.style.display = 'block';
         }
@@ -731,8 +760,7 @@ function createEditEventButton() {
 function hidePreviewContainer () {
     let previewContainer = document.querySelector('.preview-container'); 
     if (previewContainer) {
-        return previewContainer.remove() ||
-               document.body.removeChild(previewContainer);
+        previewContainer.remove() 
      }
 }
 /**
@@ -759,14 +787,17 @@ function displayEventToBuy () {
     createEventCardWithAnimation(event,eventContainer)
     const leftColumnFind = document.querySelector('.left-column');
     const findBuyButton = document.querySelector('.buy-button');
-    findBuyButton.remove()
+    findBuyButton?.remove()
 
     const buyTicketButton = createBuyTicketButton(event);
 
-    leftColumnFind.append(buyTicketButton);
+    leftColumnFind?.append(buyTicketButton);
     console.log(leftColumnFind) 
 }
 
+/**
+ * @param {Event} event
+ */
 function createBuyTicketButton(event) {
     const buyTicketButton = document.createElement('button');
     buyTicketButton.className = 'buy-button';
@@ -776,9 +807,13 @@ function createBuyTicketButton(event) {
     return buyTicketButton
 
 }
+
+/**
+ * @param {Event} event
+ */
 function onBuyTicketBasketClick (event) {
     const card = document.querySelector('.event-card')
-    let ticketCountSpan = card.querySelector('.ticket-count');
+    let ticketCountSpan = card?.querySelector('.ticket-count');
     const basketElement = document.getElementsByClassName('basket-counter')
     sumPriceValue(card)   
     card.ticketCount++;
@@ -786,18 +821,18 @@ function onBuyTicketBasketClick (event) {
     if (!ticketCountSpan) {
         ticketCountSpan = createElementWithText('span', 'ticket-count', `(${card.ticketCount})`);
         const leftColumn = card.querySelector('.left-column');
-        leftColumn.appendChild(ticketCountSpan);
+        leftColumn?.appendChild(ticketCountSpan);
     } else {
         ticketCountSpan.textContent = `(${card.ticketCount})`;
     }
 
     ticketCountSpan.style.display = 'inline';
 
-    let removeButton = card.querySelector('.remove-button'); 
+    let removeButton = card?.querySelector('.remove-button'); 
     if (!removeButton) {
         removeButton = createRemoveButton(card, event, basketElement, ticketCountSpan);
-        const leftColumn = card.querySelector('.left-column');
-        leftColumn.appendChild(removeButton);
+        const leftColumn = card?.querySelector('.left-column');
+        leftColumn?.appendChild(removeButton);
     } 
     updateTicketCount(event, card.ticketCount);
     updateBasketCounter(basketElement);
@@ -833,12 +868,16 @@ function continueToCheckout() {
     let containerSignIn = document.querySelector('.container-signin')
     if (!isUserLoggedIn()) {
         return
-    } else if(isUserLoggedIn){
+    } else{
         containerSignIn.innerHTML = '<h1> Continue to<button class="checkout-button">checkout</button>.</h1>'  
         const checkoutButton = document.querySelector('.checkout-button')
-        checkoutButton.addEventListener('click', () => displayCheckoutForm(containerSignIn))      
+        checkoutButton?.addEventListener('click', () => displayCheckoutForm(containerSignIn))      
     }
 }
+
+/**
+ * @param {HTMLElement} containerSignIn
+ */
 
 function displayCheckoutForm(containerSignIn) {
     const event = getEventFromBasketStorage()
@@ -848,13 +887,13 @@ function displayCheckoutForm(containerSignIn) {
     eventContainer.style.display = 'none';
     containerSignIn.style.display = 'none';
     let event_id=event._id
-    checkoutContainer.setAttribute('eventId', event_id)
+    checkoutContainer?.setAttribute('eventId', event_id)
     console.log('checkoutcontainer',checkoutContainer)
 }
 
 
 /**
- * @param {object} event
+ * @param {Event} event
  * @param {number} ticketCount
  */  
 function updateTicketCount(event, ticketCount) {
@@ -887,22 +926,22 @@ function updateBasketCounter(basketElement) {
  * @param {HTMLElement | null} card
  */
 function getPriceValue(card) {
-    const priceElement = card.querySelector('.price');
-    const priceValue = priceElement.textContent.replace('$', '');
+    const priceElement = card?.querySelector('.price');
+    const priceValue = priceElement?.textContent?.replace('$', '');
 
     return priceValue;
 }
 
 /**
- * @param {HTMLElement | null} card
+ * @param {HTMLElement} card
  */
 function sumPriceValue(card)  {
     const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || 0;
     const priceValue = getPriceValue(card);
     console.log(`Event price: ${priceValue}`);
 
-    totalPriceValue = currentTotalPrice + parseInt(priceValue); // Changed to add priceValue to currentTotalPrice
-    localStorage.setItem('totalPriceValue', totalPriceValue); // Removed JSON.stringify
+    totalPriceValue = currentTotalPrice + parseInt(priceValue); 
+    localStorage.setItem('totalPriceValue', totalPriceValue); 
     console.log(`Total price: ${totalPriceValue}`);
 }
 /**
@@ -915,7 +954,7 @@ function resPricevalue(card) {
     const priceValue = getPriceValue(card);
     totalPriceValue  = currentTotalPrice - parseInt(priceValue)
  
-    localStorage.setItem('totalPriceValue', totalPriceValue); // Removed JSON.stringify
+    localStorage.setItem('totalPriceValue', totalPriceValue);
     console.log(`Total price: ${totalPriceValue}`);
 
 }
@@ -929,28 +968,37 @@ function resPricevalue(card) {
  * @returns void
  */
 function onRegisterComponentSubmit (customEvent) {
-    console.log(`DESDE FUERA DEL COMPONENTE:`, customEvent);
-
     let userListData = customEvent.detail
-    console.log(userListData)
     saveUserListToLocalStorage(userListData)
     alert('User registered successfully')
     navigateTo('./login.html')
 }
 
+/**
+ * Navigates to the specified path
+ * @param {string} pathname
+ */
+
 export function navigateTo(pathname) {
     const newLocation = {
-      ...window.location.href = pathname,
+        ...window.location.href = pathname,
     }
     window.history.pushState({}, '', pathname)
     const newLocationLinked = location.pathname.replace(/\/src/, '')
     console.log(newLocation)
     console.log(newLocationLinked)
-  }
+}
 
+/**
+ * @param {Object} userList
+ */
 function saveUserListToLocalStorage(userList) {
     localStorage.setItem('userList', JSON.stringify(userList));
 }
+
+/**
+# * @param {String} storeValue
+ */
 export function updateSessionStorage(storeValue) {
     sessionStorage.setItem('userList', JSON.stringify(storeValue))
     console.log('this is storevalue',storeValue)    
@@ -1018,10 +1066,9 @@ function getBasketFromLocalStorage() {
 }
   
 function checkLoginStatus() {
-    /** @type {State} */
     const storedData = getDataFromSessionStorage()
     if (storedData?.user?.token) {
-      const storeUserData = /** @type {User} */(storedData?.user)
+      const storeUserData = (storedData?.user)
       delete storeUserData.password
       store.user.login(storeUserData)
     }
@@ -1039,7 +1086,7 @@ export function createUserCardWithAnimation(user){
     userCard.addEventListener('animationend', () => {
         userCard.classList.remove('zoom-in');
     });
-    userContainer.appendChild(userCard);
+    userContainer?.appendChild(userCard);
     return userCard;
 }
 
@@ -1068,7 +1115,6 @@ function createUserCardElement(user) {
  * 
  * @param {User} user
  */ 
-
 function createProfileInfo(user){
     const profileInfo = document.createElement('div')
     profileInfo.className ='profile-info'
@@ -1083,6 +1129,10 @@ function createProfileInfo(user){
     return profileInfo
 }
 
+/**
+ * 
+ * @param {User} user
+ */ 
 function createBio(user) {
     const bioContainer = document.createElement('p')
     bioContainer.className = 'bio'
@@ -1092,6 +1142,10 @@ function createBio(user) {
     return bioContainer
 }
 
+/**
+ * 
+ * @param {User} user
+ */ 
 function createFollowRateButtons(user) {
     const followRate = document.createElement('div')
     
@@ -1103,6 +1157,10 @@ function createFollowRateButtons(user) {
     return followRate
 }
 
+/**
+ * 
+ * @param {User} user
+ */ 
 function createFollowButton(user) {
     const userFollowedId = user._id
     console.log('userfollowedID',userFollowedId)
@@ -1125,19 +1183,30 @@ function createFollowButton(user) {
     return followButton
 }
 
+/**
+ * 
+ * @param {String} userFollowedBy
+ * @param {String} userFollowedId
+ * @param {String} currentUserId
+ * @param {HTMLElement} followButton
+ */ 
 function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton) { 
     console.log('user inside onFollowButtonClick',userFollowedBy)
 
     addFollower(userFollowedId,currentUserId)
     if(userFollowedBy && userFollowedBy.includes(currentUserId)){
-    removeFollower(userFollowedId,currentUserId,userFollowedBy)
+    removeFollower(userFollowedId,currentUserId)
     } else {
     addFollower(userFollowedId,currentUserId)
     } 
    
     toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) 
 }
-
+/**
+ * 
+ * @param {String} userFollowedId
+ * @param {String} currentUserId
+ */ 
 async function addFollower(userFollowedId,currentUserId){
     console.log('userFollowedID inside onFollowButtonClick',userFollowedId)
     console.log('currentuserID inside onFollowButtonClick',currentUserId)
@@ -1150,6 +1219,11 @@ async function addFollower(userFollowedId,currentUserId){
     console.log('apiData',apiData)
 }
 
+/**
+ * 
+ * @param {String} userFollowedId
+ * @param {String} currentUserId
+ */ 
 async function removeFollower(userFollowedId, currentUserId) {
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     console.log('apiData user to removefollower', apiData)
@@ -1168,9 +1242,15 @@ async function removeFollower(userFollowedId, currentUserId) {
     const response = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/followedBy/users/${userFollowedId}`, "PUT", payload);
     console.log('response', response)
 }
+/**
+ * 
+ * @param {String} userFollowedBy
+ * @param {String} userFollowedId
+ * @param {String} currentUserId
+ * @param {HTMLElement} followButton
+ */ 
 
 function toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) {
-    
     if (followButton.className === 'follow-button') {
         followButton.classList.add('unfollow');
         followButton.innerText = 'Unfollow'
@@ -1182,7 +1262,8 @@ function toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followBu
     }
 }
 
-function createRateButton(user) {
+
+function createRateButton() {
     const rateButton = document.createElement('button')
     rateButton.className = 'rate-button'
     rateButton.innerText = 'Rate'
@@ -1192,6 +1273,12 @@ function createRateButton(user) {
 
 //========================BACKEND================================//
 
+/**
+ * Get data from API
+ * @param {string} apiURL
+ * @param {string} method
+ * @param {any} [data]
+ */
 export async function getAPIData(apiURL, method = 'GET' , data) {
     let apiData
   
@@ -1245,7 +1332,6 @@ function getUserNickname() {
     return userData.user.nickname
 }
 
-
 function getEventFromBasketStorage() {
     const eventData = getBasketFromLocalStorage()
     const eventToget = eventData[0]
@@ -1253,7 +1339,6 @@ function getEventFromBasketStorage() {
     return eventToget
     
 }
-
 
 /**
  * Logs out the user
