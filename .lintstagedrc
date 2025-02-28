@@ -1,4 +1,4 @@
 {
-  "*.js": "eslint --fix",
-  "*.css": "stylelint"
+  "!(*service-worker).js": "eslint --fix",
+  "!(*output).css": "stylelint"
 }
