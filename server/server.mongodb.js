@@ -69,7 +69,6 @@ async function updateUser(id, updates) {
 }
 
 /**
- * Updates an article in the 'articles' collection in the 'shoppingList' database.
  *
  * @param {string} _id - The ID of the event to be updated.
  * @param {object} updates - The fields and new values to update the event with.

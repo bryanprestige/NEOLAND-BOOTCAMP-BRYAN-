@@ -2,7 +2,7 @@ import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit
 import appCss from '../../../css/app.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import reset from '../../../css/reset.css' with { type: 'css' }
-import {getDataFromSessionStorage,displayCreateEvents,displayMyEvents,displayFavoriteEvents,displayEditForm} from "../../../java/dancingEvents.js"
+import {noEventFound,createEventCardWithAnimation,cleanEventContainer,getAPIData, PORT,getUserId,hidePreviewContainer,hideEditProfileForm,getDataFromSessionStorage,displayCreateEvents,hideCreateEvents,hideEditEvents,displayFavoriteEvents,displayEditForm} from "../../../java/dancingEvents.js"
 
 /**
  * Login Form Web Component
@@ -66,13 +66,49 @@ export class CreateProfileCard extends LitElement {
             </div>
             <div class="create-myEvents-profile">
               <button id="create-events-button" @click=${displayCreateEvents}>Create Events</button>
-              <button id="my-events-button" @click=${displayMyEvents}>My Events</button>
+              <button id="my-events-button" @click=${this._displayMyEvents}>My Events</button>
             </div>
         </div>
       </div>
     `
   }
   /*=========PRIVATE METHODS============*/
+
+  async _displayMyEvents() {
+      hideCreateEvents()
+      hideEditProfileForm() 
+      hidePreviewContainer() 
+      hideEditEvents() 
+      const userId = getUserId()
+      const storageUser = `myEventsList_${userId}`;
+      const filterValue = userId;  
+      const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
+  
+      if (apiData.length === 0) {
+          noEventFound()
+       } else {
+          
+          cleanEventContainer() 
+           apiData.forEach(e => {
+            const myEventCard = createEventCardWithAnimation(e);
+            console.log(myEventCard)
+          });
+          
+      }
+      this._setEventCardAttributes() 
+      localStorage.setItem(storageUser, JSON.stringify(apiData))
+    }
+
+    _setEventCardAttributes() {
+      const displayMyEventsFlag = false
+      const eventCards = document.querySelectorAll('.event-card-component');
+      eventCards.forEach((eventCard) => {
+        eventCard.setAttribute('displayMyEvents', displayMyEventsFlag);
+        eventCard.dispatchEvent(new CustomEvent('displayMyEventsChanged', { detail: displayMyEventsFlag }));
+      });
+    }
+
+  
 }
 
 customElements.define('create-profile-card', CreateProfileCard);
