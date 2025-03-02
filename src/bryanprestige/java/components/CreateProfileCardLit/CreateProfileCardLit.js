@@ -52,24 +52,73 @@ export class CreateProfileCard extends LitElement {
     super();
   }
 
+  displayUserConditions(){
+          const currentPage = window.location.pathname;
+  
+          return currentPage.includes('reviews.html') ? 
+              html`
+                  <!-- FIRST HTML BLOCK -->
+                  <div class="profile-card">
+                <img class="profile-picture" src="../../../imagenes/profile-pic-placeholder.png">
+                <div class="profile-info">
+                    <h1 class="nickname">${this._nickname}</h1>
+                    <p class="bio">${this._bio}</p>
+                    <p class="team-academy">${this._teamAcademy}</p>    
+                    <form>
+                      <label for="technique">Technique</label>
+                        <select> 
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      <label for="dance-style">Style</label>
+                        <select> 
+                          <option value="Bachata Sensual">Bachata Sensual</option>
+                          <option value="Bachata Moderna">Bachata Moderna</option>
+                          <option value="Bachata Traditional">Bachata Traditional</option>
+                          <option value="Salsa on 1">Salsa on 1</option>
+                          <option value="Salsa on 2">Salsa on 2</option>
+                          <option value="Salsa cali">Salsa cali </option>
+                          <option value="Zouk">Zouk</option>
+                          <option value="Kizomba">Kizomba</option>
+                          <option value="Merengue">Merengue</option>
+                          <option value="West Coast Swing">West Coast Swing</option>
+                          <option value="Bachazouk">Bachazouk</option>
+                        </select>
+                      <label for="comments">Comments</label>
+                        <textarea id="comments" name="comments"  cols="20" rows="4"placeholder="Comments"></textarea>
+                      <button type="submit">Submit</button>
+                    </form>
+                </div>
+              </div>
+            `
+              :
+              html`
+              <!-- SECOND HTML BLOCK (original HTML) -->
+            <div class="profile-card">
+                <img class="profile-picture" src="../../../imagenes/profile-pic-placeholder.png">
+                <div class="profile-info">
+                    <h1 class="nickname">${this._nickname}</h1>
+                    <p class="bio">${this._bio}</p>
+                    <p class="team-academy">${this._teamAcademy}</p>    
+                    <div class="edit-fav-profile">
+                      <button id="edit-profile-button" @click=${displayEditForm}>Edit Profile</button>
+                      <button id="fav-button-profile" @click=${displayFavoriteEvents}>Favourites</button>
+                    </div>
+                    <div class="create-myEvents-profile">
+                      <button id="create-events-button" @click=${displayCreateEvents}>Create Events</button>
+                      <button id="my-events-button" @click=${this._displayMyEvents}>My Events</button>
+                    </div>
+                </div>
+              </div>
+            `
+          } 
+
   render() {
     return html`
-     <div class="profile-card">
-        <img class="profile-picture" src="../../../imagenes/profile-pic-placeholder.png">
-        <div class="profile-info">
-            <h1 class="nickname">${this._nickname}</h1>
-            <p class="bio">${this._bio}</p>
-            <p class="team-academy">${this._teamAcademy}</p>    
-            <div class="edit-fav-profile">
-              <button id="edit-profile-button" @click=${displayEditForm}>Edit Profile</button>
-              <button id="fav-button-profile" @click=${displayFavoriteEvents}>Favourites</button>
-            </div>
-            <div class="create-myEvents-profile">
-              <button id="create-events-button" @click=${displayCreateEvents}>Create Events</button>
-              <button id="my-events-button" @click=${this._displayMyEvents}>My Events</button>
-            </div>
-        </div>
-      </div>
+      ${this.displayUserConditions()}
     `
   }
   /*=========PRIVATE METHODS============*/

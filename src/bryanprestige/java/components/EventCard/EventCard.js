@@ -103,10 +103,10 @@ export class EventCard extends LitElement {
             html`
                 <!-- FIRST HTML BLOCK -->
                 <div class="left-column">
-                    <img class="event-image" src="../../../imagenes/placehold400x200.png" alt="">
-                    <a class="instagram-anchor" href="${this.eventUrl}" target="_blank">
-                        <img src="../../../imagenes/instagram.png" alt="instagram image" class="instagram-img">
-                    </a>
+                        <img class="event-image" src="../../../imagenes/placehold400x200.png" alt="">
+                        <a class="instagram-anchor" href="${this.eventUrl}" target="_blank">
+                            <img src="../../../imagenes/instagram.png" alt="instagram image" class="instagram-img">
+                        </a>
                     <div class="name-fav">
                         <h1 class="name">${this.eventName}</h1>
                         <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><img src="../../../imagenes/fav.png"></button> 
