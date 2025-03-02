@@ -45,43 +45,44 @@ a {
 }
 
 /*=====BUTTONS=====*/
-#search-button,.buy-button, #submit-button, .login-button,.log-out,.register,
-.remove-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
+#search-button,.buy-button,.buy-button-basket, #submit-button, .login-button,.log-out,.register,
+.remove-ticket-button, .button-dance-type, .button-city,.button-country, .edit-event-button,
 .publish-button,.fav-button, #favorite-button, .venue, .name,
  .music-ratio,#edit-profile-button, #fav-button-profile, #my-events-button,
  #create-events-button,#submit-new-user-data, #cancel-edit-profile-button,
- .remove-event-button, .edit--my-event-button,#save-changes-button,#cancel-changes-button,
- .follow-button,.rate-button  {
+ .vanish-remove-button, .vanish-edit-button,#save-changes-button,#cancel-changes-button,
+ .follow-button,.rate-button, .checkout-button,.guest-checkout-button  {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
     border-radius: 10px;
     font-weight: bold;
 }
-.remove-button:hover, .button-dance-type:hover, .button-city:hover,.button-country:hover,
+.remove-ticket-button:hover, .button-dance-type:hover, .button-city:hover,.button-country:hover,
 #search-button:hover, .buy-button:hover, #log-in:hover,.log-out:hover, #submit-button:hover,
 .publish-button:hover, .edit-event-button:hover,.login-button:hover, .register:hover,
 #favorite-button:hover, #edit-profile-button:hover, #fav-button-profile:hover, #my-events-button:hover,
 #create-events-button:hover,#submit-new-user-data:hover,  #cancel-edit-profile-button:hover,
-.remove-event-button:hover, .edit--my-event-button:hover,#save-changes-button:hover, 
-#cancel-changes-button:hover, .follow-button:hover,.rate-button:hover {
+.vanish-remove-button:hover, .vanish-edit-button:hover,#save-changes-button:hover, 
+#cancel-changes-button:hover, .follow-button:hover,.rate-button:hover,.checkout-button:hover,
+.guest-checkout-button:hover,.buy-button-basket:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-#search-button, .buy-button, #submit-button {
+#search-button, .buy-button,.buy-button-basket, #submit-button {
     padding: 5px 10px;
 }
-#search-button, .buy-button, #submit-button, .button-dance-type, #favorite-button,
+#search-button, .buy-button,.buy-button-basket, #submit-button, .button-dance-type, #favorite-button,
 #edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button  {
     background-color: #F7BC47;
 }
-.login-button, .register, .remove-button, .edit-event-button, .publish-button,
+.login-button, .register, .remove-ticket-button, .edit-event-button, .publish-button,
 .log-out  {
     background-color: #243D4B;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     padding: 10px 14px;
 }
-.login-button, .register, .remove-button,
+.login-button, .register, .remove-ticket-button,
 .log-out {
     display: block;
     margin-top: 15px;
@@ -102,8 +103,9 @@ a {
 }
 #favorite-button, #edit-profile-button, #fav-button-profile,
  #my-events-button, #create-events-button,#submit-new-user-data,
- #cancel-edit-profile-button, .remove-event-button,
-.edit--my-event-button, .follow-button,.rate-button {
+ #cancel-edit-profile-button,  .vanish-remove-button,
+ .vanish-edit-button, .follow-button,.rate-button,.checkout-button
+,.guest-checkout-button  {
     padding: 5px 10px;
 }
 .fav-button {
@@ -117,7 +119,7 @@ a {
 #my-events-button, #create-events-button {
     width: fit-content;
 }
-#cancel-edit-profile-button, .remove-event-buttonm,#cancel-changes-button {
+#cancel-edit-profile-button,  .vanish-remove-button,#cancel-changes-button {
     background-color: #e64242;
     color: white;
 }
@@ -125,7 +127,7 @@ a {
     background-color: lightgreen;
 }
 
-.edit--my-event-button{
+.vanish-edit-button{
     background-color: #ffaa00;
 }
 
@@ -146,6 +148,14 @@ a {
     background-color: #e64242;
     display: none;
 }
+
+.checkout-button,.guest-checkout-button {
+    border: none;
+    padding: 0px;
+    background-color: white;
+}
+
+
 /************IMG***********/
 .error-img{
     width: 600px;
@@ -155,20 +165,19 @@ img {
     width: 52px;
     margin: 10px auto 0;
 }
-
 /*======EVENTS======*/
-.event-container, .event-card,#event-form, .image-and-details, .time-price, .city-country, .name-fav,
+.event-container, .event-card,.event-card-component,#event-form, .image-and-details, .time-price, .city-country, .name-fav,
 .reviews-placeholder    {
     display: flex;
 }
-.event-container, .event-image, .remove-button, .register,
- .login-button, .register, .remove-button, .name {
+.event-container, .event-image, .remove-ticket-button, .register,
+ .login-button, .register, .remove-ticket-button, .name {
     width: 100%;
 }
-.event-card,#event-form, .fav-button, .city-country, .time-price, .name-fav  {
+.event-card,.event-card-component,#event-form, .fav-button, .city-country, .time-price, .name-fav  {
     background-color: white;
 }
-.event-card,#event-form {
+.event-card,.event-card-component,#event-form {
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
 }
 .event-image,.reviews-placeholder,.name, .venue,.time, .currency,
@@ -178,7 +187,7 @@ img {
 .reviews-placeholder, .time-price, .city-country, .name-fav,.fav-button{
     border: none;
 }
-.event-container,.event-card,#event-form {
+.event-container,.event-card,.event-card-component,#event-form {
     gap: 20px; 
 }
 .image-and-details{
@@ -193,14 +202,14 @@ img {
     font-size: 1rem;
     font-style: italic;
 }
-.event-card,#event-form {
+.event-card,.event-card-component,#event-form {
     flex-direction: row; 
     padding: 15px;
     border: 1px solid #ddd;
     width: calc(50% - 20px); 
 } 
 
-.event-card-component{
+.event-card-component-inside{
     display: flex;
     flex-direction: row; 
     padding: 5px;
@@ -284,6 +293,18 @@ margin-bottom: -10px;;
     animation: pop 0.3s ease-in-out;
     background-color: rgb(230, 158, 158);
 }
+
+.vanish,.vanish-edit-button,.vanish-remove-button,.remove-ticket-button,.ticket-count {
+    display: none;
+}
+
+.appear{
+    display: block;
+}
+
+.ticket-count{
+display: inline;
+}
 /*=====MUSIC RATIO STYLES======*/
 .music-ratio {
     margin-top: 10px;
@@ -291,13 +312,14 @@ margin-bottom: -10px;;
 }
 .music-ratio.single-style {
     background-color:#243D4B;
+    color: white;
 }
 .music-ratio.two-styles {
     background: linear-gradient(90deg, #F7BC47 50%, #243D4B 50%);
     color: white;
 }
 .music-ratio.three-styles {
-    background: linear-gradient(90deg, #F7BC47 33.33%, #243D4B 33.33%, #F7BC47 33.33%);
+    background: linear-gradient( #F7BC47 33.34%, #243D4B 33.33%, #F7BC47 66.67%);
     color: white;
 }
 /*************** POP ANIMATION FAV BUTTON **********/

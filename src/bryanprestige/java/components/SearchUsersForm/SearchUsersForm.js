@@ -38,6 +38,8 @@ export class SearchUsersForm extends LitElement {
 
     async _onSearchUserButtonClick (e){
       e.preventDefault()
+      const userCardContainer = document.querySelector('.user-card-container');
+
       const searchField = this.renderRoot.getElementById('search-field').value.trim().toLowerCase();
       const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/users/${searchField}`);
       console.log(apiData)  
@@ -45,9 +47,9 @@ export class SearchUsersForm extends LitElement {
        if (apiData.length === 0) { 
                      console.log('user not found')
                 } else {
+                    userCardContainer.innerHTML = '';
                     apiData.forEach(user => createUserCardWithAnimation(user));
                 }
     } 
 }
-
 customElements.define('search-users-form', SearchUsersForm );

@@ -1,6 +1,6 @@
 import { LoginForm } from "./LoginForm/LoginFormLit.js";
 import { RegisterForm } from "./RegisterForm/RegisterForm.js";
-//import { EventCard } from "./EventCard/EventCard.js";
+import { EventCard } from "./EventCard/EventCard.js";
 import { CreateEventForm } from "./CreateEventForm/CreateEventFormLit.js";
 import { CreateProfileCard } from "./CreateProfileCardLit/CreateProfileCardLit.js";
 import { EditProfileForm } from "./EditProfileFormLit/EditProfileFormLit.js";
@@ -11,7 +11,7 @@ import { CheckoutForm } from "./CheckoutFormLit/CheckoutFormLit.js";
 
 
 export {LoginForm};
-//export {EventCard };
+export {EventCard };
 export {RegisterForm };
 export {CreateEventForm };
 export {CreateProfileCard};
