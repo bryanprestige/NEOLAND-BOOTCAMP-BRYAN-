@@ -165,6 +165,11 @@ img {
     width: 52px;
     margin: 10px auto 0;
 }
+
+.world-map {
+    width: 100%;
+}
+
 /*======EVENTS======*/
 .event-container, .event-card,.event-card-component,#event-form, .image-and-details, .time-price, .city-country, .name-fav,
 .reviews-placeholder    {

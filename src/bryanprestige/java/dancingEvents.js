@@ -1,6 +1,6 @@
-
+/* 
 //@ts-check
- 
+  */
 import {INITIAL_STATE,store} from '../storeRedux/redux.js'
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (window.location.pathname.includes('login.html')) {
         window.addEventListener('login-form-submit', (event) => {
-            // console.log('login-form-submit', /** @type {CustomEvent} */(event).detail)
             onLoginComponentSubmit(/** @type {CustomEvent} */(event).detail)
           })        
     }
@@ -35,8 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('create-user', onRegisterComponentSubmit)
     }
     else if (window.location.pathname.includes('basket.html')) {
-        displayEventToBuy ()
+        displayEventToBuy()
         continueToCheckout()
+    }
+    else if (window.location.pathname.includes('reviews.html')) {
+        displayUserToRate ()
     }
      
     else if (window.location.pathname.includes('index.html')) {
@@ -47,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     checkLoginStatus()
 });
-
 
 /*TO DO: CREATE A PAGE JUST FOR WHEN THE EVENTS ARE CLICKED AND JUST DISPLAYIN THAT EVENT*/
 /*TO DO: MAKE FOLLOWING BUTTON*/
@@ -85,9 +86,6 @@ export async function onFilterButtonClick(e) {
         createEventCardWithAnimation(e, eventContainer);
     })
    
-   /*  const basketElement = document.querySelector('.basket-counter');
-    const storedBasketCount = localStorage.getItem('basketCount') || 0;
-    basketElement.innerText = `BASKET (${storedBasketCount})`; */
     scrollToTop();   
 }
 
@@ -169,13 +167,14 @@ function showLogoutButton() {
  * @param {Event} event 
  */ 
 
-function createEventCardElement(event) {
+ function createEventCardElement(event) {
     const eventContainer = document.querySelector('.event-container');
 
     const eventCardComponent = document.createElement('event-card');
     eventCardComponent.className = 'event-card-component';
     let eventToComponent = JSON.stringify(event)
     let eventUrl = event.url
+    let eventUserId = event.user_id
     let eventName = event.name 
     let eventPrice = event.price
     let eventCurrency = event.currency
@@ -185,6 +184,8 @@ function createEventCardElement(event) {
     let eventCity = event.city
     let eventCountry = event.country
     let eventDance = event.dance
+    console.log('eventUserId',eventUserId)
+
 
     eventCardComponent.setAttribute('event', eventToComponent)
     eventCardComponent.setAttribute('eventUrl', eventUrl)
@@ -280,6 +281,7 @@ async function displayMyEventsPurchased() {
         apiData.forEach(event => {
             const eventName = event.name;
             const newElement = document.createElement('h1');
+            newElement.href = '';
             newElement.textContent = `${eventName}`;
             myOrdersContainer[0].appendChild(newElement);
         });
@@ -567,13 +569,6 @@ function onLoginComponentSubmit(apiData) {
     }
   }
 
- /**
- * Retrieves the userList data from session storage.
- *
- * @returns {State} Saved state.
- * If no data is found, returns an empty State object.
- */
-
 function   getDataFromLocalStorage() {
     const defaultValue = JSON.stringify(INITIAL_STATE)
     return JSON.parse(localStorage.getItem('userList') || defaultValue)
@@ -597,6 +592,8 @@ function checkLoginStatus() {
       store.user.login(storeUserData)
     }
 }
+
+
 //========================CONNECT================================//
 
 /**
@@ -646,9 +643,11 @@ function createProfileInfo(user){
     const nickname = createElementWithText('h1', 'nickname', user.nickname);
     const bio = createBio(user)
     const teamAcademy = createElementWithText('p', 'team-academy', user.teamAcademy);
+    const userFollowedBy = user.followedBy
+    const followerNumber = createElementWithText('p', 'follower-number', `Followers: ${user.followedBy.length}`);
     
     const followRate = createFollowRateButtons(user)
-    profileInfo.append(nickname,bio,teamAcademy,followRate)
+    profileInfo.append(nickname,bio,teamAcademy,followRate,followerNumber)
 
     return profileInfo
 }
@@ -673,7 +672,7 @@ function createBio(user) {
 function createFollowRateButtons(user) {
     const followRate = document.createElement('div')
     const followButton = createFollowButton(user)   
-    const rateButton = createRateButton() 
+    const rateButton = createRateButton(user) 
     followRate.append(followButton,rateButton)
     return followRate
 }
@@ -712,7 +711,6 @@ function createFollowButton(user) {
  */ 
 function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton) { 
     console.log('user inside onFollowButtonClick',userFollowedBy)
-    addFollower(userFollowedId,currentUserId)
     if(userFollowedBy && userFollowedBy.includes(currentUserId)){
     removeFollower(userFollowedId,currentUserId)
     } else {
@@ -726,15 +724,16 @@ function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followB
  * @param {String} currentUserId
  */ 
 async function addFollower(userFollowedId,currentUserId){
-    console.log('userFollowedID inside onFollowButtonClick',userFollowedId)
-    console.log('currentuserID inside onFollowButtonClick',currentUserId)
+    const userFollowerNumber = document.querySelector('.follower-number')
     let userNewFollower = {
         followedBy: currentUserId
     }
 
     const payload = JSON.stringify(userNewFollower)
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/followedBy/users/${userFollowedId}`, "PUT",payload);
-    console.log('apiData',apiData)
+    const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
+    const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
+    userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`
 }
 
 /**
@@ -743,6 +742,8 @@ async function addFollower(userFollowedId,currentUserId){
  * @param {String} currentUserId
  */ 
 async function removeFollower(userFollowedId, currentUserId) {
+    const userFollowerNumber = document.querySelector('.follower-number')
+
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowedBy = apiData.followedBy;
 
@@ -755,6 +756,10 @@ async function removeFollower(userFollowedId, currentUserId) {
     }
     const payload = JSON.stringify(newUserFollowedBy);
     const response = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
+    const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
+    const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
+    userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`
+    
     console.log('response', response)
 }
 /**
@@ -775,11 +780,39 @@ function toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followBu
     }
 }
 
-function createRateButton() {
+function createRateButton(user) {
     const rateButton = document.createElement('button')
     rateButton.className = 'rate-button'
     rateButton.innerText = 'Rate'
+    rateButton.addEventListener('click',() => onRateButtonClick(user))
     return rateButton
+}
+
+function onRateButtonClick(user) {
+    saveUserListToLocalStorage(user)
+    navigateTo('./reviews.html')
+}
+
+//========================REVIEWS================================//
+function displayUserToRate () {
+    const user = getUserFromLocalStorage()
+    console.log('displayuser to rate',user)
+
+    createUserCardWithAnimation(user)
+}
+
+function getUserFromLocalStorage() {
+    const userData =  JSON.parse(localStorage.getItem('userList'))
+    const userToRate = userData
+    console.log('this is userToRate',userToRate)
+    return userToRate
+    
+}
+
+function saveUserToLocalStorage(user) {
+    let userToRateData = [];
+    userToRateData.push(user);
+    localStorage.setItem('userToRate', JSON.stringify(userToRateData));
 }
 //========================BACKEND================================//
 
