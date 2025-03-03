@@ -2,7 +2,7 @@ import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit
 import appCss from '../../../css/app.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import reset from '../../../css/reset.css' with { type: 'css' }
-import {noEventFound,createEventCardWithAnimation,cleanEventContainer,getAPIData, PORT,getUserId,hidePreviewContainer,hideEditProfileForm,getDataFromSessionStorage,displayCreateEvents,hideCreateEvents,hideEditEvents,displayFavoriteEvents,displayEditForm} from "../../../java/dancingEvents.js"
+import {getUserFromLocalStorage ,noEventFound,createEventCardWithAnimation,cleanEventContainer,getAPIData, PORT,getUserId,hidePreviewContainer,hideEditProfileForm,getDataFromSessionStorage,displayCreateEvents,hideCreateEvents,hideEditEvents,displayFavoriteEvents,displayEditForm, getInputValue} from "../../../java/dancingEvents.js"
 
 /**
  * Login Form Web Component
@@ -24,6 +24,15 @@ export class CreateProfileCard extends LitElement {
     return  nickname
   }
 
+  get _nicknameToRate() {
+    const getUser = JSON.parse(localStorage.getItem('userToRate'));
+
+    const user = getUser[0]
+    const nickname = user.nickname;
+
+    console.log('nickname',nickname)
+    return  nickname
+  }
   get _bio() {
     const getUser = getDataFromSessionStorage();
     const user = getUser.user;
@@ -31,6 +40,18 @@ export class CreateProfileCard extends LitElement {
     const bio = user.bio;
     if(!bio) {
         return `Describe yourself. Role: ${rol}`;
+    }else{
+        return  `${bio}. Role: ${rol}`
+    }
+  }
+  get _bioToRate() {
+    const getUser = JSON.parse(localStorage.getItem('userToRate'));
+    const user = getUser[0]
+
+    const rol = user.rol
+    const bio =user.bio;
+    if(!bio) {
+        return `Role: ${rol}`;
     }else{
         return  `${bio}. Role: ${rol}`
     }
@@ -47,6 +68,17 @@ export class CreateProfileCard extends LitElement {
           return  teamAcademy
         }   
     }
+    get _teamAcademyToRate() {
+      const getUser = JSON.parse(localStorage.getItem('userToRate'));
+      const user = getUser[0]
+
+      const teamAcademy = user.teamAcademy;
+      if(!teamAcademy) {
+      return `No team/academy assigned`;
+      } else {
+        return  teamAcademy
+      }   
+  }
 
   constructor() {
     super();
@@ -61,12 +93,12 @@ export class CreateProfileCard extends LitElement {
                   <div class="profile-card">
                 <img class="profile-picture" src="../../../imagenes/profile-pic-placeholder.png">
                 <div class="profile-info">
-                    <h1 class="nickname">${this._nickname}</h1>
-                    <p class="bio">${this._bio}</p>
-                    <p class="team-academy">${this._teamAcademy}</p>    
+                    <h1 class="nickname">${this._nicknameToRate}</h1>
+                    <p class="bio">${this._bioToRate}</p>
+                    <p class="team-academy">${this._teamAcademyToRate}</p>    
                     <form>
                       <label for="technique">Technique</label>
-                        <select> 
+                        <select class="input-technique"> 
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -74,7 +106,7 @@ export class CreateProfileCard extends LitElement {
                           <option value="5">5</option>
                         </select>
                       <label for="dance-style">Style</label>
-                        <select> 
+                        <select class="input-dance-style"> 
                           <option value="Bachata Sensual">Bachata Sensual</option>
                           <option value="Bachata Moderna">Bachata Moderna</option>
                           <option value="Bachata Traditional">Bachata Traditional</option>
@@ -88,8 +120,8 @@ export class CreateProfileCard extends LitElement {
                           <option value="Bachazouk">Bachazouk</option>
                         </select>
                       <label for="comments">Comments</label>
-                        <textarea id="comments" name="comments"  cols="20" rows="4"placeholder="Comments"></textarea>
-                      <button type="submit">Submit</button>
+                        <textarea id="input-comments" name="comments"  cols="20" rows="4"placeholder="Comments"></textarea>
+                      <button type="click" @click=${this._addReview} >Submit</button>
                     </form>
                 </div>
               </div>
@@ -122,6 +154,27 @@ export class CreateProfileCard extends LitElement {
     `
   }
   /*=========PRIVATE METHODS============*/
+
+
+  async _addReview(e) {
+    e.preventDefault()
+    const user = getUserFromLocalStorage()
+    const userId = user._id
+    console.log(userId,'userId to review')
+    const technique = this.renderRoot.getElementById('input-technique')
+    const danceStyle = this.renderRoot.getElementById('input-dance-style')
+    const comments = this.renderRoot.getElementById('input-comments').value.trim()
+    const review = {
+      technique : getInputValue(technique),
+      danceStyle : getInputValue(danceStyle),
+      comments : comments
+    };
+
+    const payload = JSON.stringify(review);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userId}`, "PUT",payload);
+    console.log(apiData,'apiData reviews');
+    alert('Review added successfully!');
+  }
 
   async _displayMyEvents() {
       hideCreateEvents()
