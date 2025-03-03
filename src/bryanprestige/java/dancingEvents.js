@@ -12,8 +12,6 @@ import { HttpError } from './classes/HttpError.js'
 
 export const PORT = location.port ? `:${location.port}` : ''
 
-let basketCount = 0;    
-
 document.addEventListener('DOMContentLoaded', () => {
     
     displayUserNickname()
@@ -643,7 +641,7 @@ function createProfileInfo(user){
     const nickname = createElementWithText('h1', 'nickname', user.nickname);
     const bio = createBio(user)
     const teamAcademy = createElementWithText('p', 'team-academy', user.teamAcademy);
-    const userFollowedBy = user.followedBy
+    //const userFollowedBy = user.followedBy
     const followerNumber = createElementWithText('p', 'follower-number', `Followers: ${user.followedBy.length}`);
     
     const followRate = createFollowRateButtons(user)
@@ -731,6 +729,7 @@ async function addFollower(userFollowedId,currentUserId){
 
     const payload = JSON.stringify(userNewFollower)
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/followedBy/users/${userFollowedId}`, "PUT",payload);
+    console.log(apiData)
     const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
     userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`
@@ -789,7 +788,7 @@ function createRateButton(user) {
 }
 
 function onRateButtonClick(user) {
-    saveUserListToLocalStorage(user)
+    saveUserToLocalStorage(user)
     navigateTo('./reviews.html')
 }
 
@@ -798,11 +797,11 @@ function displayUserToRate () {
     const user = getUserFromLocalStorage()
     console.log('displayuser to rate',user)
 
-    createUserCardWithAnimation(user)
+    //createUserCardWithAnimation(user)
 }
 
-function getUserFromLocalStorage() {
-    const userData =  JSON.parse(localStorage.getItem('userList'))
+export function getUserFromLocalStorage() {
+    const userData =  JSON.parse(localStorage.getItem('userToRate'))
     const userToRate = userData
     console.log('this is userToRate',userToRate)
     return userToRate
@@ -813,6 +812,7 @@ function saveUserToLocalStorage(user) {
     let userToRateData = [];
     userToRateData.push(user);
     localStorage.setItem('userToRate', JSON.stringify(userToRateData));
+    console.log('userToRateData',userToRateData)
 }
 //========================BACKEND================================//
 

@@ -17,6 +17,7 @@ app.post('/api/create/event', async (req, res) => {
 res.json(await db.events.create(req.body))
 })
 
+
 app.get('/api/read/events', async (req, res) => {
   res.json(await db.events.get())
 })
