@@ -1,3 +1,6 @@
+ 
+/* //@ts-check */
+
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import reset from '../../../css/reset.css' with { type: 'css' }
 import appCss from '../../../css/app.css' with { type: 'css' }
@@ -53,7 +56,6 @@ export class EventCard extends LitElement {
         this.addEventListener('displayMyEventsChanged', (event) => {
             this.displayMyEvents = event.detail;
           });
-
     }   
 
     
@@ -268,8 +270,7 @@ export class EventCard extends LitElement {
         console.log(`Total price: ${totalPriceValue}`);
     }
 
-    _updateTicketCount(ticketCount) {
-        console.log('ticketCount to update',ticketCount);
+    _updateTicketCount() {
         let ticketList = JSON.parse(localStorage.getItem('ticketList')) || [];
         const eventIndex = ticketList.findIndex(item => item.name === this.eventName);
         if (eventIndex === -1) {

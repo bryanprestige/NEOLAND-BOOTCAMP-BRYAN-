@@ -1,7 +1,6 @@
 
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import appCss from '../../../css/app.css' with { type: 'css' }
-import LoginFormCSS from '../LoginForm/LoginFormCSS.css' with { type: 'css' }
 import {getAPIData, PORT} from "../../dancingEvents.js"
 
 /**
@@ -11,7 +10,7 @@ import {getAPIData, PORT} from "../../dancingEvents.js"
  */
 
 export class LoginForm extends LitElement {
-  static styles = [ appCss, LoginFormCSS];
+  static styles = [ appCss];
 
   static properties = {
     prueba: {type: String},
@@ -26,7 +25,6 @@ export class LoginForm extends LitElement {
   get _password() {
     return this.renderRoot?.querySelector('#password') ?? null;
   }
-
 
   constructor() {
     super();
@@ -53,8 +51,7 @@ export class LoginForm extends LitElement {
     _passwordChanged(e) {
         this.password = e.target.value
     }
-   async _onFormSubmit(e) {
-          e.preventDefault()
+   async _onFormSubmit() {
           const emailElement = this.renderRoot.querySelector("#email");
           const passwordElement = this.renderRoot.querySelector("#password");
           const email = this._email || emailElement.value;

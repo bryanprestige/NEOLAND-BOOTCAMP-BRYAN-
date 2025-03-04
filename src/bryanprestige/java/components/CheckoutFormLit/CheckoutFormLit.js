@@ -1,3 +1,6 @@
+/* 
+//@ts-check
+    */
 import CheckoutFormCss from './CheckoutFormCss.css' with { type: 'css' }
 import {getUserId, isUserLoggedIn,navigateTo,getAPIData, PORT} from "../../dancingEvents.js"
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
@@ -93,20 +96,18 @@ export class CheckoutForm extends LitElement {
 
     /*=========PRIVATE METHODS============*/
 
-    _onCheckoutFormClick(e) {
-        e.preventDefault();
+    _onCheckoutFormClick() {
         if (!isUserLoggedIn()) {
             alert('Thanks for the purchase!, your order has been sent to your email, enjoy dancing');
             return
-        } else if(isUserLoggedIn){
-            this._updateEventToPurchased(this.eventId) 
+        } else {
+            this._updateEventToPurchased() 
             alert('Thanks for the purchase!, you can see your order in your profile, enjoy dancing!');
             navigateTo('./profile.html')
         }
     }
 
     async _updateEventToPurchased() {
-        console.log('eventID dentro de checkout component', this.eventId);
         const userId = getUserId()
         let eventBought = {
             boughtBy: userId,

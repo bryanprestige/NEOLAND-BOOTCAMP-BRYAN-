@@ -1,3 +1,7 @@
+/*  
+//@ts-check
+ */
+
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import appCss from '../../../css/app.css' with { type: 'css' }
@@ -64,11 +68,8 @@ export class EditEventForm extends LitElement {
 
     /*=========PRIVATE METHODS============*/
 
-    async _onSaveChanges(e) {
-        e.preventDefault();
-        
-        console.log('this eventId',this.eventId);
-        
+    async _onSaveChanges() {
+            
              const newEventName = this.renderRoot.getElementById('input-event-name')
             const newVenue = this.renderRoot.getElementById('input-venue')    
             const newDateTime = this.renderRoot.getElementById('input-dateTime')
@@ -81,7 +82,6 @@ export class EditEventForm extends LitElement {
             const newUrl = this.renderRoot.getElementById('input-url')
             
             let updatedEvent = {
-                //flyer: getInputValue(flyer),
                 name: getInputValue(newEventName),
                 venue: getInputValue(newVenue),
                 dateTime: getInputValue(newDateTime),

@@ -1,3 +1,6 @@
+/*  
+//@ts-check
+     */
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import appCss from '../../../css/app.css' with { type: 'css' }
@@ -124,7 +127,6 @@ export class CreateEventForm extends LitElement {
 
       async _createNewEvent () {
             const timestamp = new Date()
-            //const flyer = document.getElementById('subtmit-flyer')
             const name = this.renderRoot.getElementById('input-event-name')
             const venue = this.renderRoot.getElementById('input-venue')    
             const dateTime = this.renderRoot.getElementById('input-dateTime')
@@ -135,7 +137,6 @@ export class CreateEventForm extends LitElement {
             const city = this.renderRoot.getElementById('input-city')
             const dance = this.renderRoot.getElementById('input-dance')
             const url = this.renderRoot.getElementById('input-url')
-            const eventContainer =  document.querySelector('.event-container');
       
             const userId = getUserId()
             const event_id = String(timestamp.getTime())
@@ -144,7 +145,6 @@ export class CreateEventForm extends LitElement {
              * @type {Event}
              */
             let event = {
-                //flyer: getInputValue(flyer),
                 name: getInputValue(name),
                 venue: getInputValue(venue),
                 dateTime: getInputValue(dateTime),
@@ -158,17 +158,17 @@ export class CreateEventForm extends LitElement {
                 user_id: userId,
                 event_id: event_id
             }
-            console.log('new event list',newEventList)  
             
             newEventList.push(event)
-            this._saveNewEventToLocalStorage(newEventList)
+            console.log('new event list',newEventList)  
+            this._saveNewEventToLocalStorage()
             console.log('neweventlist',newEventList)
            
-            createEventCardWithAnimation(event, eventContainer)
+            createEventCardWithAnimation(event)
             createPreviewContainer()
         }
       
-        _saveNewEventToLocalStorage (newEventList) {
+        _saveNewEventToLocalStorage () {
           localStorage.setItem('newEventList', JSON.stringify(newEventList));
         }
 
