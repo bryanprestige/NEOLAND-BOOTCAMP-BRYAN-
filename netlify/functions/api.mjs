@@ -3,15 +3,13 @@ import { MongoClient, ObjectId } from "mongodb";
 import express, {Router} from 'express';
 import serverless from 'serverless-http';
 import bodyParser from 'body-parser';
-//import { gooogleOauth2 } from './server.oauth.js';
 const URI = process.env.MONGO_ATLAS
 const api = express();
 const router = Router();
 
+/*==========SERVER EXPRESS========== */
 
-//////////////EXPRESS SERVER/////////////////////////////////
-
-// CRUD EVENTS
+/*==========CRUD EVETNT========== */
 router.post('/create/event', async (req, res) => {  
 res.json(await db.events.create(req.body))
 })
@@ -44,8 +42,9 @@ router.delete('/delete/event/:id', async (req, res) => {
 router.get('/filter/events/:name', async (req, res) => {
   res.json(await db.events.filter({$text: {$search: req.params.name}}))
 }) 
-  
-/////////////////// CRUD USERS///////////////////////////////////
+
+/*==========CRUD USERS========== */
+
 router.post('/create/users', async (req, res) => {  
   res.json(await db.users.create(req.body))
 })
@@ -79,7 +78,6 @@ router.delete('/delete/user/:id', async (req, res) => {
 }) 
 
 router.get('/filter/users/:nickname', async (req, res) => {
-
   //res.json(await db.users.filter({nickname: req.params.nickname}))
   res.json(await db.users.filter( {$text: {$search: req.params.nickname}}))
 })
@@ -87,6 +85,35 @@ router.get('/filter/users/:nickname', async (req, res) => {
 router.get('/filter/users/:id', async (req, res) => {
   res.json(await db.users.filterById( req.params.id))
 })
+
+/*==========CRUD RATINGS========== */
+
+router.post('/create/rating', async (req, res) => {  
+  res.json(await db.ratings.create(req.body))
+})
+
+
+router.get('/read/ratings', async (req, res) => {
+  res.json(await db.ratings.get());
+    
+})
+
+router.get('/filter/ratings/:userRatedId', async (req, res) => {
+  res.json(await db.ratings.filter( {$text: {$search: req.params.userRatedId}}))
+})
+
+
+router.put('/update/rating/:id', async (req, res) => {
+  console.log(req.params.id,req.body)
+  res.json(await db.ratings.update(req.params.id, req.body))
+
+})
+
+router.delete('/delete/rating/:id', async (req, res) => {
+  res.json(await db.ratings.delete(req.params.id))
+}) 
+
+/*=========LOG & AUTHENTICATION========== */
 
 router.post('/login', async (req, res) => {
   const user = await db.users.logIn(req.body)
@@ -110,9 +137,7 @@ router.get('/logout/:id', async (req, res) => {
   res.status(200).send('Logout')
 })
 
-// for parsing application/json
 api.use(bodyParser.json())
-// for parsing application/x-www-form-urlencoded
 api.use(bodyParser.urlencoded({ extended: true }))
 api.use('/api/', router)
 
@@ -128,7 +153,7 @@ function requireAuth(req, res, next) {
 }
 export const handler = serverless(api);
 
-/////////////MONGODB////////////////////////
+/*==========MONGODB========== */
 
 export const db = {
     events: {
@@ -150,10 +175,17 @@ export const db = {
         count: countUsers,
         logIn: logInUser,
         logOut: logoutUser
-    }
+    },
+    ratings: {
+      create: createRating,
+      get: getRatings,
+      update: updateRating,
+      delete: deleteRating,
+      filter: filterRatings
+  }
 }
 
-/*=======USERS=======*/
+/*==========MONGODB USERS========== */
 
 async function countUsers(){
     const client = new MongoClient(URI);
@@ -298,10 +330,7 @@ async function filterUserById(id) {
   return returnValue
 }
 
-
-
-
-/*=========EVENTS=======*/
+/*==========MONGODB EVENTS========== */
 
 /**
  * Creates a new event in the 'events' collection in the 'dancingEvents' database.
@@ -408,4 +437,80 @@ async function filterEvents(filter){
     const dancingEventsDB = client.db('dancingEvents');
     const eventsCollection = dancingEventsDB.collection('events');
     return await  eventsCollection.find(filter).toArray();
+}
+
+/*==========MONGODB RATINGS========== */
+
+/**
+ * Creates a new event in the 'events' collection in the 'dancingEvents' database.
+ *
+ * @param {object} rating - The event to be created.
+ * @returns {Promise<object>} The created event.
+ */
+
+async function createRating(rating){
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const ratingsCollection = dancingEventsDB.collection('ratings');
+  const returnValue = await ratingsCollection.insertOne(rating);
+  console.log('db createEvent', returnValue, rating.name)
+  return rating;
+}
+
+/**
+* Filter the events from the database
+* 
+* @param {object} [filter]  - filter to apply to the evetns
+* @returns {Promise<Array<object>>} - the array of the event
+*/
+
+async function getRatings(filter){
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const ratingsCollection = dancingEventsDB.collection('ratings');
+  return await  ratingsCollection.find(filter).toArray();
+}
+
+  /**
+ * Updates an article in the 'articles' collection in the 'shoppingList' database.
+ *
+ * @param {string} _id - The ID of the event to be updated.
+ * @param {object} updates - The fields and new values to update the event with.
+ * @returns {Promise<UpdateResult>} The result of the update operation.
+ */
+
+  async function updateRating(_id, updates) {
+    const client = new MongoClient(URI);
+    const dancingEventsDB = client.db('dancingEvents');
+    const ratingsCollection = dancingEventsDB.collection('ratings');
+    const returnValue = await ratingsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: updates });
+    console.log('db updateRating', await ratingsCollection.findOne({ _id: new ObjectId(_id) }))
+    return returnValue
+}
+
+/**
+ * @param {string} id -the id of the event to be deleted
+ * @returns {Promise<object>} the id of the deleted event
+ */
+
+async function deleteRating(id) {
+    const client = new MongoClient(URI);
+    const dancingEventsDB = client.db('dancingEvents');
+    const ratingsCollection = dancingEventsDB.collection('ratings');
+    const returnValue = await ratingsCollection.deleteOne({ _id: new ObjectId(id) });
+    console.log('db deleteRating', returnValue, id)
+    return id
+}
+
+/**
+ * Filter the events from the database
+ * 
+ * @param {object} [filter]  - filter to apply to the evetns
+ * @returns {Promise<Array<object>>} - the array of the event
+ */
+async function filterRatings(filter){
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const ratingsCollection = dancingEventsDB.collection('ratings');
+  return await  ratingsCollection.find(filter).toArray();
 }
