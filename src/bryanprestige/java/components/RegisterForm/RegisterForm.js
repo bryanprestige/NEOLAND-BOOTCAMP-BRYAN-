@@ -1,4 +1,4 @@
-import {getAPIData, getInputValue, PORT} from "../../dancingEvents.js"
+import {getAPIData, getInputValue, PORT,navigateTo} from "../../dancingEvents.js"
 import appCss from '../../../css/app.css' with { type: 'css' }
 import RegisterFormCSS from './RegisterFormCSS.css' with { type: 'css' }
 import { importTemplate } from '../../lib/importTemplate.js';
@@ -10,8 +10,6 @@ const TEMPLATE = {
 
 // Wait for template to load
 await importTemplate(TEMPLATE.url);
-
-let userList = []
 
 /**
  *Register Form Web Component
@@ -76,6 +74,8 @@ export class RegisterForm extends HTMLElement {
             return; 
         } else{
             this._createUser()
+            alert('User registered successfully')
+                navigateTo('./login.html')
         }
     }
     _validateRegister() {
@@ -129,29 +129,14 @@ export class RegisterForm extends HTMLElement {
             rol: getInputValue(rol),    
             password: getInputValue(password),
         }
-        let onFormCreateUser 
+        //let onFormCreateUser 
         console.log(`DESDE DENTRO DEL COMPONENTE Email: ${user.email}, Nickname: ${user.nickname}`);
         
         const payload = JSON.stringify(user)
         const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/users?`, 'POST',payload);
         console.log(apiData)
 
-        userList.push(user)
-        console.log('add user list',user)
-
-        if (userList) {
-            onFormCreateUser = new CustomEvent("create-user", {
-                bubbles: true,
-                detail: userList
-            })
-        }else {
-            onFormCreateUser = new CustomEvent("create-user", {
-              bubbles: true,
-              detail: null
-            })
         }
-          this.dispatchEvent(onFormCreateUser);
-    }
 }
 
 customElements.define ('register-form', RegisterForm)

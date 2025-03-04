@@ -22,6 +22,13 @@ export const db = {
         count: countUsers,
         logIn: logInUser,
         logOut: logoutUser
+    },
+    ratings: {
+        create: createRating,
+        get: getRatings,
+        update: updateRating,
+        delete: deleteRating,
+        filter: filterRatings
     }
 }
 
@@ -99,7 +106,7 @@ async function updateFollowers(_id, updates, options = {}) {
       const returnValue = await usersCollection.updateOne({ _id: new ObjectId(_id) }, update);
       return returnValue;
     }
-  }
+}  
 
 /**
  * @param {string} id -the id of the event to be deleted
@@ -172,7 +179,7 @@ async function filterUserById(id) {
   return returnValue
 }
 
-/*=========EVENTS=======*/
+/*===============EVENTS==============*/
 
 /**
  * Creates a new event in the 'events' collection in the 'dancingEvents' database.
@@ -204,7 +211,7 @@ async function getEvents(filter){
     return await  eventsCollection.find(filter).toArray();
 }
 /**
- * Updates an article in the 'articles' collection in the 'shoppingList' database.
+ * Updates an event in the 'events' collection in the 'dancingEvents' database.
  *
  * @param {string} _id - The ID of the event to be updated.
  * @param {object} updates - The fields and new values to update the event with.
@@ -230,7 +237,6 @@ async function updateBoughtEvent(_id, updates, options = {}) {
       const returnValue = await eventsCollection.updateOne({ _id: new ObjectId(_id) }, update);
       return returnValue;
     } else {
-      // update multiple fields with a payload
       let update = { $set: updates };
       const returnValue = await eventsCollection.updateOne({ _id: new ObjectId(_id) }, update);
       return returnValue;
@@ -279,4 +285,82 @@ async function filterEvents(filter){
     const dancingEventsDB = client.db('dancingEvents');
     const eventsCollection = dancingEventsDB.collection('events');
     return await  eventsCollection.find(filter).toArray();
+}
+
+
+/*===============RATINGS==============*/
+
+
+/**
+ * Creates a new event in the 'events' collection in the 'dancingEvents' database.
+ *
+ * @param {object} rating - The event to be created.
+ * @returns {Promise<object>} The created event.
+ */
+
+async function createRating(rating){
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const ratingsCollection = dancingEventsDB.collection('ratings');
+  const returnValue = await ratingsCollection.insertOne(rating);
+  console.log('db createEvent', returnValue, rating.name)
+  return rating;
+}
+
+/**
+* Filter the events from the database
+* 
+* @param {object} [filter]  - filter to apply to the evetns
+* @returns {Promise<Array<object>>} - the array of the event
+*/
+
+async function getRatings(filter){
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const ratingsCollection = dancingEventsDB.collection('ratings');
+  return await  ratingsCollection.find(filter).toArray();
+}
+
+  /**
+ * Updates an article in the 'articles' collection in the 'shoppingList' database.
+ *
+ * @param {string} _id - The ID of the event to be updated.
+ * @param {object} updates - The fields and new values to update the event with.
+ * @returns {Promise<UpdateResult>} The result of the update operation.
+ */
+
+  async function updateRating(_id, updates) {
+    const client = new MongoClient(URI);
+    const dancingEventsDB = client.db('dancingEvents');
+    const ratingsCollection = dancingEventsDB.collection('ratings');
+    const returnValue = await ratingsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: updates });
+    console.log('db updateRating', await ratingsCollection.findOne({ _id: new ObjectId(_id) }))
+    return returnValue
+}
+
+/**
+ * @param {string} id -the id of the event to be deleted
+ * @returns {Promise<object>} the id of the deleted event
+ */
+
+async function deleteRating(id) {
+    const client = new MongoClient(URI);
+    const dancingEventsDB = client.db('dancingEvents');
+    const ratingsCollection = dancingEventsDB.collection('ratings');
+    const returnValue = await ratingsCollection.deleteOne({ _id: new ObjectId(id) });
+    console.log('db deleteRating', returnValue, id)
+    return id
+}
+
+/**
+ * Filter the events from the database
+ * 
+ * @param {object} [filter]  - filter to apply to the evetns
+ * @returns {Promise<Array<object>>} - the array of the event
+ */
+async function filterRatings(filter){
+  const client = new MongoClient(URI);
+  const dancingEventsDB = client.db('dancingEvents');
+  const ratingsCollection = dancingEventsDB.collection('ratings');
+  return await  ratingsCollection.find(filter).toArray();
 }

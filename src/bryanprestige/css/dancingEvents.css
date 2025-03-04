@@ -7,13 +7,15 @@ body {
     max-height: 100%;
     text-align: center;
 
-    font-family: 'MyFontBreulGroteska', Courier, monospace;
+    font-family: 'karla', Courier, monospace;
 }
 
+
 @font-face {
-    font-family: 'MyFontBreulGroteska';
-    src: url('../fonts/Breul-Grotesk/Demo_Fonts/Fontspring-DEMO-breulgroteska-extralight.otf') format('woff2'),
-  }
+    font-family: 'karla';
+    src: url('../fonts/Karla-Medium.ttf') format('woff2'),
+} 
+
 .header-container-profile,#header-container,nav {
     width: 100%;
 }
@@ -44,7 +46,7 @@ nav, li, div,#main-title-form,#main-title-event,.main-title, form, #search-label
 nav, ol, .app-name, #main-title-form,#main-title-event, .main-title,  form {
     font-weight: bold;
 }
-div, li, #header-container,.header-container-profile, #profile-card-container {
+ li, #header-container,.header-container-profile {
     background-color: #F7BC47;
 }
 
@@ -93,6 +95,7 @@ img {
     margin: auto 0 ;
     padding: 22px;
     width: fit-content;
+    background-color: #F7BC47;
 
 }
 .logo-log-register {
@@ -111,8 +114,13 @@ img {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-#profile-card-container, .header-container-profile {
+#profile-card-container,.header-container-profile {
     border-bottom: solid 1px #243D4B;
+    border-top: solid 1px #243D4B;
+}
+
+#profile-card-container {
+border: none;
 }
 
 
@@ -131,7 +139,15 @@ img {
     text-align: center;
 }
 
+.qr-code{
+    display: none;
+    width: 100px;
+}
 
+.my-orders-name-button{
+    border: none;
+    background-color: white;
+}
 /*=====FOOTER STYLES=====*/
 .follow-us{
     background-color: #F7BC47;
@@ -147,6 +163,29 @@ img {
 }
 
 /*=====PROFILE STYLES======*/
+
+.my-rating-container,.my-ratings{
+    border: none;
+}
+
+.my-rating-container,.my-orders-container{
+    display: block;
+    width: 30%; 
+    margin: 0px;
+    border: none;
+}
+
+.h1-rating {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    border-bottom: 1px solid #243D4B;
+    padding: 5px;
+}
+.h1-average-technique{
+    padding: 5px;
+}
+
 .profile-picture {
     width: 200px;
     object-fit: cover;
@@ -247,12 +286,6 @@ img {
 
 .profile-card-my-orders{
     display: flex;
-}
-
-.my-orders-container{
-    display: block;
-    width: fit-content; 
-    margin: 0px auto;
     border: none;
 }
 

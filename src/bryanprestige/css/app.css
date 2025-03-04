@@ -284,6 +284,10 @@ margin-bottom: -10px;;
     margin: auto;
 }
 
+.price-currency {
+    background-color: #F7BC47;
+}
+
 .shop-img {
     width: 30px;
     margin-top: 0px;
