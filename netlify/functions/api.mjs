@@ -80,8 +80,8 @@ router.delete('/delete/user/:id', async (req, res) => {
 
 router.get('/filter/users/:nickname', async (req, res) => {
 
-  res.json(await db.users.filter({nickname: req.params.nickname}))
-  //res.json(await db.users.filter( {$text: {$search: req.params.nickname}}))
+  //res.json(await db.users.filter({nickname: req.params.nickname}))
+  res.json(await db.users.filter( {$text: {$search: req.params.nickname}}))
 })
 
 router.get('/filter/users/:id', async (req, res) => {
