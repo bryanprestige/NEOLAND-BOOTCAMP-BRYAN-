@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// CRUD EVENTS
+/*==========CRUD EVENTS==========*/
 app.post('/api/create/event', async (req, res) => {  
 res.json(await db.events.create(req.body))
 })
@@ -47,7 +47,8 @@ app.get('/api/filter/events/:name', async (req, res) => {
   res.json(await db.events.filter({$text: {$search: req.params.name}}))
 }) 
   
-/////////////////// CRUD USERS///////////////////////////////////
+/*==========CRUD USERS==========*/
+
 app.post('/api/create/users', async (req, res) => {  
   res.json(await db.users.create(req.body))
 })
@@ -62,7 +63,6 @@ app.put('/api/update/users/:id', async (req, res) => {
   res.json(await db.users.update(req.params.id, req.body))
 
 })
-
 
 app.put('/api/followedBy/users/:id', requireAuth, async (req, res) => {
   const userId = req.body.followedBy;
@@ -90,6 +90,35 @@ app.get('/api/filter/user/:id', async (req, res) => {
   res.json(await db.users.filterById(req.params.id))
 }) 
 
+
+/*==========CRUD RATINGS==========*/
+
+app.post('/api/create/rating', async (req, res) => {  
+  res.json(await db.ratings.create(req.body))
+})
+
+
+app.get('/api/read/ratings', async (req, res) => {
+  res.json(await db.ratings.get());
+    
+})
+
+app.get('/api/filter/ratings/:userRatedId', async (req, res) => {
+  res.json(await db.ratings.filter( {$text: {$search: req.params.userRatedId}}))
+})
+
+
+app.put('/api/update/rating/:id', async (req, res) => {
+  console.log(req.params.id,req.body)
+  res.json(await db.ratings.update(req.params.id, req.body))
+
+})
+
+app.delete('/api/delete/rating/:id', async (req, res) => {
+  res.json(await db.ratings.delete(req.params.id))
+}) 
+/*==========LOGIN/LOG OUT==========*/
+
 app.post('/api/login', async (req, res) => {
   const user = await db.users.logIn(req.body)
   if (user) {
@@ -105,6 +134,8 @@ app.post('/api/login', async (req, res) => {
     res.status(401).send('Unauthorized')
   }
 })
+
+
 
 app.get('/api/logout/:id', async (req, res) => {
   const response = await db.users.logOut(req.params.id)

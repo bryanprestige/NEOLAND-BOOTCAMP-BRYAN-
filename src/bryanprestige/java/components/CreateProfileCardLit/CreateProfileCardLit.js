@@ -2,7 +2,10 @@ import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit
 import appCss from '../../../css/app.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import reset from '../../../css/reset.css' with { type: 'css' }
-import {getUserFromLocalStorage ,noEventFound,createEventCardWithAnimation,cleanEventContainer,getAPIData, PORT,getUserId,hidePreviewContainer,hideEditProfileForm,getDataFromSessionStorage,displayCreateEvents,hideCreateEvents,hideEditEvents,displayFavoriteEvents,displayEditForm, getInputValue} from "../../../java/dancingEvents.js"
+import {getUserFromLocalStorage ,noEventFound,createEventCardWithAnimation,
+        cleanEventContainer,getAPIData, PORT,getUserId,hidePreviewContainer,
+        hideEditProfileForm,getDataFromSessionStorage,displayCreateEvents,hideCreateEvents,
+        hideEditEvents,displayFavoriteEvents,displayEditForm} from "../../../java/dancingEvents.js"
 
 /**
  * Login Form Web Component
@@ -98,7 +101,7 @@ export class CreateProfileCard extends LitElement {
                     <p class="team-academy">${this._teamAcademyToRate}</p>    
                     <form>
                       <label for="technique">Technique</label>
-                        <select class="input-technique"> 
+                        <select id="input-technique"> 
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -106,7 +109,7 @@ export class CreateProfileCard extends LitElement {
                           <option value="5">5</option>
                         </select>
                       <label for="dance-style">Style</label>
-                        <select class="input-dance-style"> 
+                        <select id="input-dance-style"> 
                           <option value="Bachata Sensual">Bachata Sensual</option>
                           <option value="Bachata Moderna">Bachata Moderna</option>
                           <option value="Bachata Traditional">Bachata Traditional</option>
@@ -155,25 +158,33 @@ export class CreateProfileCard extends LitElement {
   }
   /*=========PRIVATE METHODS============*/
 
-
   async _addReview(e) {
     e.preventDefault()
     const user = getUserFromLocalStorage()
-    const userId = user._id
-    console.log(userId,'userId to review')
-    const technique = this.renderRoot.getElementById('input-technique')
-    const danceStyle = this.renderRoot.getElementById('input-dance-style')
-    const comments = this.renderRoot.getElementById('input-comments').value.trim()
-    const review = {
-      technique : getInputValue(technique),
-      danceStyle : getInputValue(danceStyle),
-      comments : comments
-    };
+    const userId = user[0]._id
 
+    const getUser = getDataFromSessionStorage();
+    const currentUser = getUser.user;
+    const currentUserId = currentUser._id;
+
+    const technique = this.renderRoot.getElementById('input-technique').value
+    const danceStyle = this.renderRoot.getElementById('input-dance-style').value
+    const comments = this.renderRoot.getElementById('input-comments').value.trim()
+
+    const review = {
+      nicknameUserRating : this._nickname,
+      userRatedId : userId,
+      userRatingId : currentUserId,
+      technique : technique,
+      danceStyle : danceStyle,
+      comments : comments
+    }
+
+    console.log(review)
     const payload = JSON.stringify(review);
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userId}`, "PUT",payload);
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/rating?`, "POST",payload);
     console.log(apiData,'apiData reviews');
-    alert('Review added successfully!');
+    alert('Review created successfully!');
   }
 
   async _displayMyEvents() {

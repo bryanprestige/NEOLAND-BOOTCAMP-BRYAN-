@@ -8,6 +8,8 @@ export class User {
     rol
     password
     bio
+    followedBy
+    teamAcademy
     /**
      * 
      * @param {string} _id 
@@ -17,8 +19,10 @@ export class User {
      * @param {string} rol 
      * @param {string} password 
      * @param {string} bio 
+     * @param {Array<string>} followedBy
+     * @param {string} teamAcademy
      */
-    constructor(_id,email, nickname, name, rol, password,bio) {
+    constructor(_id,email, nickname, name, rol, password,bio,followedBy,teamAcademy) {
         this._id = _id
         this.email = email
         this.nickname = nickname
@@ -26,5 +30,7 @@ export class User {
         this.rol = rol
         this.password = password
         this.bio = bio
+        this.followedBy = followedBy
+        this.teamAcademy = teamAcademy
     }
 }

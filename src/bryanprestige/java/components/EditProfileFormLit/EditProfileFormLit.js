@@ -69,6 +69,8 @@ export class EditProfileForm extends LitElement {
             bio: newBio
         }
 
+      console.log('newUser',newUser)
+
       const payload = JSON.stringify(newUser)
       console.log(payload)
       const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userId}`, "PUT",payload);
