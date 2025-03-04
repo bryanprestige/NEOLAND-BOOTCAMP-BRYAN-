@@ -51,7 +51,8 @@ export class LoginForm extends LitElement {
     _passwordChanged(e) {
         this.password = e.target.value
     }
-   async _onFormSubmit() {
+   async _onFormSubmit(e) {
+    e.preventDefault(); 
           const emailElement = this.renderRoot.querySelector("#email");
           const passwordElement = this.renderRoot.querySelector("#password");
           const email = this._email || emailElement.value;
