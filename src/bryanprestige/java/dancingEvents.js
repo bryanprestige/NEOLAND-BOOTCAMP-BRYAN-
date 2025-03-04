@@ -1,6 +1,6 @@
-
+/* 
 //@ts-check
-  
+   */
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
 //import { isConstructorDeclaration } from 'typescript';
@@ -435,8 +435,6 @@ function setCheckoutFormValues() {
     checkoutContainer?.setAttribute('eventPrice', eventPrice)
     checkoutContainer?.setAttribute('ticketCount', ticketCount)
 }
-
-
 
 //========================CONNECT================================//
 /**

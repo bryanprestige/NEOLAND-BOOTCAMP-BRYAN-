@@ -1,3 +1,6 @@
+/*  
+//@ts-check
+ */
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import appCss from '../../../css/app.css' with { type: 'css' }
@@ -53,10 +56,8 @@ export class EditProfileForm extends LitElement {
 
   /*=========PRIVATE METHODS============*/
 
-  async _updateProfile(e) {
-    e.preventDefault()
+  async _updateProfile() {
     const userId = getUserId() 
-   
     const newNickname = this.renderRoot.getElementById('input-new-nickname')
     const newRol = this.renderRoot.getElementById('input-new-rol')
     const newTeamAcademy = this.renderRoot.getElementById('input-team-academy')
@@ -68,8 +69,6 @@ export class EditProfileForm extends LitElement {
             teamAcademy: getInputValue(newTeamAcademy),
             bio: newBio
         }
-
-      console.log('newUser',newUser)
 
       const payload = JSON.stringify(newUser)
       console.log(payload)
@@ -88,8 +87,7 @@ export class EditProfileForm extends LitElement {
         updateSessionStorage(updatedData)        
     }
 
-      navigateTo('./profile.html')
-    this.dispatchEvent(new CustomEvent('edit-profile-form-submit'))
+    navigateTo('./profile.html')
   }
 }
 
