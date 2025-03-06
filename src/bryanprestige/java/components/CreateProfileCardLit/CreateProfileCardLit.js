@@ -85,6 +85,14 @@ export class CreateProfileCard extends LitElement {
       }   
   }
 
+  get _followerNumberUser() {
+    const getUser = getDataFromSessionStorage();
+    const user = getUser.user
+
+    const followerNumber = user.followedBy.length
+    return followerNumber
+  }
+
   constructor() {
     super();
   }
@@ -100,7 +108,8 @@ export class CreateProfileCard extends LitElement {
                 <div class="profile-info">
                     <h1 class="nickname">${this._nicknameToRate}</h1>
                     <p class="bio">${this._bioToRate}</p>
-                    <p class="team-academy">${this._teamAcademyToRate}</p>    
+                    <p class="team-academy">${this._teamAcademyToRate}</p>  
+                    <p class="follower-number">Followers: ${this._followerNumberUser}</p>  
                     <form>
                       <label for="technique">Technique</label>
                         <select id="input-technique"> 
@@ -139,7 +148,8 @@ export class CreateProfileCard extends LitElement {
                 <div class="profile-info">
                     <h1 class="nickname">${this._nickname}</h1>
                     <p class="bio">${this._bio}</p>
-                    <p class="team-academy">${this._teamAcademy}</p>    
+                    <p class="team-academy">${this._teamAcademy}</p> 
+                    <p class="follower-number">Followers: ${this._followerNumberUser}</p>   
                     <div class="edit-fav-profile">
                       <button id="edit-profile-button" @click=${displayEditForm}>Edit Profile</button>
                       <button id="fav-button-profile" @click=${displayFavoriteEvents}>Favourites</button>
