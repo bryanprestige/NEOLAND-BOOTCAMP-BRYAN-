@@ -6,114 +6,187 @@ body {
     max-width: 100%;    
     max-height: 100%;
     text-align: center;
-
     font-family: 'karla', Courier, monospace;
 }
-
 
 @font-face {
     font-family: 'karla';
     src: url('../fonts/Karla-Medium.ttf') format('woff2'),
 } 
-
-.header-container-profile,#header-container,nav {
+nav {
     width: 100%;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    justify-content: space-between;
+    background-color: #243D4B;
 }
-body, ol, .logo-log-register,
+
+ol {
+    display: flex;
+}
+
+li{
+    cursor: pointer;
+    background-color: #F7BC47;
+    margin: 5px;
+}
+
+img {
+    margin: 10px auto 0;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    color: #1D3557
+}
+  
+div{
+    color: #243D4B;
+    padding: 5px;
+}
+
+.logo-log-register {
+    display: flex;
+    gap: 5px;
+} 
+.app-name-logo {
+    flex-grow: 1;
+    margin: auto 0 ;
+    display: flex;
+    justify-content: center;
+}
+.app-name{
+margin: auto;
+}
+.log-out  {
+    width: 100px;
+    background-color: #e64242;
+    display: block;
+    color: white;
+    display: none;
+}
+.login-button{
+    width: 100px;
+    background-color: #243D4B;
+    display: block;
+    color: #F7BC47;
+}
+.main-title{
+    font-weight: bold;
+    color: #243D4B;
+    justify-content: flex-start;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#search-form{
+    margin: auto;
+}
 form {
     width: fit-content;
 } 
-nav, ol, #header-container, .header-container-profile,
-.logo-log-register, #search-section, #profile-card-container {
+#search-section {
+    display: flex;
+    width: fit-content;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 12px;
+    gap: 5px;
+}
+#search-button{
+    background-color: #F7BC47;
+    padding: 5px 10px;
+}
+#login-container {
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    margin: auto;
+    margin-top: 10px;
+    background-color: white;
+}
+.search-header{
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: #243D4B;
+}
+.event-card-component{
+    display: flex;
+    flex-direction: row; 
+    background-color: white;
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+.date-time,.edit-form-container{
+    border-radius: 12px;
+}
+.header-container-profile,#header-container {
+    width: 100%;
+}
+
+#header-container, .header-container-profile, #profile-card-container {
     display: flex;
 }
-img, .app-logo, #main-title-form,#main-title-event,.main-title, span, form {
+ .app-logo, #main-title-form,#reviews-title,#main-title-event, span, form {
     display: block;
 }
+
+
 #header-container, .header-container-profile, #profile-card-container {
     flex-direction: column;
 }
-nav, ol {
-    flex-direction: row;
-}
-nav, li, div,#main-title-form,#main-title-event,.main-title, form, #search-label {
+
+#main-title-form,#reviews-title,#main-title-event, form, #search-label {
     font-size: 16px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
-.app-name, #main-title-form,#main-title-event,.main-title {
+ #main-title-form,#main-title-event{
     font-size: 24px;
 }
-nav, ol, .app-name, #main-title-form,#main-title-event, .main-title,  form {
+ #main-title-form,#main-title-event,#reviews-title,  form {
     font-weight: bold;
 }
- li, #header-container,.header-container-profile {
+#header-container,.header-container-profile {
     background-color: #F7BC47;
 }
 
-li, :link ,div, #main-title-form,#main-title-event,.main-title,  form, #search-section, #search-label{
+:link, #main-title-form,#main-title-event,#reviews-title, form, #search-label{
     color: #243D4B;
 }
-li{
-    cursor: pointer;
-}
-#main-title-form,#main-title-event,.main-title{
+
+#main-title-form,#main-title-event,#reviews-title{
     border-radius: 20px;
 }
-li, div{
-    border-radius: 12px;
-    margin: 5px;
-    padding: 5px;
-}
+
 :link {
     text-decoration: none;
 }
-.app-name, .logo-log-register {
+ .logo-log-register {
     margin-right: 5px;
 }
-nav {
-    justify-content: space-between;
-    background-color: #243D4B;
-    position: sticky;
-    top: 0;
-}
-ol {
-    justify-content: start;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-div {
-    border: 1px solid #243D4B;
-}   
-img {
-    width: 52px;
-    margin: 10px auto 0;
-}
 
-.app-name {
-    flex-grow: 1;
-    margin: auto 0 ;
-    padding: 22px;
-    width: fit-content;
-    background-color: #F7BC47;
-
-}
 .logo-log-register {
     gap: 5px;
     margin: auto;
     justify-content: end;
 }
-.app-logo{
-    width: 100px;
-    margin: -20px ;
-}
-#main-title-form,#main-title-event,.main-title  {
+
+#main-title-form,#main-title-event,#reviews-title  {
     width: fit-content;
     justify-content: flex-start;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+
+#reviews-title {
+    font-size: 30px;
+}
+
 #profile-card-container,.header-container-profile {
     border-bottom: solid 1px #243D4B;
     border-top: solid 1px #243D4B;
@@ -123,20 +196,15 @@ img {
 border: none;
 }
 
-
-#search-section {
-    width: fit-content;
-    padding: 20px;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: white;
-    border: none;
-    gap: 5px 
-}
 #search-label {
     font-size: 20px;
     text-align: center;
+}
+.my-orders-button{
+    display: block;
+    margin: 5px auto;
+    border: none;
+    background-color: white;
 }
 
 .qr-code{
@@ -144,10 +212,6 @@ border: none;
     width: 100px;
 }
 
-.my-orders-name-button{
-    border: none;
-    background-color: white;
-}
 /*=====FOOTER STYLES=====*/
 .follow-us{
     background-color: #F7BC47;
@@ -185,19 +249,17 @@ border: none;
 .h1-average-technique{
     padding: 5px;
 }
-
-.profile-picture {
+.profile-picture,.profile-picture-follow,.profile-picture-reviews {
     width: 200px;
     object-fit: cover;
     margin: auto;
     border-radius: 20px;
 }
 
-.profile-card {
+.profile-card-follow,.profile-card,.profile-card-reviews {
     margin: 0px auto;
-    width: 100%;
     height: max-content;
-    display: flex;
+    display: block;
     padding: 15px;
     background: #1D3557;
     border-radius: 10px; 
@@ -247,9 +309,38 @@ border: none;
     display: none;
 }
 
-#event-form, .preview-container, #event-fieldset {
+#event-editor{
+    display: none;
+}
+form {
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin: auto   
+}
+
+
+#eventForm,#edit-profile-form{
+    padding: 15px;
+    margin: auto;
+    margin-top:10px
+}
+
+#event-creator-legend{ 
+    padding: 10px ;
+    margin-bottom: 5px;
+}
+
+#event-editor-legend{
+    padding: 10px ;
+    margin-bottom: 5px;
+}
+
+#event-form,#event-fieldset{
     display: flex;
 }
+
+
 #submit-flyer {
     color: #F7BC47;
 }
@@ -258,9 +349,9 @@ border: none;
     background-color: #ffe5e5;
 }
 .preview-container {
-    flex-direction: row;
-    margin: 0px 300px;
+    display: block;
     gap: 50px;
+    background-color: #F7BC47;
 }
 .preview-title {
     font-size: 1.5rem;
@@ -268,20 +359,18 @@ border: none;
     text-align: center;
     color: #333;
     padding-top: 8px;
-    
 }
 
 .edit-form-container{
-    padding: 5px;
+    width: 100%;
+    padding: 10px;
     border: #243D4B solid 1px;
+    justify-content: center;
 }
+
+
 #edit-profile-form-container {
-    display: none;
-    
-}
-#edit-event-form-container {
-    display: none;
-    
+    display: none;;
 }
 
 .profile-card-my-orders{
@@ -297,16 +386,15 @@ border: none;
     border: none;
 }
 
-#login-container,.register-container, .container-signin {
+.register-container, .container-signin {
     background-color: white;
 }
-#login-container {
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    width: 500px;
-    margin: auto;
-    margin-top: 10px;
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: none;
 }
 
 /*=====REGISTER STYLES=====*/
@@ -315,6 +403,8 @@ border: none;
     width: 50%;
     margin: auto;
     margin-top: 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 hr {
     border: 1px solid #f1f1f1;
@@ -344,4 +434,792 @@ hr {
 
 .user-card-container {
     margin-top: 20px;
+}
+/*=====COMMONS=====*/
+
+
+input {
+    border: 5px solid #243D4B;
+    text-align: center; 
+    border-radius: 20px;
+}
+
+
+label {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+
+select {
+    border: 5px solid #243D4B;
+    text-align: center; 
+    border-radius: 20px;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+    gap: 10px;
+    border: none;
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+.left-column-form, .right-column-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+    gap: 10px;
+    border: none;
+    padding: 10px;
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+/*=====BUTTONS=====*/
+button  {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: bold;
+}
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+#search-button, .buy-button, #submit-button {
+    padding: 5px 10px;
+}
+
+ .buy-button,.buy-button-basket, #submit-button, .button-dance-type, #favorite-button,
+#edit-profile-button, #fav-button-profile, #my-events-button, #create-events-button  {
+    background-color: #F7BC47;
+}
+.register, .edit-event-button, 
+.publish-button {
+    background-color: #243D4B;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    padding: 10px 14px;
+}
+
+.register, .remove-ticket-button{
+    display: block;
+    margin-top: 15px;
+    color: #F7BC47;
+}
+
+.remove-ticket-button{
+    background-color: #1D3557;
+}
+.button-dance-type, .button-city,.button-country {
+    border: none;
+    width: 50%;
+    padding: 8px 12px;
+}
+.edit-event-button, .publish-button {
+    font-size: 16px;
+    color: #ffffff;
+}
+.button-dance-type{
+    color: black;
+    width: 100%;
+}
+#favorite-button, #edit-profile-button, #fav-button-profile,
+ #my-events-button, #create-events-button,#submit-new-user-data,
+ #cancel-edit-profile-button,  .vanish-remove-button,
+ .vanish-edit-button, .follow-button,.rate-button,.checkout-button
+,.guest-checkout-button,.submit-button-rate,#less-ratings-button,
+#more-ratings-button,.checkout-button,.guest-checkout-button  {
+    padding: 5px 10px;
+}
+
+.fav-button:hover{
+    transform: scale(1.1); 
+    box-shadow: unset;
+}
+#my-events-button, #create-events-button {
+    width: fit-content;
+}
+#cancel-edit-profile-button,  .vanish-remove-button,#cancel-changes-button {
+    background-color: #e64242;
+    color: white;
+}
+#submit-new-user-data,#save-changes-button,.submit-button-rate{
+    background-color: lightgreen;
+}
+
+.vanish-edit-button{
+    background-color: #ffaa00;
+}
+
+.follow-button{
+    transition: all .5s ease-in;
+}
+
+.rate-button{
+    background-color: #141633;
+    color: white;
+}
+.unfollow {
+    background-color: black;
+    color: white;
+}
+.checkout-button,.guest-checkout-button {
+    border: none;
+    background-color: rgb(17, 0, 0);
+    color: white;
+    border-radius: 5px;
+}
+#submit-button-login {
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: white;
+    cursor: pointer;
+    background-color:#243D4B;
+    width: 100%;
+    font-size: 16px;
+    border : none
+}
+
+#less-ratings-button{
+    display: none  ;
+}
+/************IMG***********/
+
+.world-map {
+    width: 100%;
+}
+
+/*======EVENTS======*/
+.event-container, .event-card,#event-form, .image-and-details, .time-price, .city-country, .name-fav,
+.reviews-placeholder    {
+    display: flex;
+}
+
+.event-container, .remove-ticket-button, .register, .register, .name {
+    width: 100%;
+}
+.event-card,#event-form, .fav-button, .city-country, .time-price, .name-fav  {
+    background-color: white;
+}
+.event-card,#event-form {
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+}
+.event-image,.reviews-placeholder,.name, .venue,.time, .currency,
+.button-dance-type, .button-city,.button-country,.date, .time, .price, .event-card,#event-form{
+    border-radius: 10px;
+}
+.reviews-placeholder, .time-price, .city-country, .name-fav,.fav-button{
+    border: none;
+}
+.event-container,.event-card,#event-form {
+    gap: 20px; 
+}
+.image-and-details{
+    gap: 10px;
+}
+.event-container {
+    display: block;
+    overflow-y: auto; 
+    max-height: 80vh; 
+    justify-content: center; 
+    font-family: 'Montserrat', sans-serif; 
+    font-size: 1rem;
+    font-style: italic;
+}
+.event-card,#event-form {
+    flex-direction: row; 
+    padding: 15px;
+    border: 1px solid #ddd;
+    width: calc(50% - 20px); 
+} 
+.image-and-details {
+    flex-direction: column;
+}
+
+.reviews-placeholder {
+    background-color: #e0e0e0;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    height: 190px;
+    font-weight: bold;
+    color: #666;
+}
+.price-currency, .city-country, .name-fav {
+    justify-content: space-between;
+    gap: 5px; 
+}
+.music-ratio,.music-ratio.single-style,.music-ratio.three-styles,
+.music-ratio.two-styles,.button-dance-type,.city-country, .button-city,
+.button-country, .time, .price,.currency,.date-time {
+    letter-spacing: 0.5px; 
+    padding: 10px;
+}
+.time, .price, .date-time, .button-dance-type, .button-city,.button-country, .music-ratio, .venue, .name {
+    background-color:#243D4B;
+    color: #F7BC47;
+}
+.time, .price, .button-dance-type, .button-city,.button-country,.date {
+    flex: 1; 
+    font-weight: bold;
+}
+.city-country {
+    margin: 0px;
+} 
+.venue {
+    padding: 10px 15px; 
+}
+.name-fav {
+margin-bottom: -10px;;
+}
+.name {
+    margin: auto;
+}
+.price-currency {
+    background-color: #F7BC47;
+}
+.shop-img {
+    width: 30px;
+    margin-top: 0px;
+}
+.instagram-img {
+    margin: auto;
+    margin-bottom: -10px;
+}
+.favorited {
+    color: #ffaa00;
+}
+
+.vanish,.vanish-edit-button,.vanish-remove-button,.remove-ticket-button,.ticket-count {
+    display: none;
+}
+
+/*=====MUSIC RATIO STYLES======*/
+.music-ratio {
+    margin-top: 10px;
+    font-size: 14px;
+}
+.music-ratio.single-style {
+    background-color:#243D4B;
+    color: white;
+}
+.music-ratio.two-styles {
+    background: linear-gradient(90deg, #F7BC47 50%, #243D4B 50%);
+    color: white;
+}
+.music-ratio.three-styles {
+    background: linear-gradient( #F7BC47 33.34%, #243D4B 33.33%, #F7BC47 66.67%);
+    color: white;
+}
+/*************** POP ANIMATION FAV BUTTON **********/
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.1); }
+}
+/************ ZOOM ANIMATION *********/
+@keyframes zoomIn {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+}
+.zoom-in {
+    animation: zoomIn 0.5s ease-in-out;
+}
+
+.appear{
+    display: block;
+}
+
+@media (min-width: 320px) {
+    nav {
+        display: flex;
+        flex-direction: column;
+        background-color: #F7BC47;
+    }
+    nav ol {
+        justify-content:space-around
+    }
+    nav ol li {
+        display: none;
+    }
+    nav ol li:first-child,
+    nav ol li:nth-child(2),
+    nav ol li:nth-child(4),
+    nav ol li:nth-child(5),
+    nav ol li:nth-child(6) {
+        display: block;
+        font-size: 10px;
+        border: none;
+        padding: 0px;
+    }
+    img{
+        width: 20px;
+    }
+    .logo-log-register {
+        margin-top: -15px;
+    }
+    .app-name-logo {
+        margin-bottom: -10px;
+        padding: 0px;
+        background-color: #1D3557;
+        color: #F7BC47;
+        border-radius:unset ;
+    }
+    .app-name {
+        margin-top: 10px;
+        font-size: 10px;
+        margin-left: 100px;
+        margin-bottom: 10px;
+    }
+    .app-logo{
+        width: 40px;
+        height: 40px;
+        box-shadow: unset;
+        margin-right: 90px;
+        margin-top: 0px;
+    }
+    .log-out{
+        margin-top: 25px;
+        font-size: 8px;
+        padding: 5px;
+    }
+    .login-button{
+        margin-top: 25px;
+        font-size: 8px;
+        padding: 5px;
+        margin-left: 10px;
+    }
+    .register{
+        width: 100px;
+        font-size: 8px;
+        padding: 5px;
+        margin-top: 25px;
+    }
+    .main-title{
+        font-size: 15px;
+    }
+    .search-label{
+        font-size: 15px;
+    }
+    .search-header{
+        font-size: 12px;
+    }
+    #search-section{
+        padding: 3px;
+    }  
+    .register-container {
+        width: 80%;
+    }
+    #login-container {
+        width: 80%;
+    }
+    .event-card-component{
+        width: fit-content;
+        gap: 5px;
+        margin: auto;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+    .name,.currency,.date-time,.price,
+    .venue,.music-ratio.single-style,
+    .music-ratio.two-styles,.music-ratio.three-styles,
+    .nickname,.bio,.team-academy,
+    button{
+        font-size: 10px;
+        border-radius: 5px;
+    }  
+    .button-country,.button-dance-type,.button-city{
+        display: none;
+    }
+    .price-currency,.price,.currency{
+        padding: 0px;
+        border-radius: 5px;
+    }
+    .name{
+        padding: 5px;
+    }
+    .reviews-placeholder{
+        width: 110px;
+        height: 90px;
+        margin: auto;
+    }
+    .event-image{
+        width: 100px;
+        height: 100px;
+        margin-top: 0px;
+    } 
+    .instagram-img{
+        width: 15px;
+    }
+    .follow-us-title{
+        font-size: 15px;
+    }
+    .social-media{
+        gap :5px
+    }
+    .copyright{
+        font-size: 10px;
+    }
+    .user-search-container{
+        margin-top: 15px;
+        border-top: none;
+    }
+    .profile-card-follow{
+        width: 250px;
+        margin-bottom: 10px;
+    }
+    .profile-picture,.profile-picture-reviews, .profile-picture-follow{
+        width: 80px;
+        margin-bottom: 10px;
+    }
+    .my-rating-container{
+        display: none;
+    }
+    .error-img{
+        width: 200px;
+    }
+    #event-fieldset{
+        display: block;
+    }
+    .preview-container{
+        margin-top: 20px;
+        margin: auto;
+    }
+    .preview-title {
+        margin-bottom: 10px;
+    }
+    .publish-button{
+        margin-right: 25px;
+    }
+    .fav-star{
+        font-size: 25px;
+    }
+    .buy-button-basket,.remove-ticket-button {
+        width: 100px;
+        margin: auto;
+        margin-top: 0px;
+    }
+    .remove-ticket-button{
+        padding: 3px;
+    }
+    .ticket-count{
+        font-size: 10px;
+    }
+    #register-button-register{
+        width: 100%;
+        margin-top: 25px;
+        font-size: 8px;
+        padding: 5px;
+        background-color: #243D4B;
+        color: white;
+    }
+}
+
+@media (min-width: 768px) {
+    nav {
+        flex-direction: row;
+    }
+    nav ol {
+        justify-content:space-around
+    }
+    nav ol li:first-child,
+    nav ol li:nth-child(2),
+    nav ol li:nth-child(4),
+    nav ol li:nth-child(5),
+    nav ol li:nth-child(6) {
+        font-size: 14px;
+    }
+    img{
+        width: 30px;
+    }
+    .app-name-logo {
+        border-bottom: 1px solid #1D3557;
+        background-color: #F7BC47;
+        color: #1D3557;
+        margin-left:0px;
+        margin-bottom: 5px;
+        width: 50px;
+    }
+    .app-name {
+        font-size: 18px;
+        margin: auto;  
+    }
+    .app-logo{
+        display: none;
+    }
+    .log-out{
+        font-size: 14px;
+        margin-left: 0px;
+    }
+    .login-button{
+        font-size: 14px;
+    }
+    .register{
+        font-size: 14px;
+    }
+    .main-title{
+        font-size: 20px;
+    }
+    .search-label{
+        font-size: 17px;
+    }
+
+    .search-header{
+        font-size: 19px;
+    }
+    .register-container{
+        width: 60%;
+    }
+    #login-container {
+        width: 60%;
+    }
+    .event-card-component{
+        width: 80%;
+    }
+    .name,.currency,.date-time,.price,
+    .venue,.music-ratio.single-style,
+    .music-ratio.two-styles,.music-ratio.three-styles,
+    .nickname,.bio,.team-academy,
+    button{
+        font-size: 15px;
+    }  
+    .price-currency,.price,.currency{
+        padding: 2px;
+    }
+    .reviews-placeholder{
+        width: 210px;
+        height:100px;
+    }
+    .event-image{
+        width: 110px;
+        height: 110px;
+    }
+    .instagram-img{
+        width: 20px;
+    }
+    .follow-us-title{
+        font-size: 25px;
+    }
+    .copyright{
+       font-size: 15px;
+    }
+    .user-search-container{
+        margin-top: 0px ;       
+        border-top: none
+    }
+    .profile-card,.profile-card-follow,.profile-card-reviews{
+        width: 500px;
+        display: flex;
+    }
+    .profile-picture{
+        width: 100px;
+        margin-bottom: 100px;
+    }
+    .profile-picture-follow{
+        width: 100px;
+        margin-bottom: 60px;
+
+    }
+    .profile-picture-reviews{
+        width: 100px;
+        margin-bottom: 180px;
+    }
+    .error-img{
+       width: 400px;
+    }
+    #event-fieldset{
+        display: flex;
+    }
+    .fav-star{
+        font-size: 35px;
+    }
+    .buy-button-basket,.remove-ticket-button {
+            width: 250px;
+    }
+    .remove-ticket-button{
+            padding: 5px;
+    }
+    .ticket-count{
+            font-size: 14px;
+    }
+    .profile-card-my-orders{
+        justify-content: end;
+    }      
+}
+
+@media (min-width: 1200px) {
+    nav {
+        position: sticky;
+        top: 1;
+        background-color: #243D4B;
+      }
+    nav ol li:first-child,
+    nav ol li:nth-child(2),
+    nav ol li:nth-child(4),
+    nav ol li:nth-child(5),
+    nav ol li:nth-child(6) {
+        font-size: 16px;
+        padding: 5px;
+        border-radius: 12px;
+    }
+    img{
+        width: 52px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+    }
+    .logo-log-register {
+        margin: auto;
+        margin-bottom: 25px;
+    }
+    .app-name-logo {
+        padding: 35px;
+        font-size: 24px;
+        border-radius: 12px;
+    }
+    .app-name {
+        font-size: 24px;
+        margin: auto;  
+    }
+    .log-out{
+        width: 150px;
+        font-size: 14px;
+        padding: 10px 14px;
+        margin-left: 0px;
+        padding: 10px 14px;
+        border-radius: 10px;
+    }
+    .login-button{
+        font-size: 14px;
+        padding: 10px 14px;
+        border-radius: 10px;
+    }
+    .register{
+        font-size: 14px;
+        padding: 10px 14px;
+        border-radius: 10px;
+    }
+    .main-title{
+        font-size: 24px;
+    }
+    .search-label{
+        font-size: 22px;
+    }
+    .search-header{
+        font-size: 24px;
+    }
+    #search-section{
+        padding: 10px;
+    }
+    .register-container {
+        width: 40%;
+    }
+    #login-container {
+        width: 40%;
+    }
+    .event-card-component{
+        width: 50%;
+    }
+    .name,.currency,.date-time,.price,
+    .venue,.music-ratio.single-style,
+    .music-ratio.two-styles,.music-ratio.three-styles,
+    .nickname,.bio,.team-academy,
+    button{
+        font-size: 20px;
+        border-radius: 12px;
+    }  
+    .button-country,.button-dance-type,.button-city{
+        display: block;
+    }
+    .price-currency,.price,.currency{
+        padding: 10px;
+        border-radius: 12px;
+    }
+    #search-button, .buy-button,.buy-button-basket, #submit-button {
+        padding: 5px 10px;
+    }
+    #search-button{
+        background-color: #F7BC47;
+    }
+    .name{
+        padding: 10px;
+    }
+    .reviews-placeholder{
+        width: 240px;
+        height:200px;
+    }
+    .event-image{
+        width: 200px;
+        height: 200px;
+    }
+    .instagram-img{
+        width: 35px;
+    }
+    .follow-us-title{
+        font-size: 35px;
+    }
+    .copyright{
+       font-size: 25px;
+    }
+    .profile-card{
+        width: fit-content;
+    }
+    .profile-card-reviews,.profile-card-follow{
+        width: 700px;
+    }
+    .profile-picture{
+        width: 200px;
+        margin-top: 10px;
+    }
+    .profile-picture-follow{
+        width: 200px;
+        margin-top: 55px;
+    }
+    .profile-picture-reviews{
+        width: 200px;
+        margin-top: 70px;
+    }
+    .my-rating-container{
+        display: block;
+    }
+    .error-img{
+       width: 600px;
+    }
+    .preview-container{
+        display: flex;
+        margin: 0px 300px;
+    }
+    .fav-star{
+        font-size: 45px;
+    }
+    .buy-button-basket,.remove-ticket-button {
+            width: 250px;
+    }
+    .remove-ticket-button{
+            padding: 10px;
+    }
+    .ticket-count{
+            font-size: 14px;
+    }
+    .profile-card-my-orders{
+        justify-content: end;
+    }
+    .my-orders-button{
+        display: block;
+        margin: 5px auto;
+        border: none;
+        background-color: white;
+    }
 }

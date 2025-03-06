@@ -1,6 +1,5 @@
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
-import appCss from '../../../css/app.css' with { type: 'css' }
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import {noEventFound,getAPIData, PORT,scrollToTop,cleanEventContainer,createEventCardWithAnimation} from "../../dancingEvents.js"
 
@@ -11,7 +10,7 @@ import {noEventFound,getAPIData, PORT,scrollToTop,cleanEventContainer,createEven
  */
 
 export class SearchEventsForm extends LitElement {
-    static styles = [ css,reset,appCss];
+    static styles = [ css,reset];
 
     static properties = { 
         prueba: {type: String},
@@ -24,9 +23,6 @@ export class SearchEventsForm extends LitElement {
       render() {
         return html`
         <form id="search-form">
-            <label for="seacher" id="search-label">What are you dancing today?
-                <span> You can search by event name, dance, city, country.</span>
-            </label>
             <div id="search-section">
                 <input type="text" name="dances" id="search-field">
                 <button id="search-button" @click=${this._onSearchFormSubmit}>Search</button>

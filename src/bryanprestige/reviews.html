@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dancing Events USER</title>
     <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/app.css">
     <link rel="stylesheet" href="./css/dancingEvents.css">
     <script type="module" src="./java/components/bundle.js" defer></script>
     <script type="module" src="./java/dancingEvents.js"></script>
@@ -50,23 +49,24 @@
                 </a>
             </li>
         </ol>
-            <div class="app-name">
-                <header>DANCING EXCHANGE</header>
+            <div class="app-name-logo">
+                <header class="app-name">DANCING EXCHANGE</header>
+                <img src="./imagenes/logo.png" class="app-logo" class="animate__animated animate__fadeIn animate__delay-1s">
             </div>
             <div class="logo-log-register">
-                <img src="./imagenes/logo.png" class="app-logo" class="animate__animated animate__fadeIn animate__delay-1s">
                 <a href="./login.html">
                     <button class="login-button"  >LOG IN</button>
                 </a>
                 <a href="./register.html">
                     <button class="register">REGISTER</button>
                 </a>
-                <a>
-                    <button class="log-out">LOG-OUT</button>
-                </a>
             </div>
     </nav>
-    <create-profile-card></create-profile-card> 
+    <section class="profile-card-contaier">
+
+        <h1 id="reviews-title">Rate your experience with this dancer/event!</h1>
+        <create-profile-card></create-profile-card> 
+    </section>
 
 </body>
 </html>

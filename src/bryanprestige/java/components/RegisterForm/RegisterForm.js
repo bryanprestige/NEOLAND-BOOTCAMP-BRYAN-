@@ -1,6 +1,5 @@
 import {getAPIData, getInputValue, PORT,navigateTo} from "../../dancingEvents.js"
-import appCss from '../../../css/app.css' with { type: 'css' }
-import RegisterFormCSS from './RegisterFormCSS.css' with { type: 'css' }
+import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import { importTemplate } from '../../lib/importTemplate.js';
 
 const TEMPLATE = {
@@ -34,7 +33,7 @@ export class RegisterForm extends HTMLElement {
     connectedCallback() {
         console.log("Custom element added to page.");
         this.attachShadow({ mode:"open" })
-        this.shadowRoot.adoptedStyleSheets.push(appCss,RegisterFormCSS);
+        this.shadowRoot.adoptedStyleSheets.push(css);
         this._setUpContent()
         
         // Add event listeners to form elements

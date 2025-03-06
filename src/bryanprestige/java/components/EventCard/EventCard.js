@@ -3,7 +3,6 @@
 
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import reset from '../../../css/reset.css' with { type: 'css' }
-import appCss from '../../../css/app.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import {onFilterButtonClick,getUserId,navigateTo,getAPIData, PORT,cleanEventContainer,hidePreviewContainer,hideEditProfileForm} from "../../dancingEvents.js"
 
@@ -18,7 +17,7 @@ let ticketCount = 0;
 
 export class EventCard extends LitElement {
     
-    static styles = [ reset,appCss,css];
+    static styles = [ reset,css];
     static properties = {
         event: {type: Object}, 
         eventUrl: {type: String},
@@ -57,8 +56,6 @@ export class EventCard extends LitElement {
             this.displayMyEvents = event.detail;
           });
     }   
-
-    
 
     updated(changedProperties) {
         if (changedProperties.has('displayMyEvents')) {
@@ -111,7 +108,7 @@ export class EventCard extends LitElement {
                         </a>
                     <div class="name-fav">
                         <h1 class="name">${this.eventName}</h1>
-                        <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><img src="../../../imagenes/fav.png"></button> 
+                        <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><span class="fav-star">&#9825;</span></button> 
                     </div>
                     <div class="price-currency">
                         <h1 class="currency">${this.eventCurrency}</h1>
@@ -148,7 +145,7 @@ export class EventCard extends LitElement {
                    </a>
                    <div class="name-fav">
                        <h1 class="name">${this.eventName}</h1>
-                       <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><img src="../../../imagenes/fav.png"></button>
+                       <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><span class="fav-star">&#9825;</span></button>
                    </div>
                    <div class="price-currency">
                        <h1 class="currency">${this.eventCurrency}</h1>
@@ -217,7 +214,7 @@ export class EventCard extends LitElement {
         this._sumPriceValue()   
         ticketCount++;
         
-        let ticketCountSpan = this.renderRoot.querySelector('span');
+        let ticketCountSpan = this.renderRoot.querySelector('.ticket-count');
         console.log('ticketCountSpan',ticketCountSpan);
         if(ticketCountSpan) {
             ticketCountSpan.textContent = `(${ticketCount})`;
@@ -231,7 +228,7 @@ export class EventCard extends LitElement {
     _removeTicket() {
             this._resPricevalue()
             ticketCount--;
-            let ticketCountSpan = this.renderRoot.querySelector('span');
+            let ticketCountSpan = this.renderRoot.querySelector('.ticket-count');
             if(ticketCountSpan) {
                 ticketCountSpan.textContent = `(${ticketCount})`;
             }
@@ -309,9 +306,9 @@ export class EventCard extends LitElement {
         hideEditProfileForm()
         hidePreviewContainer()
         
-        const eventEditorContainer = document.getElementById('edit-event-form-container')
+        const eventEditorContainer = document.getElementById('event-editor')
         eventEditorContainer.style.display = 'block'
-        const eventEditor = document.getElementById('event-editor')
+        const eventEditor = document.getElementById('event-editor-component')
         eventEditor.setAttribute('eventId', eventId)
         console.log(eventEditor)
     }

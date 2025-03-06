@@ -4,10 +4,10 @@
 
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
-import appCss from '../../../css/app.css' with { type: 'css' }
-
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
-import { displayMyEvents,getAPIData, PORT,getInputValue,hideEditEvents } from "../../dancingEvents.js"
+import {getAPIData, PORT,getInputValue,hideEditEvents,createEventCardWithAnimation,
+        cleanEventContainer,hideCreateEvents,hidePreviewContainer,
+        hideEditProfileForm,noEventFound,getUserId} from "../../dancingEvents.js"
 /**
  * Edit Event Form  Web Component
  * @class EditEventForm
@@ -16,7 +16,7 @@ import { displayMyEvents,getAPIData, PORT,getInputValue,hideEditEvents } from ".
 
 export class EditEventForm extends LitElement {
     
-    static styles = [ css,reset,appCss];
+    static styles = [ css,reset];
     
     static properties = { 
         prueba: {type: String},
@@ -30,8 +30,8 @@ export class EditEventForm extends LitElement {
         return html `
             <form action="#" id="eventForm">
                 <fieldset id="event-fieldset">
-                    <legend>Event Creator</legend>
-                        <div class="left-column">
+                    <legend id="event-editor-legend">Event Editor</legend>
+                        <div class="left-column-form">
                             <label> Submit your flyer</label>
                                 <input type="file" id="submit-flyer" name="filename">
                                 <input type="text" name="input-event-name" id="input-event-name" placeholder="Name of the event" required>
@@ -39,7 +39,7 @@ export class EditEventForm extends LitElement {
                                 <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="2025-02-10T08:30" required>
                                 <input type="url" id="input-url" placeholder="instagram-url">
                         </div>
-                        <div class="right-column">
+                        <div class="right-column-form">
                             <input type="number" name="input-price" id="input-price" placeholder="Price" max="1000" required>
                             <select class="form-select" id="input-currency" name="input-currency" required>
                                 <option>select currency</option>
@@ -100,7 +100,7 @@ export class EditEventForm extends LitElement {
             if (apiData.matchedCount === 1) {
                 alert('Event updated successfully')
                 hideEditEvents()
-                displayMyEvents()
+                this._displayMyEvents()
             }else if (apiData.modifiedCount === 0) {
                 alert('No changes Detected')
                 return
@@ -109,8 +109,45 @@ export class EditEventForm extends LitElement {
 
     _oncancelChanges () {
         hideEditEvents()
-        displayMyEvents()
+        this._displayMyEvents()
     }
+
+      async _displayMyEvents() {
+          hideCreateEvents()
+          hideEditProfileForm() 
+          hidePreviewContainer() 
+          hideEditEvents() 
+          const userId = getUserId()
+          const storageUser = `myEventsList_${userId}`;
+          const filterValue = userId;  
+          const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
+      
+          if (apiData.length === 0) {
+              noEventFound()
+           } else {
+              
+            cleanEventContainer() 
+            apiData.forEach(e => {
+             if (e.user_id === userId) {
+               const myEventCard = createEventCardWithAnimation(e);
+               console.log(myEventCard)
+             }
+           });
+              
+          }
+          this._setEventCardAttributes() 
+          localStorage.setItem(storageUser, JSON.stringify(apiData))
+        }
+    
+        _setEventCardAttributes() {
+          const displayMyEventsFlag = false
+          const eventCards = document.querySelectorAll('.event-card-component');
+          eventCards.forEach((eventCard) => {
+            eventCard.setAttribute('displayMyEvents', displayMyEventsFlag);
+            eventCard.dispatchEvent(new CustomEvent('displayMyEventsChanged', { detail: displayMyEventsFlag }));
+          });
+        }
+
 
 }
 customElements.define('edit-event-form', EditEventForm)

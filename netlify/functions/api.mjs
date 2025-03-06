@@ -453,7 +453,7 @@ async function createRating(rating){
   const dancingEventsDB = client.db('dancingEvents');
   const ratingsCollection = dancingEventsDB.collection('ratings');
   const returnValue = await ratingsCollection.insertOne(rating);
-  console.log('db createEvent', returnValue, rating.name)
+  console.log('db createrating', returnValue, rating.name)
   return rating;
 }
 

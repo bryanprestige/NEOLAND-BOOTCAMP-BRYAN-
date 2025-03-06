@@ -1,6 +1,6 @@
 
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
-import appCss from '../../../css/app.css' with { type: 'css' }
+import css from '../../../css/dancingEvents.css' with { type: 'css' }
 import {getAPIData, PORT} from "../../dancingEvents.js"
 
 /**
@@ -10,7 +10,7 @@ import {getAPIData, PORT} from "../../dancingEvents.js"
  */
 
 export class LoginForm extends LitElement {
-  static styles = [ appCss];
+  static styles = [ css];
 
   static properties = {
     prueba: {type: String},
