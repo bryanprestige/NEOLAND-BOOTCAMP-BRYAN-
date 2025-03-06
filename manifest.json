@@ -3,11 +3,11 @@
 "short_name": "DancEx",
 "start_url": "/index.html",
 "display": "standalone",
-"description": "A description for your application",
+"description": "La aplicación consiste en una página de muestra de eventos de baile social, donde los usuarios pueden registrarse y utilizar sus credenciales para acceder a la página web y desbloquear la opción de crear eventos, editarlos y guardarlos en favoritos para verlos en su perfil.",
 "lang": " The default language of your application",
 "dir": "auto",
-"theme_color": "#000000",
-"background_color": "#000000",
+"theme_color": "#243D4B",
+"background_color": "#243D4B",
 "orientation": "any",
 "icons": [
     {
