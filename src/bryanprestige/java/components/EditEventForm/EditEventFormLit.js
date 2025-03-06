@@ -36,7 +36,7 @@ export class EditEventForm extends LitElement {
                                 <input type="file" id="submit-flyer" name="filename">
                                 <input type="text" name="input-event-name" id="input-event-name" placeholder="Name of the event" required>
                                 <input type="text" name="input-venue" id="input-venue" placeholder="Venue" required>
-                                <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="2025-02-10T08:30" required>
+                                <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="yyyy-mm-dd" required>
                                 <input type="url" id="input-url" placeholder="instagram-url">
                         </div>
                         <div class="right-column-form">

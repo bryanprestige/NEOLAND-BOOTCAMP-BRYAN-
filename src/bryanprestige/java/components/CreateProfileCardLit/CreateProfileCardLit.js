@@ -16,7 +16,7 @@ import {getUserFromLocalStorage ,noEventFound,createEventCardWithAnimation,
  */
 
 export class CreateProfileCard extends LitElement {
-  static styles = [css,reset];
+  static styles = [ css,reset];
 
   static properties = {
     prueba: {type: String},
@@ -73,21 +73,6 @@ export class CreateProfileCard extends LitElement {
           return  teamAcademy
         }   
     }
-
-    get _followedBy() {
-      const getUser = getDataFromSessionStorage();
-        const user = getUser.user;
-        const followedBy = user.followedBy
-        const followersNumber = followedBy.length
-        console.log('followersNumber',followersNumber)
-
-
-        if(!followersNumber) {
-        return `Be the first to follow!`;
-        } else {
-          return  followersNumber
-        }
-    }
     get _teamAcademyToRate() {
       const getUser = JSON.parse(localStorage.getItem('userToRate'));
       const user = getUser[0]
@@ -110,8 +95,8 @@ export class CreateProfileCard extends LitElement {
           return currentPage.includes('reviews.html') ? 
               html`
                   <!-- FIRST HTML BLOCK -->
-                  <div class="profile-card-reviews">
-                <img class="profile-picture-reviews" src="../../../imagenes/profile-pic-placeholder.png">
+                  <div class="profile-card">
+                <img class="profile-picture" src="../../../imagenes/profile-pic-placeholder.png">
                 <div class="profile-info">
                     <h1 class="nickname">${this._nicknameToRate}</h1>
                     <p class="bio">${this._bioToRate}</p>
@@ -140,8 +125,8 @@ export class CreateProfileCard extends LitElement {
                           <option value="Bachazouk">Bachazouk</option>
                         </select>
                       <label for="comments">Comments</label>
-                        <textarea id="input-comments" name="comments"  cols="20" rows="4"></textarea>
-                      <button class="submit-button-rate" type="click" @click=${this._addReview} >Submit</button>
+                        <textarea id="input-comments" name="comments"  cols="20" rows="4"placeholder="Comments"></textarea>
+                      <button type="click" @click=${this._addReview} >Submit</button>
                     </form>
                 </div>
               </div>
@@ -155,7 +140,6 @@ export class CreateProfileCard extends LitElement {
                     <h1 class="nickname">${this._nickname}</h1>
                     <p class="bio">${this._bio}</p>
                     <p class="team-academy">${this._teamAcademy}</p>    
-                    <p class="followers">Followers: ${this._followedBy}</p>
                     <div class="edit-fav-profile">
                       <button id="edit-profile-button" @click=${displayEditForm}>Edit Profile</button>
                       <button id="fav-button-profile" @click=${displayFavoriteEvents}>Favourites</button>
@@ -193,7 +177,7 @@ export class CreateProfileCard extends LitElement {
       nicknameUserRating : this._nickname,
       userRatedId : userId,
       userRatingId : currentUserId,
-      technique : technique,
+      technique : Number(technique),
       danceStyle : danceStyle,
       comments : comments
     }
@@ -214,17 +198,16 @@ export class CreateProfileCard extends LitElement {
       const storageUser = `myEventsList_${userId}`;
       const filterValue = userId;  
       const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
-      
-      if (!apiData.some(event => event.user_id === userId)) {
-        noEventFound()
-      } else {
-        cleanEventContainer() 
-        apiData.forEach(e => {
-         if (e.user_id === userId) {
-           const myEventCard = createEventCardWithAnimation(e);
-           console.log(myEventCard)
-         }
-       });
+  
+      if (apiData.length === 0) {
+          noEventFound()
+       } else {
+          
+          cleanEventContainer() 
+           apiData.forEach(e => {
+            const myEventCard = createEventCardWithAnimation(e);
+            console.log(myEventCard)
+          });
           
       }
       this._setEventCardAttributes() 
