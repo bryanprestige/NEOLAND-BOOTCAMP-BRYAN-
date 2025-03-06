@@ -2,7 +2,6 @@
  export class Event  {
     _id
     name
-    //flyer
     venue
     dateTime
     price
@@ -14,12 +13,13 @@
     user_id
     url
     event_id
+    boughtBy
 
     /**
      * @param {string} name 
      * @param {string} _id
      * @param {string} venue
-    * @param {Date} dateTime
+    * @param {string} dateTime
     * @param {number} price
     * @param {string} currency
     * @param {string} music  
@@ -29,14 +29,14 @@
      * @param {string} user_id
      * @param {URL} url
      * @param {string} event_id
+     * @param {Array} boughtBy
      */
-    constructor ({_id,name,venue,dateTime,price,currency,music,city,country,dance,user_id,url,event_id}){
+    constructor ({_id,name,venue,dateTime,price,currency,music,city,country,dance,user_id,url,event_id,boughtBy}){
         const timestamp = new Date()
-        //this.flyer = flyer
         this._id = _id
         this.name = name    
         this.venue = venue
-        this.dateTime = dateTime ||  String(timestamp.getTime())
+        this.dateTime = dateTime 
         this.price = price
         this.currency = currency
         this.music = music
@@ -46,5 +46,6 @@
         this.user_id = user_id
         this.url = url
         this.event_id = event_id || String(timestamp.getTime())
+        this.boughtBy = boughtBy
     }
 }

@@ -1,9 +1,8 @@
-/* 
+
 //@ts-check
-   */
+   
 import { simpleFetch } from './lib/simpleFetch.js'
 import { HttpError } from './classes/HttpError.js'
-//import { isConstructorDeclaration } from 'typescript';
 /**
  * @import {Event} from './classes/Event.js'
  * @import {User}   from './classes/User.js'
@@ -20,11 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
     logOutButton[0]?.addEventListener('click', onLogoutClick);
 
     if (window.location.pathname.includes('profile.html')) {
+        if(!isUserLoggedIn()){
+            alert('need to login or register to enjoy all the perks!')
+            navigateTo('./login.html')
+        }else{
+
         showLogoutButton()
         displayMyEventsPurchased();
         displayMyRatings()
         const showLessButton = document.getElementById('less-ratings-button');
         showLessButton?.addEventListener('click', () => onClickShowLess());
+        }
     }
     else if (window.location.pathname.includes('login.html')) {
         window.addEventListener('login-form-submit', (event) => {
@@ -36,9 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         continueToCheckout()
     }
     else if (window.location.pathname.includes('reviews.html')) {
+        if(!isUserLoggedIn()){
+            alert('need to login or register to enjoy all the perks!')
+            navigateTo('./login.html')
+        }else{
         displayUserToRate ()
+        }
     }
-     
     else if (window.location.pathname.includes('index.html')) {
         updateDefaultFeed() 
 
@@ -48,14 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     checkLoginStatus()
 });
 
-/*TO DO: CREATE A PAGE JUST FOR WHEN THE EVENTS ARE CLICKED AND JUST DISPLAYIN THAT EVENT*/
-/*TO DO: DISPLAY FOLLOWERS ON USERS PROFILE */
-/*MAKE A CHAT BETWEEN USERS*/
-/*TO DO: RESTRICT PROFILE AND OPTIONS TO LOGGED IN USERS*/
-/*TO DO: FILTRADO POR FECHA, BUSQUEDA DE FECHA EXACTA Y FILTRO ENTRE DOS FECHAS*/
-/*TO DO: RESTRIC FAV BUTTON TO LOGGED IN USERS*/
-/*TO DO: FIX HYPERLINKS TO INSTAGRAM PROFILES*/
-/*TO DO: FIX STYLING, ADD MEDIA QUERYES*/
 
 //====================FEED=====================//
 
@@ -75,7 +76,6 @@ export function createEventCardWithAnimation(event){
     card.addEventListener('animationend', () => {
         card.classList.remove('zoom-in');
     });
-
     return card;
 }
 
@@ -117,26 +117,29 @@ function createEventCardElement(event) {
 }
 
 /**
- * @param {Event} event
+ * @param {MouseEvent} event
  */
 export async function onFilterButtonClick(event) {
-    event.preventDefault();
     const targetEvent = event.target;
-    /** @type {HTMLElement | null} */
-    const filterValue =   targetEvent.textContent.toLowerCase();  
     
-    const eventContainer = document.querySelector('.event-container');
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
-  
-    if (!apiData) return;
-    if (!eventContainer) return;
-    cleanEventContainer();
-  
-    apiData.forEach((/** @type {Event}  */event) => {
-        createEventCardWithAnimation(event);
-    })
+    if (targetEvent instanceof HTMLElement) {
+      const filterValue = targetEvent.textContent?.toLowerCase();  
+      
+      const eventContainer = document.querySelector('.event-container');
+      const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
+    
+      if (!apiData) return;
+      if (!eventContainer) return;
+      cleanEventContainer();
+    
+      apiData.forEach((/** @type {Event}  */event) => {
+          createEventCardWithAnimation(event);
+      })
    
-    scrollToTop();   
+      scrollToTop();   
+    } else {
+      console.error('Target event is not an HTMLElement');
+    }
 }
 
 //======================== CREATES PROFILE===============================//
@@ -219,17 +222,19 @@ function myEventsPurchased (apiData,userId) {
     });
 
     if (myOrdersContainer[0].childElementCount === 0) {
+        if (noOrders[0] instanceof HTMLElement) {
         noOrders[0].style.display = 'block';
+        }
     } else {
-        noOrders[0].style.display = 'none';
+        if (noOrders[0] instanceof HTMLElement) {
+            noOrders[0].style.display = 'none';
+        }
     }
 }
 
 function getQrCode() {
-     /** @type {HTMLElement | null} */
     const qrCode = document.querySelector('.qr-code')
-    qrCode.classList.toggle('appear')
-   
+    qrCode?.classList.toggle('appear')
 }
 export function displayCreateEvents () {
     cleanEventContainer();
@@ -241,7 +246,9 @@ export function displayCreateEvents () {
         eventCreator.style.display = 'block';
        
     } else {
+         if (eventCreator) {
         eventCreator.style.display = 'none';
+        }
     }
     hidePreviewContainer();
 }
@@ -249,8 +256,9 @@ export function displayCreateEvents () {
 async function postEvent() {
     cleanEventContainer()
     const newTitleEvent = document.getElementById('main-title-event');
-    newTitleEvent.innerText = 'Now you can go to the feed, everybody can see your event! Thanks for contributing to the dance community!';
-
+    if (newTitleEvent) {
+        newTitleEvent.innerText = 'Now you can go to the feed, everybody can see your event! Thanks for contributing to the dance community!';
+    }
     let newEvent = JSON.parse(localStorage.getItem('newEventList')); 
     const payload = JSON.stringify(newEvent[0])
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/event?`,'POST',payload);
@@ -258,47 +266,59 @@ async function postEvent() {
     hidePreviewContainer()
 }
 
-
 async function displayMyRatings() {
-    /** @type {HTMLElement | null} */
+    /** @type {{ user: any } | null} */
     const getUser = getDataFromSessionStorage()
-    const userId = getUser.user._id
+    const showMoreButton = document.getElementById('more-ratings-button');
+
+    const userId = getUser?.user._id
     const filterValue = userId
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/ratings/${filterValue}`);    
 
     if (!apiData || apiData.length === 0) {
-        return
+        if (showMoreButton instanceof HTMLElement && showMoreButton.style) {
+        showMoreButton.style.display = 'none'
+    }
+    return
     } else{
         myRatings(apiData)
     }
 } 
 
+/**
+ * @param {Array <Ratings>} apiData 
+ */
 function myRatings(apiData) {
     const myRatingsContainer = document.getElementsByClassName('my-ratings');
     const noRatings = document.querySelector('.no-ratings');
     const showMore = document.querySelector('#more-ratings-button');
     const showLess = document.querySelector('#less-ratings-button');
+    apiData.sort((a, b) => b.technique - a.technique);
+    console.log('apiData',apiData)
     const sumTechnique = apiData.reduce((acc, current) => {
-      noRatings.style.display = 'none';
-  
-      const technique = parseInt(current.technique);
-      if (!isNaN(technique)) {
-        return acc + technique;
-      } else {
-        return acc;
-      }
+            console.log('current',current)
+        if (noRatings instanceof HTMLElement && noRatings.style) {
+            noRatings.style.display = 'none';
+        }   
+        const technique = current.technique
+        console.log('technique',technique)
+        if (!isNaN(technique)) {
+            return acc + technique;
+        } else {
+            return acc;
+        }
     }, 0);
     
     const averageTechnique = sumTechnique / apiData.length;
-  
-    apiData.sort((a, b) => b.technique - a.technique);
   
     for (let i = 0; i < 2; i++) {
       ratings(apiData[i]);
     }
 
-    showMore.addEventListener('click', () => {
-        onClickShowMore(apiData,showLess)
+    showMore?.addEventListener('click', () => {
+        if (showLess instanceof HTMLElement) {
+            onClickShowMore(apiData,showLess)
+          }
     })
 
     const averageTechniqueElement = document.createElement('h1');
@@ -307,22 +327,25 @@ function myRatings(apiData) {
     myRatingsContainer[0].appendChild(averageTechniqueElement);
   }
 
-
+/**
+ * @param {Array <Ratings>} apiData 
+ * @param {HTMLElement} showLess
+ */
 function onClickShowMore(apiData,showLess) {
    const moreRatingsButton = document.querySelector('#more-ratings-button');
     let ratingsIndex = 2;
 
         for (let i = ratingsIndex; i < apiData.length && i < ratingsIndex + 2; i++) {
-          ratings(apiData[i]);
+            ratings(apiData[i]);
         }
         ratingsIndex += 2;
         showLess.style.display = 'block';
     
         if (ratingsIndex >= apiData.length) {
-          moreRatingsButton.style.display = 'none';
+            if (moreRatingsButton instanceof HTMLElement && moreRatingsButton.style) {
+                moreRatingsButton.style.display = 'none';
+              }
         }
-      
-
 }
 
 function onClickShowLess() {
@@ -340,22 +363,22 @@ function onClickShowLess() {
         }else{
             moreRatingsButton.style.display = 'block';
         }
-
 }
 
 /**
- * @param {Ratings} rating 
- */ 
+ * @param {Ratings} rating
+ */
 function ratings(rating) {
+    console.log('this is the rating', rating)
     const myRatingsContainer = document.getElementsByClassName('my-ratings');
-    const userRatingNickname = rating.nicknameUserRating
     const newElement = document.createElement('h1');
+    const userRatingNickname = rating.nicknameUserRating
 
     newElement.className = 'h1-rating';
     newElement.textContent = `${userRatingNickname} says:"
         ${rating.comments}" and i value its technique in a ${rating.technique},
         when we danced ${rating.danceStyle}`;
-            
+
     myRatingsContainer[0].appendChild(newElement);
 }
 
@@ -381,13 +404,16 @@ export function displayFavoriteEvents() {
 }
 
 export function displayEditForm() {
-    /** @type {HTMLElement | null} */
     const editForm = document.getElementById('edit-profile-form-container');
-    editForm.style.display = 'block';
-    cleanEventContainer()
-    hidePreviewContainer()
-    hideCreateEvents()
-    hideEditEvents()
+    if (editForm) {
+        editForm.style.display = 'block';
+        cleanEventContainer()
+        hidePreviewContainer()
+        hideCreateEvents()
+        hideEditEvents()
+    } else {
+        console.error("Could not find element with id 'edit-profile-form-container'");
+    }
 }
 
 export function hideEditEvents(){
@@ -405,10 +431,10 @@ export function hideCreateEvents () {
 }
 
 export function hideEditProfileForm() {
-    /** @type {HTMLElement | null} */
     const editForm = document.getElementById('edit-profile-form-container');
-    editForm.style.display = 'none';
-}
+    if (editForm) {
+        editForm.style.display = 'none';
+    }}
 
 export function hidePreviewContainer () {
     let previewContainer = document.querySelector('.preview-container'); 
@@ -427,12 +453,23 @@ function continueToCheckout() {
     let containerSignIn = document.querySelector('.container-signin')
     const guestCheckoutButton = document.querySelector('.guest-checkout-button')
     if (!isUserLoggedIn()) {
-        guestCheckoutButton?.addEventListener('click', () => displayCheckoutForm(containerSignIn))
+        guestCheckoutButton?.addEventListener('click', () => {
+            if (containerSignIn instanceof HTMLElement) {
+                displayCheckoutForm(containerSignIn)
+            } else {
+                console.error('containerSignIn is null')
+            }
+        })
         return
     } else{
-        containerSignIn.innerHTML = '<h1> Continue to <button class="checkout-button"> checkout</button>.</h1>'  
-        const checkoutButton = document.querySelector('.checkout-button')
-        checkoutButton?.addEventListener('click', () => displayCheckoutForm(containerSignIn))      
+        
+        if (containerSignIn instanceof HTMLElement) {
+            containerSignIn.innerHTML = '<h1> Continue to <button class="checkout-button"> checkout</button>.</h1>'
+            const checkoutButton = document.querySelector('.checkout-button')
+            checkoutButton?.addEventListener('click', () => displayCheckoutForm(containerSignIn))
+        } else {
+            console.error('containerSignIn is null')
+        }  
     }
 }
 
@@ -444,8 +481,13 @@ function displayCheckoutForm(containerSignIn) {
     const eventContainer = document.querySelector('.event-container');
     const checkoutContainer = document.getElementById('checkout-form');
     containerSignIn.style.display = 'none';
-    eventContainer.style.display = 'none';
-    checkoutContainer.style.display = 'block';
+    
+    if (eventContainer instanceof HTMLElement && eventContainer.style) {
+        eventContainer.style.display = 'none';
+      }
+     if (checkoutContainer instanceof HTMLElement && checkoutContainer.style) {
+         checkoutContainer.style.display = 'block';  
+     } 
     
     setCheckoutFormValues()
 }
@@ -584,12 +626,18 @@ function createFollowButton(user) {
  * @param {HTMLElement} followButton
  */ 
 function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton) { 
-    if(userFollowedBy && userFollowedBy.includes(currentUserId)){
-    removeFollower(userFollowedId,currentUserId)
-    } else {
-    addFollower(userFollowedId,currentUserId)
-    } 
-    toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) 
+    if(!isUserLoggedIn()){
+        alert('need to login or register to enjoy all the perks!')
+        navigateTo('./login.html')
+    }else {
+
+        if(userFollowedBy && userFollowedBy.includes(currentUserId)){
+        removeFollower(userFollowedId,currentUserId)
+        } else {
+        addFollower(userFollowedId,currentUserId)
+        } 
+        toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) 
+    }
 }
 
 /**
@@ -607,7 +655,10 @@ async function addFollower(userFollowedId,currentUserId){
     console.log(apiData)
     const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
-    userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`
+    
+    if (userFollowerNumber instanceof HTMLElement) {
+        userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`;
+    }
 }
 
 /**
@@ -631,8 +682,9 @@ async function removeFollower(userFollowedId, currentUserId) {
     const response = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
     const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
-    userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`
-    
+    if (userFollowerNumber instanceof HTMLElement) {
+        userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`;
+    }
     console.log('response', response)
 }
 
@@ -670,8 +722,13 @@ function createRateButton(user) {
  * @param {User} user
  */ 
 function onRateButtonClick(user) {
+    if(!isUserLoggedIn()){
+        alert('need to login or register to enjoy all the perks!')
+        navigateTo('./login.html')
+    }else{
     saveUserToLocalStorage(user)
     navigateTo('./reviews.html')
+    }
 }
 
 //========================REVIEWS================================//
@@ -761,6 +818,7 @@ export function getUserId() {
 
 function getUserNickname() {
     const userData = getDataFromSessionStorage();
+    console.log('user nickname',userData.user.nickname)
     return userData.user.nickname
 }
 
@@ -821,9 +879,13 @@ function showLogoutButton() {
     if (!isUserLoggedIn()) {
         return
     } else {
-         /** @type {HTMLElement} */(loginButton).style.display = 'none'
-        registerButton.style.display = 'none'
-        logoutButton.style.display = 'block'
+            /** @type {HTMLElement} */(loginButton).style.display = 'none'
+            if (registerButton instanceof HTMLElement && registerButton.style) {
+                registerButton.style.display = 'none'
+            }
+            if (logoutButton instanceof HTMLElement && logoutButton.style) {
+            logoutButton.style.display = 'block'
+            }
     }
 }
 
@@ -834,9 +896,10 @@ function hideLoginRegisterButtons() {
         return
     } else {
          /** @type {HTMLElement} */(loginButton).style.display = 'none'
-        registerButton.style.display = 'none'
+         if (registerButton instanceof HTMLElement && registerButton.style) {
+            registerButton.style.display = 'none'
+        }
     }
-
 }
 
 
@@ -849,6 +912,7 @@ async function onLogoutClick() {
     await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/logout/${userData.user._id}`, 'GET')
   
     updateSessionStorage({ user: {} })
+    //updateSessionStorage(JSON.stringify({ user: {} }))
     navigateTo('/index.html')
 }
 //========================UTILS===============================//
@@ -863,7 +927,7 @@ export function navigateTo(pathname) {
         ...window.location.href = pathname,
     }
     window.history.pushState({}, '', pathname)
-    const newLocationLinked = location.pathname.replace(/\/src/, '')
+    const newLocationLinked = window.location.pathname.replace(/\/src/, '')
     console.log(newLocation)
     console.log(newLocationLinked)
 }

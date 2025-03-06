@@ -4,7 +4,7 @@
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
-import {onFilterButtonClick,getUserId,navigateTo,getAPIData, PORT,cleanEventContainer,hidePreviewContainer,hideEditProfileForm} from "../../dancingEvents.js"
+import {onFilterButtonClick,getUserId,navigateTo,getAPIData, PORT,cleanEventContainer,hidePreviewContainer,hideEditProfileForm, isUserLoggedIn} from "../../dancingEvents.js"
 
 let totalPriceValue = 0;
 let ticketCount = 0;
@@ -103,9 +103,11 @@ export class EventCard extends LitElement {
                 <!-- FIRST HTML BLOCK -->
                 <div class="left-column">
                         <img class="event-image" src="../../../imagenes/placehold400x200.png" alt="">
-                        <a class="instagram-anchor" href="${this.eventUrl}" target="_blank">
-                            <img src="../../../imagenes/instagram.png" alt="instagram image" class="instagram-img">
-                        </a>
+                        ${this.eventUrl ? html`
+                            <a class="instagram-anchor" href="https://${this.eventUrl}" target="_blank">
+                                <img src="../../../imagenes/instagram.png" alt="instagram image" class="instagram-img">
+                            </a>
+                            ` : ''}
                     <div class="name-fav">
                         <h1 class="name">${this.eventName}</h1>
                         <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><span class="fav-star">&#9825;</span></button> 
@@ -140,9 +142,11 @@ export class EventCard extends LitElement {
              <!-- THIRD HTML BLOCK (original HTML) -->
             <div class="left-column">
                    <img class="event-image" src="../../../imagenes/placehold400x200.png" alt="">
-                   <a class="instagram-anchor" href="${this.eventUrl}" target="_blank">
-                       <img src="../../../imagenes/instagram.png" alt="instagram image" class="instagram-img">
-                   </a>
+                   ${this.eventUrl ? html`
+                            <a class="instagram-anchor" href="https://${this.eventUrl}" target="_blank">
+                                <img src="../../../imagenes/instagram.png" alt="instagram image" class="instagram-img">
+                            </a>
+                            ` : ''}
                    <div class="name-fav">
                        <h1 class="name">${this.eventName}</h1>
                        <button class="fav-button ${this.favorited ? 'favorited' : ''}" @click=${this._toggleFavorite}><span class="fav-star">&#9825;</span></button>
@@ -284,19 +288,24 @@ export class EventCard extends LitElement {
     }
 
     _toggleFavorite() { 
-    this.favorited = !this.favorited    
-    const userId = getUserId()
-    const storageUser = `favList_${userId}`;
-    let userFavList = JSON.parse(localStorage.getItem(storageUser)) || []
-    const index = userFavList.findIndex(favEvent => favEvent.name === this.event.name);
-    if (index === -1) {
-        userFavList.push(this.event);
-
-    } else {
-        userFavList.splice(index, 1);
-    }
-
-    localStorage.setItem(storageUser, JSON.stringify(userFavList));
+        if(!isUserLoggedIn()){
+            alert('need to login or register to enjoy all the perks!')
+            navigateTo('./login.html')
+        }else{
+            this.favorited = !this.favorited    
+            const userId = getUserId()
+            const storageUser = `favList_${userId}`;
+            let userFavList = JSON.parse(localStorage.getItem(storageUser)) || []
+            const index = userFavList.findIndex(favEvent => favEvent.name === this.event.name);
+            if (index === -1) {
+                userFavList.push(this.event);
+        
+            } else {
+                userFavList.splice(index, 1);
+            }
+        
+            localStorage.setItem(storageUser, JSON.stringify(userFavList));
+        }
     }
 
     _displayEditMyEvents() { 
