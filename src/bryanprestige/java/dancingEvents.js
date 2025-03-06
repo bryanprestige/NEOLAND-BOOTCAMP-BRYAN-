@@ -353,16 +353,25 @@ function onClickShowLess() {
     const moreRatingsButton = document.querySelector('#more-ratings-button');
     const lessRatingsButton = document.querySelector('#less-ratings-button');
 
-        while (myRatingsContainer[0].childElementCount > 3) {
-          myRatingsContainer[0].removeChild(myRatingsContainer[0].lastChild);
+    while (myRatingsContainer[0].childElementCount > 3) {
+        const lastChild = myRatingsContainer[0].lastChild;
+        if (lastChild) {
+            myRatingsContainer[0].removeChild(lastChild);
+        } else {
+            break;
         }
-    
+    }
+        
+    if (lessRatingsButton instanceof HTMLElement) {
         lessRatingsButton.style.display = 'none';
-        if (!moreRatingsButton) {
-            return
-        }else{
+    }
+    if (!moreRatingsButton) {
+        return
+    }else{
+        if (moreRatingsButton instanceof HTMLElement && moreRatingsButton.style) {
             moreRatingsButton.style.display = 'block';
         }
+    }
 }
 
 /**

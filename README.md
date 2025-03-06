@@ -78,6 +78,8 @@ Evento en  My Events tiene las siguientes funcionalides:
 
 .JavaScript
 
+.Lit Components
+
 ### Backend
 
 .Node.js
@@ -172,6 +174,8 @@ CORS
 
 Dancing Exchange utiliza un modelo de datos basado en MongoDB, con colecciones para eventos, usuarios y valoraciones. La relación entre componentes se establece mediante la utilización de IDs y referencias entre documentos.
 
+![alt text](image-8.png)
+
 ### Pre-commit y pre-push
 
 La aplicación utiliza lint-staged para ejecutar validaciones antes de ejecutar el commit, y Jest para ejecutar pruebas unitarias antes de ejecutar el push.
@@ -204,7 +208,7 @@ npm run lint
 
 Ejecuta ESLint para validar código
 
-# Endpoints de la API
+## Endpoints de la API
 
 ## USERS
 
