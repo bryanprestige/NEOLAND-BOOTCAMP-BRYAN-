@@ -88,9 +88,12 @@ export class CreateProfileCard extends LitElement {
   get _followerNumberUser() {
     const getUser = getDataFromSessionStorage();
     const user = getUser.user
-
-    const followerNumber = user.followedBy.length
-    return followerNumber
+    if(!user.followedBy) {
+      return 0
+    }else{
+      const followerNumber = user.followedBy.length
+      return followerNumber
+    }
   }
 
   constructor() {
