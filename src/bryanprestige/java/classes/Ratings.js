@@ -1,4 +1,4 @@
-// @ts-check
+
 
 export class Ratings {
     _id

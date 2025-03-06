@@ -1,7 +1,6 @@
 
 import * as qs from "node:querystring";
 import * as http from "node:http";
-// import * as path from "node:path";
 import { crud } from "./server.crud.js";
 
 const MIME_TYPES = {
@@ -21,7 +20,6 @@ const EVENTS_URL = './server/BBDD/events.json'
 const USERS_URL = './server/BBDD/users.json'
 
 function getAction (pathname) {
-  // /create/articles/:id
   const actionParts = pathname.split('/');
   return {
     name: `/${actionParts[1]}/${actionParts[2]}`,
@@ -37,11 +35,7 @@ http
     const statusCode = 200
     let responseData = []
     let chunks = []
-    //console.log(request.method,url.pathname, action)
-    // Determine if the request is creating a new user
-
-    //console.log(url.pathname, url.searchParams);
-    // Set Up CORS
+ 
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Content-Type', MIME_TYPES.json);
     response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
@@ -61,11 +55,8 @@ http
           })
           request.on('end', () => {
             let body = Buffer.concat(chunks)
-            //console.log('create event - body BUFFER', body)
             let parsedData = qs.parse(body.toString())
-            //console.log('create event - body', parsedData)
             crud.create(EVENTS_URL, parsedData, (data) => {
-              //console.log(`server create events ${data.name} creado`, data)
               responseData = data
   
               response.write(JSON.stringify(responseData));
@@ -74,9 +65,7 @@ http
           })
         break;
       case '/read/events':
-        //console.log('read events')
         crud.read(EVENTS_URL, (data) => {
-          //console.log('server read events', data)
           responseData = data
 
           response.write(JSON.stringify(responseData));
@@ -91,7 +80,6 @@ http
             let body = Buffer.concat(chunks)
             let parsedData = qs.parse(body.toString())
             crud.update(EVENTS_URL, action.id, parsedData, (data) => {
-              //console.log(`server update events ${action.id} modificado`, data)
               responseData = data
   
               response.write(JSON.stringify(responseData));
@@ -101,7 +89,6 @@ http
         break;
         case '/delete/events':
           crud.delete(EVENTS_URL, action.id, (data) => {
-            //console.log('server delete events', action.id, data)
             responseData = data
   
             response.write(JSON.stringify(responseData));
@@ -110,7 +97,6 @@ http
           break;
       case '/filter/events':
         crud.filter(EVENTS_URL, urlParams, (data) => {
-          //console.log('server filter events', data)
           responseData = data
 
           response.write(JSON.stringify(responseData));
@@ -123,11 +109,8 @@ http
           })
           request.on('end', () => {
             let body = Buffer.concat(chunks)
-            //console.log('create user - body BUFFER', body)
             let parsedData = qs.parse(body.toString())
-            //console.log('create user - body', parsedData)
             crud.create(USERS_URL, parsedData, (data) => {
-              //console.log(`server create user ${data.name} creado`, data)
               responseData = data
   
               response.write(JSON.stringify(responseData));
@@ -137,7 +120,6 @@ http
         break;
         case '/read/users':
           crud.read(USERS_URL, (data) => {
-            //console.log('server read users', data)
             responseData = data
   
             response.write(JSON.stringify(responseData));
@@ -152,7 +134,6 @@ http
             let body = Buffer.concat(chunks)
             let parsedData = qs.parse(body.toString())
             crud.update(USERS_URL, action.id, parsedData, (data) => {
-              //console.log(`server update users ${action.id} modificado`, data)
               responseData = data
   
               response.write(JSON.stringify(responseData));
@@ -162,7 +143,6 @@ http
           break;
         case '/delete/users':
           crud.delete(USERS_URL, action.id, (data) => {
-            //console.log('server delete user', action.id, data)
             responseData = data
   
             response.write(JSON.stringify(responseData));
@@ -171,7 +151,6 @@ http
           break;
         case '/filter/users':
           crud.filter(USERS_URL, urlParams, (data) => {
-            //console.log('server filter users', data)
             responseData = data
   
             response.write(JSON.stringify(responseData));
@@ -179,7 +158,6 @@ http
           })
           break;
         default:
-          //console.log('no se encontro el endpoint');
   
           response.write(JSON.stringify('no se encontro el endpoint'));
           response.end();

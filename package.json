@@ -2,7 +2,7 @@
   "name": "neoland-bootcamp-bryan-",
   "version": "1.0.0",
   "type": "module",
-  "description": "practica neoland",
+  "description": "dancing events app",
   "main": "index.js",
   "scripts": {
     "server:express:start": "node --env-file=.env --watch server/server.express.js",
