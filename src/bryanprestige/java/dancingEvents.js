@@ -15,13 +15,16 @@ export const PORT = location.port ? `:${location.port}` : ''
 document.addEventListener('DOMContentLoaded', () => {
     
     displayUserNickname()
-    showLogoutButton()
+    hideLoginRegisterButtons()
     const logOutButton = document.getElementsByClassName('log-out');
     logOutButton[0]?.addEventListener('click', onLogoutClick);
 
     if (window.location.pathname.includes('profile.html')) {
+        showLogoutButton()
         displayMyEventsPurchased();
         displayMyRatings()
+        const showLessButton = document.getElementById('less-ratings-button');
+        showLessButton?.addEventListener('click', () => onClickShowLess());
     }
     else if (window.location.pathname.includes('login.html')) {
         window.addEventListener('login-form-submit', (event) => {
@@ -177,71 +180,56 @@ function createPublishButton() {
 
 //========================HIDE/DISPLAY IN PROFILE===============================//
 
-export async function displayMyEvents() {
-    hideCreateEvents()
-    hideEditProfileForm() 
-    hidePreviewContainer() 
-    hideEditEvents() 
-    const userId = getUserId()
-    const filterValue = userId;  
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${filterValue}`);
-    if (apiData.length === 0) {
-        noEventFound()
-     } else {
-       myEvents(apiData)
-    }
-} 
-
-/**
- * @param {Array <Event>} apiData
- */
-function myEvents(apiData){
-    cleanEventContainer() 
-    apiData.forEach((/** @type {Event}  */event) => {
-       const myEventCard = createEventCardWithAnimation(event);
-       console.log(myEventCard)
-   });
-}
-
 async function displayMyEventsPurchased() {
     const userId = getUserId()
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/events/${userId}`);
-    console.log('apidata displaymyeventsbought',apiData)
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/read/events`);
+
     if (!apiData) {
         return
     } else{
-        myEventsPurchased(apiData)
+        myEventsPurchased(apiData,userId)
     }
 }
 
 /**
  * @param {Array <Event>} apiData 
+ * @param {string} userId
  */ 
-function myEventsPurchased (apiData) {
+function myEventsPurchased (apiData,userId) {
+    console.log('userId',userId)
     const myOrdersContainer = document.getElementsByClassName('my-orders');
     const noOrders = document.getElementsByClassName('no-orders');
-
-    noOrders[0].style.display = 'none';
-
     apiData.forEach((/** @type {Event}  */event) => {
-        const eventName = event.name;
-        const newElement = document.createElement('div');
-        newElement.innerHTML = `<button class="my-orders-name-button"> ${eventName} </button>`;
-        newElement.className = 'my-orders-name';
+        const boughtBy = event.boughtBy;
+        console.log('bought by',boughtBy)
 
-        newElement.addEventListener('click', () => {
-            getQrCode()
-        })
-        myOrdersContainer[0].appendChild(newElement);
+        if (boughtBy && boughtBy.includes(userId)) {
+            const eventName = event.name;
+            const newElement = document.createElement('button');
+            newElement.innerText = ` ${eventName}`;
+            newElement.className = 'my-orders-button';
+
+            newElement.addEventListener('click', () => {
+                getQrCode()
+            })
+
+            myOrdersContainer[0].appendChild(newElement);
+            console.log('bought by',myOrdersContainer)
+        }
     });
+
+    if (myOrdersContainer[0].childElementCount === 0) {
+        noOrders[0].style.display = 'block';
+    } else {
+        noOrders[0].style.display = 'none';
+    }
 }
 
 function getQrCode() {
      /** @type {HTMLElement | null} */
     const qrCode = document.querySelector('.qr-code')
-    qrCode.className = 'appear'
-   /*  const qrCode = await getAPIData(`https://api.dub.co/qr?url=https://github.com/dubinc/dub`)
-    console.log('qr code',qrCode); */
+    qrCode.classList.toggle('appear')
+   
 }
 export function displayCreateEvents () {
     cleanEventContainer();
@@ -269,11 +257,14 @@ async function postEvent() {
     console.log('this is the new event posted',apiData)
     hidePreviewContainer()
 }
+
+
 async function displayMyRatings() {
     /** @type {HTMLElement | null} */
     const getUser = getDataFromSessionStorage()
     const userId = getUser.user._id
-    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/ratings/${userId}`);    
+    const filterValue = userId
+    const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/ratings/${filterValue}`);    
 
     if (!apiData || apiData.length === 0) {
         return
@@ -282,34 +273,74 @@ async function displayMyRatings() {
     }
 } 
 
-/**
- * @param {Array <Ratings>} apiData 
- */ 
 function myRatings(apiData) {
     const myRatingsContainer = document.getElementsByClassName('my-ratings');
     const noRatings = document.querySelector('.no-ratings');
-
+    const showMore = document.querySelector('#more-ratings-button');
+    const showLess = document.querySelector('#less-ratings-button');
     const sumTechnique = apiData.reduce((acc, current) => {
-        noRatings.style.display = 'none';
+      noRatings.style.display = 'none';
+  
+      const technique = parseInt(current.technique);
+      if (!isNaN(technique)) {
+        return acc + technique;
+      } else {
+        return acc;
+      }
+    }, 0);
+    
+    const averageTechnique = sumTechnique / apiData.length;
+  
+    apiData.sort((a, b) => b.technique - a.technique);
+  
+    for (let i = 0; i < 2; i++) {
+      ratings(apiData[i]);
+    }
 
-        const technique = parseInt(current.technique);
-        if (!isNaN(technique)) {
-          return acc + technique;
-        } else {
-          return acc;
-        }
-        }, 0);     
-
-        const averageTechnique = sumTechnique / apiData.length;
-
-        apiData.forEach((/** @type {Ratings}  */rating) => {
-           ratings(rating)
-        });
+    showMore.addEventListener('click', () => {
+        onClickShowMore(apiData,showLess)
+    })
 
     const averageTechniqueElement = document.createElement('h1');
     averageTechniqueElement.className = 'h1-average-technique';
-    averageTechniqueElement.textContent = `Average technique: ${averageTechnique.toFixed(2)}/5`; 
+    averageTechniqueElement.textContent = `Average technique: ${averageTechnique.toFixed(2)}/5`;
     myRatingsContainer[0].appendChild(averageTechniqueElement);
+  }
+
+
+function onClickShowMore(apiData,showLess) {
+   const moreRatingsButton = document.querySelector('#more-ratings-button');
+    let ratingsIndex = 2;
+
+        for (let i = ratingsIndex; i < apiData.length && i < ratingsIndex + 2; i++) {
+          ratings(apiData[i]);
+        }
+        ratingsIndex += 2;
+        showLess.style.display = 'block';
+    
+        if (ratingsIndex >= apiData.length) {
+          moreRatingsButton.style.display = 'none';
+        }
+      
+
+}
+
+function onClickShowLess() {
+    const myRatingsContainer = document.getElementsByClassName('my-ratings');
+    const moreRatingsButton = document.querySelector('#more-ratings-button');
+    const lessRatingsButton = document.querySelector('#less-ratings-button');
+
+        while (myRatingsContainer[0].childElementCount > 3) {
+          myRatingsContainer[0].removeChild(myRatingsContainer[0].lastChild);
+        }
+    
+        lessRatingsButton.style.display = 'none';
+        if (!moreRatingsButton) {
+            return
+        }else{
+            moreRatingsButton.style.display = 'block';
+        }
+
 }
 
 /**
@@ -327,8 +358,9 @@ function ratings(rating) {
             
     myRatingsContainer[0].appendChild(newElement);
 }
+
+
 export function displayFavoriteEvents() {
-    //event.preventDefault(); 
     hideCreateEvents()
     hideEditEvents()
     const userId = getUserId()
@@ -359,7 +391,7 @@ export function displayEditForm() {
 }
 
 export function hideEditEvents(){
-    const eventEditor = document.getElementById('edit-event-form-container')
+    const eventEditor = document.getElementById('event-editor')
     if (eventEditor) {
         eventEditor.style.display = 'none';
     }
@@ -398,7 +430,7 @@ function continueToCheckout() {
         guestCheckoutButton?.addEventListener('click', () => displayCheckoutForm(containerSignIn))
         return
     } else{
-        containerSignIn.innerHTML = '<h1> Continue to:<button class="checkout-button"> checkout</button>.</h1>'  
+        containerSignIn.innerHTML = '<h1> Continue to <button class="checkout-button"> checkout</button>.</h1>'  
         const checkoutButton = document.querySelector('.checkout-button')
         checkoutButton?.addEventListener('click', () => displayCheckoutForm(containerSignIn))      
     }
@@ -458,10 +490,10 @@ export function createUserCardWithAnimation(user){
  */ 
 function createUserCardElement(user) {
     const userCard = document.createElement('div');
-    userCard.className = 'profile-card';
+    userCard.className = 'profile-card-follow';
 
     const imagePlaceholder = document.createElement('img')
-    imagePlaceholder.className = 'profile-picture'
+    imagePlaceholder.className = 'profile-picture-follow'
     imagePlaceholder.src = './imagenes/profile-pic-placeholder.png'
 
     const profileInfo = createProfileInfo(user);
@@ -794,6 +826,19 @@ function showLogoutButton() {
         logoutButton.style.display = 'block'
     }
 }
+
+function hideLoginRegisterButtons() {
+    let loginButton = document.querySelector('.login-button')
+    let registerButton = document.querySelector('.register')
+    if (!isUserLoggedIn()) {
+        return
+    } else {
+         /** @type {HTMLElement} */(loginButton).style.display = 'none'
+        registerButton.style.display = 'none'
+    }
+
+}
+
 
 /**
  * Logs out the user

@@ -3,7 +3,6 @@
  */
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
-import appCss from '../../../css/app.css' with { type: 'css' }
 
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import {getUserId,getInputValue,getAPIData,
@@ -17,7 +16,7 @@ navigateTo,hideEditProfileForm} from "../../../java/dancingEvents.js"
  */
 
 export class EditProfileForm extends LitElement {
-  static styles = [ css,reset,appCss];
+  static styles = [ css,reset];
 
   static properties = { 
     prueba: {type: String},
@@ -30,8 +29,8 @@ export class EditProfileForm extends LitElement {
   render() {
     return html `
      <form action="#" id="edit-profile-form">
-        <div class="edit-form-container">
-            <h1>Please fill this form to update your data</h1>
+        <fieldset class="edit-form-container">
+            <legend>Profile Editor</legend>
             <label for="input-new-nickname"><b>Nickname</b></label>
                 <input type="text" placeholder="Edit Nickname" name="input-new-nickname" id="input-new-nickname" required>
             <label for="input-team-academy"><b>Team/Academy</b></label>
@@ -49,7 +48,7 @@ export class EditProfileForm extends LitElement {
                 <button type="button" id="submit-new-user-data" @click="${this._updateProfile}" >Save Changes</button>
                 <button type="button" id="cancel-edit-profile-button" @click="${hideEditProfileForm}" >Cancel</button>
             </div>
-        </div>
+        </fieldset>
       </form>
     `
   }

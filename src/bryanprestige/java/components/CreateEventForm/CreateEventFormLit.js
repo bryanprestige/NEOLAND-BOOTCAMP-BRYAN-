@@ -3,7 +3,6 @@
      */
 import reset from '../../../css/reset.css' with { type: 'css' }
 import css from '../../../css/dancingEvents.css' with { type: 'css' }
-import appCss from '../../../css/app.css' with { type: 'css' }
 
 import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
 import { getInputValue,getUserId,createPreviewContainer,hideCreateEvents,createEventCardWithAnimation} from "../../dancingEvents.js"
@@ -16,7 +15,7 @@ let newEventList = []
 
 export class CreateEventForm extends LitElement {
     
-    static styles = [ css,reset,appCss];
+    static styles = [ css,reset];
     
     static properties = { 
         prueba: {type: String},
@@ -30,7 +29,7 @@ export class CreateEventForm extends LitElement {
             <form action="#" id="eventForm">
                 <fieldset id="event-fieldset">
                     <legend>Event Creator</legend>
-                        <div class="left-column">
+                        <div class="left-column-form">
                             <label> Submit your flyer</label>
                                 <input type="file" id="submit-flyer" name="filename">
                                 <input type="text" name="input-event-name" id="input-event-name" placeholder="Name of the event" required>
@@ -38,7 +37,7 @@ export class CreateEventForm extends LitElement {
                                 <input type="datetime-local" name="input-dateTime" id="input-dateTime" value="2025-02-10T08:30" required>
                                 <input type="url" id="input-url" placeholder="instagram-url">
                         </div>
-                        <div class="right-column">
+                        <div class="right-column-form">
                             <input type="number" name="input-price" id="input-price" placeholder="Price" max="1000" required>
                             <select class="form-select" id="input-currency" name="input-currency" required>
                                 <option>select currency</option>
