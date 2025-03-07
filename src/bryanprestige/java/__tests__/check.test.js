@@ -28,8 +28,8 @@ describe('we are testing if it filters teh data correctly', () => {
   ]
 
   it('should return dance events that match the filter value', () => {
-    expect(onFilterButtonClick(events, "bachata")).toEqual([{name: "Bachata Exchange"}])
-    expect(onFilterButtonClick(events, "salsa")).toEqual([{name: "Salsa Fusion"}])
-    expect(onFilterButtonClick(events, "kizomba")).toEqual([{name: "Kizomba"}])
+    expect(onFilterButtonClick(events, "bachata")).toEqual([{name: "Bachata Exchange"}]);
+    expect(onFilterButtonClick(events, "salsa")).toEqual([{name: "Salsa Fusion"}]);
+    expect(onFilterButtonClick(events, "kizomba")).toEqual([{name: "Kizomba Town"}]);
   })
 }) 
