@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import { multiplicate,toUpperCase,onFilterButtonClick } from "./checkTesteto/js";
+import { multiplicate,toUpperCase,onFilterButtonClick } from "./checkTest.js";
 
 /*=====TEST toUpperCase=====*/ 
 describe("we are testing if the string is covnerted to upper cAse", () => {
