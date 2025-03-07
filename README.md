@@ -92,6 +92,16 @@ Autenticación: Server Express
 
 Herramientas adicionales: ESLint, .env, body-parser, CORS
 
+## Tecnologías Aplicadas durante el desarrollo de la aplicacion 
+
+REDUX
+
+Static server y API server
+
+Servidor CRUD
+
+Base de datos local en JSON
+
 ## Docs y buena praxis
 
 JSDoc para la documentación del código
@@ -152,7 +162,29 @@ O manualmente:
 
 ## Configuracion de puertos
 
-La configuración de puertos se define en el archivo .env, no incluido en el repositorio de Git.
+configuración de puertos se define en el archivo .env, no incluido en el repositorio de Git.
+
+## Dependencias de la aplicacion
+
+Node >= 20.0.0
+
+Express
+
+MongoDB (visualizacion de la base de datos en Compass y Atlas como servicio en la cloud)
+
+JSDoc (Documentacion de los metodos)
+
+Typescript (Escribir un codigo seguro y profesional)
+
+Jest (Testeo)
+
+ESLint
+
+Lint-Staged
+
+StyleLint
+
+Netlify (despliegue del FronEnd)
 
 ## Plugins de VS recomendados
 
@@ -169,6 +201,8 @@ Markdownlint
 lit-html
 
 CORS
+
+Postman
 
 ## Modelo de datos y relación entre componentes
 

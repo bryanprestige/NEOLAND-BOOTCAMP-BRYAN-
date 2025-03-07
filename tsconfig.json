@@ -1,5 +1,5 @@
 {
-  "include": ["./src/bryanprestige/java/*.js", "src/bryanprestige/java/classes/eventscard.js"],
+  "include": ["./src/bryanprestige/java/*.js", "src/bryanprestige/java/classes/eventscard.js", "src/bryanprestige/java/__tests__/testBuyEvent.js"],
   "compileOnSave": false,  
   "compilerOptions": {
     "paths": {
