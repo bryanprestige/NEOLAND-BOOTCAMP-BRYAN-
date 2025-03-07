@@ -159,6 +159,7 @@ export function createPreviewContainer() {
 
     previewContainer.append(previewTitle,publishButton,editEventButton);
     document.body.appendChild(previewContainer);
+    
 return previewContainer
 }}
 

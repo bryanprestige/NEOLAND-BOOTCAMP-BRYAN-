@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "dancing events app",
-  "main": "index.js",
+  "main": "dancingEvents.js",
   "scripts": {
     "server:express:start": "node --env-file=.env --watch server/server.express.js",
     "server:api:start": "node --env-file=.env --watch server/server.api.js",
