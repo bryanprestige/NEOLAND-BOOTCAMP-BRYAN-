@@ -28,6 +28,8 @@ export class LoginForm extends LitElement {
 
   constructor() {
     super();
+    this.email = '';
+    this.password = '';
   }
 
   render() {

@@ -128,9 +128,9 @@ export class RegisterForm extends HTMLElement {
             rol: getInputValue(rol),    
             password: getInputValue(password),
         }
-        //let onFormCreateUser 
         console.log(`DESDE DENTRO DEL COMPONENTE Email: ${user.email}, Nickname: ${user.nickname}`);
         
+
         const payload = JSON.stringify(user)
         const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/users?`, 'POST',payload);
         console.log(apiData)
