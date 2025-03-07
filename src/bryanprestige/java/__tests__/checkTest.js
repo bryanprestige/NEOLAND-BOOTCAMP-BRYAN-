@@ -18,18 +18,15 @@ export function multiplicate(a, b) {
     return str.toUpperCase();
 }
 
-
 /**
  * Filtra la data por el filterValue
  * @param {string} filterValue
- * @param {object} data
+ * @param {object} events
  */
 export function onFilterButtonClick(filterValue,events) {
-    if (!filterValue) {
-        return
-    }
+    if (!filterValue.trim()) return events
 
-    return events.filter(item => 
-      item.name.toLowerCase().includes(filterValue.toLowerCase())
+    return events.filter(event => 
+      event.name.toLowerCase().includes(filterValue.toLowerCase())
     )
 }
