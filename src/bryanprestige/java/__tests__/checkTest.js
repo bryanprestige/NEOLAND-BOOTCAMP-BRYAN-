@@ -24,7 +24,9 @@ export function multiplicate(a, b) {
  * @param {object} events
  */
 export function onFilterButtonClick(filterValue,events) {
-    if (!filterValue.trim()) return events
+  if (typeof filterValue !== 'string' || !filterValue.trim()) {
+    return events;
+  }
 
     return events.filter(event => 
       event.name.toLowerCase().includes(filterValue.toLowerCase())
