@@ -20,10 +20,10 @@ export function multiplicate(a, b) {
 
 /**
  * Filtra la data por el filterValue
- * @param {string} filterValue
  * @param {object} events
+ * @param {string} filterValue
  */
-export function onFilterButtonClick(filterValue,events) {
+export function onFilterButtonClick(events,filterValue) {
   if (typeof filterValue !== 'string' || !filterValue.trim()) {
     return events;
   }
