@@ -2,44 +2,53 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c096813a-0032-45de-8f78-52041b74bd1c/deploy-status)](https://app.netlify.com/sites/dancingexchange/deploys)
 
-Dancing exchange es un servicio que permite a los usuarios tener un perfil y crear eventos a compartir con el mundo. Estos eventos podran ser comprados online y acceder al ticket dentro del mismo perfil de usuario.
+Dancing Exchange es una plataforma que permite a los usuarios crear un perfil y organizar eventos de baile para compartir con la comunidad. Los eventos pueden comprarse en línea, y los tickets estarán disponibles dentro del perfil del usuario.
 
 ## DESCRIPCION DEL LA PLATAFORMA
 
-La aplicación consiste en una página de muestra de eventos de baile social, donde los usuarios pueden registrarse y utilizar sus credenciales para acceder a la página web y desbloquear la opción de crear eventos, editarlos y guardarlos en favoritos para verlos en su perfil.
+Dancing Exchange es una plataforma dedicada a eventos de baile social, donde los usuarios pueden registrarse, iniciar sesión y acceder a diversas funcionalidades, como:
 
-También pueden seguirse entre sí y en un futuro, enviarse mensajes. Tienen la opción de valorar a otros usuarios y promotores de eventos dependiendo de su experiencia con ellos y así hacer un ranking de quién es un buen bailarín y qué eventos son buenos.
-Hacer las valoraciones de usuarios y el ranking publicos estan en fase de desarrollo.
+Creación, edición y gestión de eventos.
 
-### SNIPPETS DE LA PLATAFORMA
+Marcar eventos como favoritos y visualizarlos en su perfil.
+
+Seguir a otros usuarios y, en futuras actualizaciones, enviar mensajes.
+
+Valorar a otros usuarios y promotores de eventos, creando un sistema de ranking.
+
+La visibilidad de las valoraciones y rankings públicos está en fase de desarrollo.
+
+### FUNCIONALIDADES DE LA PLATAFORMA
 
 Perfil de usuario en el cual tiene las siguientes funcionalidades:
 
-1. Editar los datos del usuario (el nickname, la bio y a que academia o team     pertenecen)
+1. Editar los datos personales (nickname, biografía y afiliación a academias o teams).
 
-2. Mostrar todos los eventos que hayan sido marcados previamente como favoritos
+2. Ver eventos marcados como favoritos.
 
-3. Crear eventos para compartir y poder vender tickets.
+3. Crear eventos para compartir y vender tickets.
 
-4. Mostrar los eventos que hayan sido creados previamente por el usuario.
+4. Listar eventos creados previamente.
 
-5. Mostrar mas valoraciones que se hayan hecho al usuario
+5. Ver las valoraciones recibidas.
 
-6. Mostrar el QR code al ticket del evento
+6. Acceder al código QR de los tickets comprados.
 
 ![alt text](image-1.png)
 
-La tarjeta del perfil dentro de las reviews tiene las siguientes funcionalidades:
+La tarjeta del perfil dentro del CONNECT tiene las siguientes funcionalidades:
 
-1. Hacer follow al usuario deseado
+1. Seguir a otros usuarios.
 
-2. Dirigirte a la seccion de reviews con el usuario seleccionado
-
-![alt text](image-6.png)
-
-La tarjeta de perfil dentro del CONNECT tiene las siguientes funcionalidades:
+2. Acceder a la sección de valoraciones del usuario seleccionado.
 
 ![alt text](image-7.png)
+
+La tarjeta de perfil dentro del REVIEWS tiene las siguientes funcionalidades:
+
+1. Aportar review al usuario
+
+![alt text](image-6.png)
 
 Evento en el feed tiene las siguientes funcionalidades:
 
