@@ -38,8 +38,6 @@ export class SearchUsersForm extends LitElement {
 
       const searchField = this.renderRoot.getElementById('search-field').value.trim().toLowerCase();
       const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/users/${searchField}`);
-      console.log(apiData)  
-      //const userCardContainer = document.querySelector('.user-card-container');
        if (apiData.length === 0) { 
                      console.log('user not found')
                 } else {

@@ -29,15 +29,11 @@ export class RegisterForm extends HTMLElement {
     constructor(){
         super();
     }
-    //FUNCIONALIDAD DEL FORMULARIO DE REGISTRO
     connectedCallback() {
-        console.log("Custom element added to page.");
         this.attachShadow({ mode:"open" })
         this.shadowRoot.adoptedStyleSheets.push(css);
         this._setUpContent()
-        
-        // Add event listeners to form elements
-        
+                
         const form = this.shadowRoot.getElementById("registerForm");
         form.addEventListener("submit", this._onRegisterFormSubmit.bind(this));
     }
@@ -68,7 +64,6 @@ export class RegisterForm extends HTMLElement {
     _onRegisterFormSubmit (e) {
         e.preventDefault()
         if (this._validateRegister() === false) {
-            console.log("Paso por aqui");
             alert("Please ensure all fields are correctly filled before submitting.");
             return; 
         } else{
@@ -127,14 +122,11 @@ export class RegisterForm extends HTMLElement {
             name: getInputValue(name),
             rol: getInputValue(rol),    
             password: getInputValue(password),
-        }
-        console.log(`DESDE DENTRO DEL COMPONENTE Email: ${user.email}, Nickname: ${user.nickname}`);
-        
+        }        
 
         const payload = JSON.stringify(user)
         const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/users?`, 'POST',payload);
         console.log(apiData)
-
         }
 }
 

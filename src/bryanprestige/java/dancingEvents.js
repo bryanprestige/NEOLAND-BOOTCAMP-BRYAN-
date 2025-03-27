@@ -12,7 +12,6 @@ import { HttpError } from './classes/HttpError.js'
 export const PORT = location.port ? `:${location.port}` : ''
 
 document.addEventListener('DOMContentLoaded', () => {
-    
     displayUserNickname()
     hideLoginRegisterButtons()
     const logOutButton = document.getElementsByClassName('log-out');
@@ -44,8 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if(!isUserLoggedIn()){
             alert('need to login or register to enjoy all the perks!')
             navigateTo('./login.html')
-        }else{
-        displayUserToRate ()
         }
     }
     else if (window.location.pathname.includes('index.html')) {
@@ -200,12 +197,10 @@ async function displayMyEventsPurchased() {
  * @param {string} userId
  */ 
 function myEventsPurchased (apiData,userId) {
-    console.log('userId',userId)
     const myOrdersContainer = document.getElementsByClassName('my-orders');
     const noOrders = document.getElementsByClassName('no-orders');
     apiData.forEach((/** @type {Event}  */event) => {
         const boughtBy = event.boughtBy;
-        console.log('bought by',boughtBy)
 
         if (boughtBy && boughtBy.includes(userId)) {
             const eventName = event.name;
@@ -218,7 +213,6 @@ function myEventsPurchased (apiData,userId) {
             })
 
             myOrdersContainer[0].appendChild(newElement);
-            console.log('bought by',myOrdersContainer)
         }
     });
 
@@ -295,14 +289,11 @@ function myRatings(apiData) {
     const showMore = document.querySelector('#more-ratings-button');
     const showLess = document.querySelector('#less-ratings-button');
     apiData.sort((a, b) => b.technique - a.technique);
-    console.log('apiData',apiData)
     const sumTechnique = apiData.reduce((acc, current) => {
-            console.log('current',current)
         if (noRatings instanceof HTMLElement && noRatings.style) {
             noRatings.style.display = 'none';
         }   
         const technique = current.technique
-        console.log('technique',technique)
         if (!isNaN(technique)) {
             return acc + technique;
         } else {
@@ -379,7 +370,6 @@ function onClickShowLess() {
  * @param {Ratings} rating
  */
 function ratings(rating) {
-    console.log('this is the rating', rating)
     const myRatingsContainer = document.getElementsByClassName('my-ratings');
     const newElement = document.createElement('h1');
     const userRatingNickname = rating.nicknameUserRating
@@ -525,7 +515,6 @@ function setCheckoutFormValues() {
  * @param {User} user
  */ 
 export function createUserCardWithAnimation(user){
-    console.log('user dentro de creatin process',user)
     const userCard = createUserCardElement(user); 
     userCard.classList.add('zoom-in');  
     const userContainer = document.querySelector('.user-card-container')
@@ -548,7 +537,7 @@ function createUserCardElement(user) {
     imagePlaceholder.className = 'profile-picture-follow'
     imagePlaceholder.src = './imagenes/profile-pic-placeholder.png'
 
-    const profileInfo = createProfileInfo(user);
+    const profileInfo = createProfileInfo(user,userCard);
 
     userCard.appendChild(imagePlaceholder);
     userCard.appendChild(profileInfo);
@@ -560,14 +549,16 @@ function createUserCardElement(user) {
  * 
  * @param {User} user
  */ 
-function createProfileInfo(user){
+function createProfileInfo(user,userCard){
     const profileInfo = document.createElement('div')
     profileInfo.className ='profile-info'
+
+    console.log(userCard,'usercard')
 
     const nickname = createElementWithText('h1', 'nickname', user.nickname);
     const bio = createBio(user)
     const teamAcademy = createElementWithText('p', 'team-academy', user.teamAcademy);
-    const followRate = createFollowRateButtons(user)
+    const followRate = createFollowRateButtons(user,userCard)
     
     profileInfo.append(nickname,bio,teamAcademy,followRate)
 
@@ -598,9 +589,9 @@ function createBio(user) {
  * 
  * @param {User} user
  */ 
-function createFollowRateButtons(user) {
+function createFollowRateButtons(user,userCard) {
     const followRate = document.createElement('div')
-    const followButton = createFollowButton(user)   
+    const followButton = createFollowButton(user,userCard)   
     const rateButton = createRateButton(user) 
     followRate.append(followButton,rateButton)
     return followRate
@@ -609,7 +600,7 @@ function createFollowRateButtons(user) {
 /**
  * @param {User} user
  */ 
-function createFollowButton(user) {
+function createFollowButton(user,userCard) {
     const userFollowedId = user._id
     const currentUserId= getUserId()
     const userFollowedBy = user.followedBy
@@ -625,7 +616,7 @@ function createFollowButton(user) {
          followButton.innerText = 'Follow'
     }    
 
-    followButton.addEventListener('click', () => onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton))
+    followButton.addEventListener('click', () => onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton,userCard))
     return followButton
 }
 
@@ -634,17 +625,18 @@ function createFollowButton(user) {
  * @param {String} userFollowedId
  * @param {String} currentUserId
  * @param {HTMLElement} followButton
+ * @param {HTMLElement} userCard
  */ 
-function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton) { 
+function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followButton,userCard) { 
     if(!isUserLoggedIn()){
         alert('need to login or register to enjoy all the perks!')
         navigateTo('./login.html')
     }else {
 
         if(userFollowedBy && userFollowedBy.includes(currentUserId)){
-        removeFollower(userFollowedId,currentUserId)
+        removeFollower(userFollowedId,currentUserId,userCard)
         } else {
-        addFollower(userFollowedId,currentUserId)
+        addFollower(userFollowedId,currentUserId,userCard)
         } 
         toggleFollowButton(userFollowedBy,userFollowedId,currentUserId,followButton) 
     }
@@ -653,9 +645,10 @@ function onFollowButtonClick(userFollowedBy,userFollowedId,currentUserId,followB
 /**
  * @param {String} userFollowedId
  * @param {String} currentUserId
+ * @param {HTMLElement} userCard
  */ 
-async function addFollower(userFollowedId,currentUserId){
-    const userFollowerNumber = document.querySelector('.follower-number')
+async function addFollower(userFollowedId,currentUserId,userCard) {
+    const userFollowerNumber = userCard.querySelector('.follower-number')
     let userNewFollower = {
         followedBy: currentUserId
     }
@@ -665,18 +658,18 @@ async function addFollower(userFollowedId,currentUserId){
     console.log(apiData)
     const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
-    
     if (userFollowerNumber instanceof HTMLElement) {
         userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`;
-    }
+    }    
 }
 
 /**
  * @param {String} userFollowedId
  * @param {String} currentUserId
+ * @param {HTMLElement} userCard
  */ 
-async function removeFollower(userFollowedId, currentUserId) {
-    const userFollowerNumber = document.querySelector('.follower-number')
+async function removeFollower(userFollowedId, currentUserId,userCard) {
+    const userFollowerNumber = userCard.querySelector('.follower-number')
 
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowedBy = apiData.followedBy;
@@ -690,12 +683,12 @@ async function removeFollower(userFollowedId, currentUserId) {
     }
     const payload = JSON.stringify(newUserFollowedBy);
     const response = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/users/${userFollowedId}`, "PUT",payload);
+    console.log('response', response)
     const apiDataUpdated = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/filter/user/${userFollowedId}`, "GET");
     const userFollowerNumberUpdated = apiDataUpdated.followedBy.length
     if (userFollowerNumber instanceof HTMLElement) {
         userFollowerNumber.innerText = `Followers: ${userFollowerNumberUpdated}`;
     }
-    console.log('response', response)
 }
 
 /**
@@ -741,13 +734,8 @@ function onRateButtonClick(user) {
     }
 }
 
-//========================REVIEWS================================//
-function displayUserToRate () {
-    const user = getUserFromLocalStorage()
-    console.log('displayuser to rate',user)
-}
-
 //========================APIDATA================================//
+
 
 /**
  * Get data from API
@@ -828,7 +816,6 @@ export function getUserId() {
 
 function getUserNickname() {
     const userData = getDataFromSessionStorage();
-    console.log('user nickname',userData.user.nickname)
     return userData.user.nickname
 }
 
@@ -840,7 +827,6 @@ export function getBasketFromLocalStorage() {
 export function getEventFromBasketStorage() {
     const eventData = getBasketFromLocalStorage()
     const eventToget = eventData[0]
-    console.log('this is eventdata from basket',eventToget)
     return eventToget
     
 }
@@ -922,7 +908,6 @@ async function onLogoutClick() {
     await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/logout/${userData.user._id}`, 'GET')
   
     updateSessionStorage({ user: {} })
-    //updateSessionStorage(JSON.stringify({ user: {} }))
     navigateTo('/index.html')
 }
 //========================UTILS===============================//
