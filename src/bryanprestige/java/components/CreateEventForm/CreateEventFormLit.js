@@ -96,9 +96,7 @@ export class CreateEventForm extends LitElement {
       ].map(id => this.renderRoot.getElementById(id));
     
         formIsValid = fields.every(field => field?.value.trim() !== '');
-       
-        console.log('form is valid',formIsValid); 
-          
+                 
         const fieldsEmpty = [
             'input-event-name',
             'input-venue',
@@ -159,9 +157,7 @@ export class CreateEventForm extends LitElement {
             }
             
             newEventList.push(event)
-            console.log('new event list',newEventList)  
             this._saveNewEventToLocalStorage()
-            console.log('neweventlist',newEventList)
            
             createEventCardWithAnimation(event)
             createPreviewContainer()

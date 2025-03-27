@@ -17,7 +17,6 @@ app.post('/api/create/event', async (req, res) => {
 res.json(await db.events.create(req.body))
 })
 
-
 app.get('/api/read/events', async (req, res) => {
   res.json(await db.events.get())
 })
@@ -134,8 +133,6 @@ app.post('/api/login', async (req, res) => {
     res.status(401).send('Unauthorized')
   }
 })
-
-
 
 app.get('/api/logout/:id', async (req, res) => {
   const response = await db.users.logOut(req.params.id)

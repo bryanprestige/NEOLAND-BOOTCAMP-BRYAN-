@@ -96,7 +96,6 @@ export class EditEventForm extends LitElement {
         
             const payload = JSON.stringify(updatedEvent)
             const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/update/events/${this.eventId}`, "PUT",payload);
-            console.log(apiData)
             if (apiData.matchedCount === 1) {
                 alert('Event updated successfully')
                 hideEditEvents()
@@ -132,8 +131,7 @@ export class EditEventForm extends LitElement {
                const myEventCard = createEventCardWithAnimation(e);
                console.log(myEventCard)
              }
-           });
-              
+           });  
           }
           this._setEventCardAttributes() 
           localStorage.setItem(storageUser, JSON.stringify(apiData))
@@ -147,7 +145,5 @@ export class EditEventForm extends LitElement {
             eventCard.dispatchEvent(new CustomEvent('displayMyEventsChanged', { detail: displayMyEventsFlag }));
           });
         }
-
-
 }
 customElements.define('edit-event-form', EditEventForm)

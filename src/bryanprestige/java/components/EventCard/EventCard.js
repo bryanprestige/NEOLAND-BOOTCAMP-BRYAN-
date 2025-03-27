@@ -38,7 +38,7 @@ export class EventCard extends LitElement {
 
     constructor() {
         super();
-        this.displayRemoveButton = false; // Initialize the property to false
+        this.displayRemoveButton = false;
         this.displayTicketCount = false
     }
     
@@ -66,9 +66,7 @@ export class EventCard extends LitElement {
             button.classList.toggle('vanish', !this.displayMyEvents);
             editButton.classList.toggle('appear', !this.displayMyEvents);
             removeButton.classList.toggle('appear', !this.displayMyEvents);
-
         }
-
         if (changedProperties.has('displayRemoveButton')) {
             const removeTicketButton = this.renderRoot.querySelector('.remove-ticket-button');
             
@@ -76,14 +74,12 @@ export class EventCard extends LitElement {
                 removeTicketButton.classList.toggle('appear', this.displayRemoveButton);
             }
         }
-
         if (changedProperties.has('displayTicketCount')) {
             const ticketCountSpan = this.renderRoot.querySelector('.ticket-count');
             if (ticketCountSpan) {
                 ticketCountSpan.classList.toggle('appear', this.displayTicketCount);
             }
         }
-
         if (changedProperties.has('eventDance')) {
             this._getDanceTypeColor();
         }
@@ -91,8 +87,6 @@ export class EventCard extends LitElement {
         if (changedProperties.has('eventMusic')) {
             this._MusicRatioElement();
         }
-
-        console.log('properties have chanded',changedProperties)
     }
 
      displayEventsConditions(){
@@ -139,7 +133,7 @@ export class EventCard extends LitElement {
                 `
             :
             html `
-             <!-- THIRD HTML BLOCK (original HTML) -->
+             <!-- SECOMD HTML BLOCK (original HTML) -->
             <div class="left-column">
                    <img class="event-image" src="../../../imagenes/placehold400x200.png" alt="">
                    ${this.eventUrl ? html`
@@ -219,14 +213,11 @@ export class EventCard extends LitElement {
         ticketCount++;
         
         let ticketCountSpan = this.renderRoot.querySelector('.ticket-count');
-        console.log('ticketCountSpan',ticketCountSpan);
         if(ticketCountSpan) {
             ticketCountSpan.textContent = `(${ticketCount})`;
         }
 
-        console.log('ticketCountSaved',ticketCount);
         this._updateTicketCount(ticketCount);
-
     } 
 
     _removeTicket() {
@@ -237,7 +228,6 @@ export class EventCard extends LitElement {
                 ticketCountSpan.textContent = `(${ticketCount})`;
             }
 
-            console.log('ticketCountSpan',ticketCountSpan);
             if (ticketCount === 0) {
                 this.displayTicketCount = false;
                 this.displayRemoveButton = false;
@@ -254,21 +244,17 @@ export class EventCard extends LitElement {
     _sumPriceValue()  {
         const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || 0;
         const priceValue = this._getPriceValue();
-        console.log(`Event price: ${priceValue}`);
     
         totalPriceValue = currentTotalPrice + parseInt(priceValue); 
         localStorage.setItem('totalPriceValue', totalPriceValue); 
-        console.log(`Total price: ${totalPriceValue}`);
     }
 
     _resPricevalue() {
         const currentTotalPrice = JSON.parse(localStorage.getItem('totalPriceValue')) || [];
-        console.log(`current total price: ${currentTotalPrice}`);
         const priceValue = this._getPriceValue();
         totalPriceValue  = currentTotalPrice - parseInt(priceValue)
      
         localStorage.setItem('totalPriceValue', totalPriceValue);
-        console.log(`Total price: ${totalPriceValue}`);
     }
 
     _updateTicketCount() {
@@ -319,7 +305,6 @@ export class EventCard extends LitElement {
         eventEditorContainer.style.display = 'block'
         const eventEditor = document.getElementById('event-editor-component')
         eventEditor.setAttribute('eventId', eventId)
-        console.log(eventEditor)
     }
     async _removeEvent () {
     let eventId = this.event._id    

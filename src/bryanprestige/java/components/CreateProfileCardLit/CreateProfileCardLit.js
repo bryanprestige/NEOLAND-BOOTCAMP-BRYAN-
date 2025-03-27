@@ -35,7 +35,6 @@ export class CreateProfileCard extends LitElement {
     const user = getUser[0]
     const nickname = user.nickname;
 
-    console.log('nickname',nickname)
     return  nickname
   }
   get _bio() {
@@ -195,7 +194,6 @@ export class CreateProfileCard extends LitElement {
       comments : comments
     }
 
-    console.log(review)
     const payload = JSON.stringify(review);
     const apiData = await getAPIData(`${location.protocol}//${location.hostname}${PORT}/api/create/rating?`, "POST",payload);
     console.log(apiData,'apiData reviews');
